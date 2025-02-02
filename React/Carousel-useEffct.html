@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState, useEffect, useRef, useCallback, useMemo } = React;
+      function MyApp() {
+        const imgs = [
+          {
+            imgLink: "https://www.12306.cn/index/images/abanner01.jpg",
+            img: "https://www.12306.cn/index/images/abanner01.jpg",
+          },
+
+          {
+            imgLink: "https://www.12306.cn/index/images/abanner05.jpg",
+            img: "https://www.12306.cn/index/images/abanner05.jpg",
+          },
+        ];
+        return (
+          <>
+            <div>
+              <Carousel todos={imgs} autoplay={true} />
+              这个组件实现了定时播放， 主动切换后重置定时器， 鼠标悬浮停止播放，
+              刷新页面检测鼠标是否悬浮。
+              <hr />
+              实际测试中， 没有测试出课堂上的效果，
+              浏览器在js层面直接检测出了刷新后鼠标的hover状态，
+              并没有运行CSS检测hover元素的逻辑。
+              <hr />
+              hover的改变没有必要更新组件， 所以可以使用ref来保存hover的状态
+            </div>
+            <div>
+              <TimeAndPosition />
+              <hr />
+              下面是一个尽量靠近系统时间的实现
+              <FakeRealTime />
+              <hr />
+              下面是一个倒计时：
+              <CountDown />
+              下面是一个Counter hook函数的实现：
+              <Counter />
+              <hr />
+              下面是一个useSet示例：
+              <TestSet />
+              <hr />
+              <br />
+              下面是一个useInterval示例
+              <TestInterval />
+              <br />
+            </div>
+            <div className="">
+              <FakeVModel />
+            </div>
+            <FakeRequestTest />
+            <hr />
+          </>
+        );
+      }
+      function useTime() {
+        const [time, setTime] = useState(() => new Date());
+
+        let id;
+        useEffect(() => {
+          id = setInterval(() => {
+            setTime(new Date());
+          }, 1000);
+
+          return () => {
+            clearInterval(id);
+          };
+        }, []);
+
+        return time.toString();
+      }
+
+      function usePos() {
+        const [x, setX] = useState(0);
+        const [y, setY] = useState(0);
+
+        useEffect(() => {
+          window.addEventListener("mousemove", updatePos);
+          function updatePos(e) {
+            setX(e.clientX);
+            setY(e.clientY);
+          }
+
+          return () => {
+            window.removeEventListener("mousemove", updatePos);
+          };
+        }, []);
+
+        return [x, y];
+      }
+
+      function TimeAndPosition() {
+        const time = useTime();
+        const [x, y] = usePos();
+
+        return (
+          <>
+            <span className="border bg-green-500">{time}</span>
+            <hr />
+            <span>
+              X: {x}, Y: {y}
+            </span>
+          </>
+        );
+      }
+
+      function Carousel({ start = 0, step = 1, autoplay = false, todos }) {
+        // console.log('组件重新渲染了......')
+        const [i, setI] = useState(start);
+        // const [hover, setHover] = useState(false);
+        const hover = useRef(false);
+        const idRef = useRef(0);
+        const elRef = useRef();
+
+        useEffect(() => {
+          const carouselEl = document.querySelector(".carousel-el");
+          const hoveredEls = document.querySelectorAll(":hover");
+          if ([...hoveredEls].includes(carouselEl)) {
+            console.log("刷新后检测到hover.....");
+            setHover((hover) => (hover = true));
+          }
+        }, []);
+        useEffect(() => {
+          if (hover.current === false) {
+            if (autoplay) {
+              idRef.current = setInterval(() => {
+                // console.log('切换图片了.....')
+                next();
+              }, 1000);
+            }
+          }
+
+          return () => {
+            clearInterval(idRef.current);
+          };
+        }, []);
+
+        function next() {
+          setI((i) => (i === todos.length - 1 ? 0 : i + 1));
+        }
+
+        function prev() {
+          setI((i) => (i === 0 ? todos.length - 1 : i - 1));
+        }
+
+        function startPlay() {
+          idRef.current = setInterval(() => {
+            next();
+          }, 1000);
+        }
+        function endPlay() {
+          clearInterval(idRef.current);
+        }
+        function handleMouseEnter() {
+          hover.current = true;
+          endPlay();
+        }
+
+        function handleMouseLeave() {
+          hover.current = false;
+          startPlay();
+        }
+
+        return (
+          <div
+            ref={elRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className="carousel-el bg-green-500 relative border w-[300px] h-[200px]"
+          >
+            <div>
+              <a href={todos[i].imgLink}>
+                <img src={todos[i].img} alt="This is a demo pic." />
+              </a>
+            </div>
+            <button
+              className="bg-slate-500 absolute top-1/2 left-0"
+              onClick={prev}
+            >
+              previous
+            </button>
+            <button
+              className="bg-slate-500 absolute top-1/2 right-0"
+              onClick={next}
+            >
+              next
+            </button>
+          </div>
+        );
+      }
+
+      //useRequest 用于请求的hook函数
+      function useRequest(fetcher) {
+        //fetcher是一个异步函数
+        const [data, setData] = useState(null);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState(null);
+
+        useEffect(() => {
+          fetcher().then(
+            (data) => {
+              setLoading(false);
+              setData(data);
+            },
+            (error) => {
+              setError(error);
+            }
+          );
+        }, []);
+
+        return { data, loading, error };
+      }
+      //测试useRequest的组件
+      function FakeRequestTest() {
+        const { data, error, loading } = useRequest(() => {
+          return fetch("https://jsonplaceholder.typicode.com/todos").then(
+            (val) => val.json()
+          );
+        });
+        if (loading) {
+          return <span>loading.........</span>;
+        }
+
+        return (
+          <div>
+            {data.map((it, i) => {
+              return (
+                <div key={i}>
+                  <input
+                    type="checkbox"
+                    checked={it.completed}
+                    onChange={() => {}}
+                  />
+                  <span>{it.title}</span>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+
+      //模拟Vue里面的VModel效果
+      function useVModel() {
+        const [val, setVal] = useState("");
+        function onChanged(e) {
+          setVal(e.target.value);
+        }
+
+        return {
+          value: val,
+          onChange: onChanged,
+        };
+      }
+
+      function useTime1() {
+        const [time, setTime] = useState(() => new Date());
+        let delay = (1000 - (time % 1000)) | 0;
+
+        useEffect(() => {
+          let id1, id2;
+          id1 = setTimeout(() => {
+            id2 = setInterval(() => {
+              setTime(new Date());
+            }, 1000);
+          }, delay);
+
+          return () => {
+            clearTimeout(id1);
+            clearInterval(id2);
+          };
+        }, []);
+
+        return time;
+      }
+      //模拟一个尽量没有延迟的时间
+      function FakeRealTime() {
+        const time = useTime1();
+
+        return (
+          <div>
+            <span>{time.toString()}</span>
+          </div>
+        );
+      }
+      function FakeVModel() {
+        const name = useVModel();
+        return (
+          <input
+            className="outline-solid bg-bg-slate-500"
+            type="text"
+            {...name}
+          />
+        );
+      }
+
+      //倒计时实现
+      function useCountDown(timeString) {
+        //使用memo创建一个日期， 只要输入的日期不变化， 就不做更改
+        const date = React.useMemo(() => new Date(timeString), [timeString]);
+        const [now, setNow] = useState(() => new Date());
+        useEffect(() => {
+          let id = setInterval(() => {
+            setNow(new Date());
+          }, 1000);
+
+          return () => clearInterval(id);
+        }, []);
+
+        let timeLeft = ((date - now) / 1000) | 0;
+        return timeLeft;
+      }
+      function CountDown() {
+        const timeLeft = useCountDown("2025-02-04");
+
+        return (
+          <div className="border bg-green-500">
+            <span>距离2025.02.04还剩下: {timeLeft} 秒</span>
+          </div>
+        );
+      }
+
+      //useForceUpdate
+      function useForceUpdate() {
+        //利用状态改变来强制更新
+        const [x, setX] = useState(0);
+
+        return React.callback(() => {
+          setX((x) => x + 1);
+        }, []);
+      }
+
+      //useCounter
+      function useCounter(init = 1, { min = 0, max = 20 }) {
+        //为了防止数据更改后可能访问到的是旧的值， 使用ref来进行跟踪
+        const minRef = useRef();
+        minRef.current = min;
+        const maxRef = useRef();
+        maxRef.current = max;
+        const initRef = useRef();
+        initRef.current = init;
+
+        const [current, setCurrent] = useState(() => {
+          if (init < minRef.current) {
+            return minRef.current;
+          } else if (init > maxRef.current) {
+            return maxRef.current;
+          } else {
+            return init;
+          }
+        });
+
+        const inc = useCallback((delta = 1) => {
+          if (typeof delta !== "number") delta = 1;
+
+          setCurrent((current) => {
+            if (current + delta > maxRef.current) {
+              console.log("max is 10......");
+
+              return maxRef.current;
+            } else {
+              console.log("inc always here....");
+              return current + delta;
+            }
+          });
+        }, []);
+
+        const dec = useCallback((delta = 1) => {
+          if (typeof delta !== "number") delta = 1;
+
+          setCurrent((current) => {
+            if (current - delta < minRef.current) {
+              console.log("min is 0....");
+              return minRef.current;
+            } else {
+              return current - delta;
+            }
+          });
+        }, []);
+
+        const set = useCallback((val) => {
+          if (typeof val !== "number") val = 2;
+          setCurrent(val);
+        }, []);
+
+        const reset = useCallback(() => {
+          setCurrent(initRef.current);
+        }, []);
+
+        return [current, { inc, dec, set, reset }];
+      }
+      function Counter() {
+        const [current, { inc, dec, set, reset }] = useCounter(5, {
+          min: 0,
+          max: 10,
+        });
+
+        return (
+          <div className="bg-bg-slate-500">
+            Counter: {current}
+            <hr />
+            <button className="border bg-green-500 " onClick={inc}>
+              inc
+            </button>
+            <hr />
+            <button className="border bg-green-500 " onClick={dec}>
+              dec
+            </button>
+            <hr />
+            <button className="border bg-green-500 " onClick={() => set(2)}>
+              set to 2
+            </button>
+            <hr />
+            <button className="border bg-green-500 " onClick={reset}>
+              reset to initial number 1
+            </button>
+          </div>
+        );
+      }
+
+      //useSet
+      //主要思路是通过更改完成原集合之后， 赋给新集合
+      function useSet(init = ["hello"]) {
+        const initRef = useRef();
+        initRef.current = init;
+        const [set, setSet] = useState(() => {
+          return new Set(initRef.current);
+        });
+
+        const add = useCallback((val) => {
+          setSet((set) => {
+            console.log(val);
+            set.add(val);
+            return new Set(set);
+          });
+        }, []);
+        const remove = useCallback((val) => {
+          setSet((set) => {
+            set.delete(val);
+            return new Set(set);
+          });
+        }, []);
+        const reset = useCallback(() => {
+          setSet((set) => {
+            return new Set(initRef.current);
+          });
+        }, []);
+
+        return [set, { add, remove, reset }];
+      }
+      function TestSet() {
+        const [set, { add, remove, reset }] = useSet(["hello"]);
+
+        console.log([...set]);
+        return (
+          <div>
+            <span>{[...set].join(",")}</span>
+            <br />
+            <button
+              className="border bg-slate-500"
+              onClick={() => add(Date.now().toString())}
+            >
+              add
+            </button>
+            <button
+              className="border bg-slate-500"
+              onClick={() => remove("hello")}
+            >
+              remove hello
+            </button>
+            <button className="border bg-slate-500" onClick={() => reset()}>
+              reset
+            </button>
+          </div>
+        );
+      }
+
+      //useInterval
+      //主要思路是将原本的setInterval的清除工作隐藏起来
+      function useInterval(func, delay) {
+        const funcRef = useRef();
+        funcRef.current = func;
+        useEffect(() => {
+          let id = setInterval(() => {
+            funcRef.current();
+          }, delay);
+
+          return () => {
+            clearInterval(id);
+          };
+        });
+      }
+      function TestInterval() {
+        const [count, setCount] = useState(0);
+
+        useInterval(() => {
+          setCount((count) => (count = count + 1));
+        }, 1000);
+
+        return (
+          <div>
+            <button className="border bg-green-500">{count}</button>
+          </div>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

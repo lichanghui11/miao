@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原生js实现</title>
+  <style>
+    .completed {
+      color: grey;
+      text-decoration: line-through;
+    }
+
+
+    ul.selectsactive li.completed {
+      display: none;
+    }
+
+    ul.selectscompleted li:not(.completed) {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Todos</h1>
+  <div>
+    <input type="checkbox" name="" id="toggleAll">
+    <input type="text" placeholder="What needs to be done?" id="todo-input">
+  </div>
+
+  <div class="todo-output">
+    <ul id="todo-output">
+
+    </ul>
+  </div>
+  <div>
+    <div>
+      <span id="left-count">0 items left</span>
+    </div>
+    <div id="selects">
+      <input type="radio" checked value="all" name="selects" id=""> all
+      <input type="radio" value="active" name="selects" id=""> active
+      <input type="radio" value="completed" name="selects" id=""> completed
+    </div>
+    <div>
+      <button>clear completed</button>
+    </div>
+  </div>
+  <script>
+    let todoInput = document.querySelector('#todo-input');
+    let todoOutput = document.querySelector('#todo-output')
+    let leftCount = document.querySelector('#left-count');
+    let count = 0;
+
+    let toggleAll = document.querySelector('#toggleAll');
+    let selects = document.querySelector('#selects');
+
+    todoInput.addEventListener('keyup', e => {
+      if (e.key === 'Enter') {
+        let temp = e.target.value.trim();
+        if (!temp) return;
+        let li = document.createElement('li');
+        let html = `
+          <input type="checkbox">
+          <span>${temp}</span>
+          <button>&times;</button>
+        `
+        li.innerHTML = html;
+        todoOutput.append(li);
+        count++;
+        toggleAllTemp();
+        todoInput.value = '';
+        li.querySelector('input[type="checkbox"]').addEventListener('change', function (e) {
+          if (this.checked) {
+            li.classList.add('completed');
+            count--;
+            updateCount(count);
+            toggleAllTemp();
+          } else {
+            li.classList.remove('completed');
+            count++;
+            updateCount(count);
+            toggleAllTemp();
+          }
+        })
+        li.querySelector('button').addEventListener('click', e => {
+          todoOutput.removeChild(li)
+          if (!li.classList.contains('completed')) {
+            count--;
+            updateCount(count);
+            toggleAllTemp();
+          }
+        })
+
+        updateCount(count);
+        toggleAllTemp();
+      }
+    })
+
+    toggleAll.addEventListener('click', e => {
+      let lists = Array.from(todoOutput.children);
+      if (lists.every(it => it.classList.contains('completed'))) {
+        count = lists.length;
+        updateCount(count);
+        lists.forEach(it => it.classList.remove('completed'));
+        lists.forEach(it => it.querySelector('input').checked = false)
+      } else {
+        count = 0;
+        updateCount(count);
+        lists.forEach(it => it.classList.add('completed'));
+        lists.forEach(it => it.querySelector('input').checked = true)
+      }
+    })
+
+    selects.addEventListener('click', e => {
+      if (e.target.matches('input[type="radio"]')) {
+        todoOutput.className = 'selects' + e.target.value;
+      }
+    })
+
+    function updateCount(count) {
+      leftCount.textContent = `${count} ${count > 1 ? 'items' : 'item'} left`;
+    }
+
+    function toggleAllTemp() {
+      let lists = Array.from(todoOutput.children);
+      if (lists.every(it => it.classList.contains('completed'))) toggleAll.checked = true;
+      else toggleAll.checked = false;
+    }
+
+  </script>
+</body>
+
+</html>

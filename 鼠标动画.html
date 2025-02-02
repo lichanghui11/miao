@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼠标动画</title>
+  <style>
+    div {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="circle1"></div>
+  <div class="circle2"></div>
+  <div class="circle3"></div>
+
+  <script>
+    let one = document.querySelector('.circle1');
+    let two = document.querySelector('.circle2');
+    let three = document.querySelector('.circle3');
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      })
+
+    function ani() {
+      let angle1 = Date.now() / 100;
+      let angle2 = angle1 + Math.PI * 2 / 3;
+      let angle3 = angle2 + Math.PI * 2 / 3;
+
+      let x0 = Math.cos(angle1) * 100 + mouseX;
+      let y0 = Math.sin(angle1) * 100 + mouseY;
+
+      let x1 = Math.cos(angle2) * 100 + mouseX;
+      let y1 = Math.sin(angle2) * 100 + mouseY;
+
+      let x2 = Math.cos(angle3) * 100 + mouseX;
+      let y2 = Math.sin(angle3) * 100 + mouseY;
+
+      one.style.left = x0 + 'px';
+      one.style.top = y0 + 'px';
+
+
+      two.style.left = x1 + 'px';
+      two.style.top = y1 + 'px';
+
+      three.style.left = x2 + 'px';
+      three.style.top = y2 + 'px';
+      requestAnimationFrame(ani);
+    }
+    requestAnimationFrame(ani); 
+  </script>
+</body>
+
+</html>

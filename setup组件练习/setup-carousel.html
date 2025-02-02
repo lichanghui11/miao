@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>setup carousel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { ref, reactive, onBeforeMount, onMounted, createApp } = Vue;
+      let app = createApp({
+        template: `
+        <div id="app">
+          <Carousel :slides="xiaoMiCars" />
+          <Carousel :slides="铁路图" :autoPlay="1000" />
+        </div>
+      `,
+        data() {
+          return {
+            xiaoMiCars: [
+              {
+                link: "https://www.mi.com/a/h/46580.html?sign=f95119440b11eb71afd5cb7031bed6cc",
+                img: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/16e619932cfa955ef2c195d5a1baaa7b.jpg?w=2452&h=920",
+              },
+              {
+                link: "https://www.mi.com/shop/buy?product_id=20854",
+                img: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/cd3aecdd51725ee0f23d4564b843f8ee.jpg?thumb=1&w=2452&h=920&f=webp&q=90",
+              },
+              {
+                link: "https://www.mi.com/xiaomi-bluetooth-speaker-mini",
+                img: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/e0937b3c33789f4a0bd2d707336d56dc.png?thumb=1&w=2452&h=920&f=webp&q=90",
+              },
+            ],
+            铁路图: [
+              {
+                link: "https://kyfw.12306.cn/otn/view/commutation_index.html",
+                img: "https://www.12306.cn/index/images/abanner05.jpg",
+              },
+              {
+                link: "https://travel.12306.cn/portal/travel/detail/ff80808157df83c2016445b0fd5f1304",
+                img: "https://travel.12306.cn/imgs/resources/uploadfiles/images/b0c76b21-531b-4af4-a607-cf5672c72ded_product_W572_H370.jpg",
+              },
+              {
+                link: "https://kyfw.12306.cn/otn/view/commutation_index.html",
+                img: "https://travel.12306.cn/imgs/resources/uploadfiles/images/8b36f9a7-f780-4e71-b719-9300109a9ff2_product_W572_H370.jpg",
+              },
+            ],
+          };
+        },
+      });
+
+      app.component("Carousel", {
+        template: `
+        <div class="w-[300px] h-[100px] bg-slate-500 relative" >
+          <a class="block w-full h-full" :href="slides[i].link" target="_blank">
+            <img class="w-full h-full" :src="slides[i].img" />
+          </a>
+          <div>
+            <button @click="next()" class="border absolute right-[0] top-1/2" >Next</button>
+            <button @click="prev()" class="border absolute left-[0] top-1/2" >Prev</button>
+          </div>
+        </div>
+      `,
+        emits: {
+          change: null,
+        },
+        props: {
+          slides: {
+            type: Array,
+            required: true,
+          },
+          autoPlay: {
+            type: Number,
+            default: 0,
+          },
+        },
+        setup(props, context) {
+          let i = ref(0);
+
+          const next = () => {
+            i.value++;
+            if (i.value === props.slides.length) i.value = 0;
+            context.emit("change", i.value);
+            console.log(i.value);
+          };
+
+          const prev = () => {
+            i.value--;
+            if (i.value < 0) i.value = props.slides.length - 1;
+            context.emit("change", i.value);
+            console.log(i.value);
+          };
+
+          let id = null;
+          onMounted(() => {
+            id = setInterval(() => {
+              if (props.autoPlay) {
+                next();
+              }
+            }, props.autoPlay);
+          });
+
+          onBeforeMount(() => {
+            clearInterval(id);
+          });
+
+          return {
+            i,
+            next,
+            prev,
+          };
+        },
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sun_earth_moon Solar_System</title>
+  <style>
+    .sun {
+      background-color: rgb(189, 74, 74);
+      width: 100px;
+      height: 100px;
+      border-radius: 999999px;
+      position: fixed;
+    }
+    .earth {
+      background-color: rgb(99, 99, 210);
+      width: 80px;
+      height: 80px;
+      border-radius: 99999px;
+      position: fixed;
+    }
+    .moon {
+      background-color: rgb(237, 170, 170);
+      width: 30px;
+      height: 30px;
+      border-radius: 9999px;
+      position: fixed;
+    }
+  </style>
+</head>
+<body>
+  <div class="sun"></div>  
+  <div class="earth"></div>
+  <div class="moon"></div>
+
+  <script>
+    let sun = document.querySelector('.sun'); 
+    let earth = document.querySelector('.earth'); 
+    let moon = document.querySelector('.moon');
+
+    requestAnimationFrame(function animate () {
+      let angleEarth = Date.now() / 1200; //地球转动角度； 
+      let angleMoon = Date.now() / 120; //月球转动角度； 
+      let x0 = window.innerWidth / 2 - 100;//定义太阳的位置；  
+      let y0 = window.innerHeight / 2 - 100; 
+      sun.style.left = x0 + 'px'; 
+      sun.style.top = y0 + 'px'; 
+
+      let x1 = Math.cos(angleEarth) * 400 + 50 - 40 + x0; 
+      let y1 = Math.sin(angleEarth) * 400 + 50 - 40 + y0; 
+      earth.style.left = x1  + 'px'; 
+      earth.style.top  = y1  + 'px'; 
+
+      let x2 = x1 + Math.cos(angleMoon) * 100 + 40 - 15; 
+      let y2 = y1 + Math.sin(angleMoon) * 100 + 40 - 15; 
+      moon.style.left = x2 + 'px'; 
+      moon.style.top = y2 + 'px'; 
+
+      requestAnimationFrame(animate);
+    });
+
+  </script>
+</body>
+</html>

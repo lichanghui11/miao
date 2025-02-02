@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>游戏方块儿</title>
+  <style>
+    div {
+      
+    }
+  </style>
+</head>
+<body>
+  <div class=".box" style="width: 100px;height: 100px;background-color: red;position: fixed;left: 0;top: 0;"></div> 
+
+  <script>
+
+    let div = document.querySelector('div'); 
+    
+    let vx = 0; 
+    let vy = 0; 
+    let speed = 1; 
+
+    requestAnimationFrame(function ani () {
+      div.style.left = parseFloat(div.style.left) + vx * speed + 'px'; 
+      div.style.top = parseFloat(div.style.top) + vy * speed + 'px';       
+
+
+      requestAnimationFrame(ani);
+    })
+
+    let ArrowLeftPress = false; 
+    let ArrowRightPress = false; 
+    let ArrowUpPress = false; 
+    let ArrowDownPress = false; 
+    addEventListener('keydown', e => {
+      if (e.key === 'shift') {
+        speed = 3; 
+      }else if (e.key == 'ArrowLeft') {
+        ArrowLeftPress = true; 
+        vx = -1; 
+      } else if (e.key === 'ArrowRight') {
+        ArrowRightPress = true; 
+        vx = 1; 
+      } else if (e.key === 'ArrowDown') {
+        ArrowDownPress = true; 
+        vy = 1; 
+      } else if (e.key === 'ArrowUp') {
+        ArrowUpPress = true; 
+        vy = -1;  
+      }
+    })
+
+    addEventListener('keyup', e => {
+      if (e.key === 'shift') {
+        speed = 1; 
+      }else if (e.key === 'ArrowRight') {
+        ArrowRightPress = false; 
+        if (ArrowLeftPress) {
+          vx = -1; 
+        } else {
+          vx = 0; 
+        }
+      } else if (e.key === 'ArrowLeft') {
+        ArrowLeftPress = false; 
+        if (ArrowRightPress) {
+          vx = 1; 
+        } else { 
+          vx = 0; 
+        }
+      } else if (e.key === 'ArrowUp') {
+        ArrowUpPress = false; 
+        if (ArrowDownPress) {
+          vy = 1; 
+        } else {
+          vy = 0; 
+        }
+      } else if (e.key === 'ArrowDown') {
+        ArrowDownPress = false; 
+        if (ArrowUpPress) {
+          vy = -1; 
+        } else {
+          vy = 0; 
+        }
+      }
+    })
+  </script>
+</body>
+</html>

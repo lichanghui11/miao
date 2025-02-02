@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta string[i]set="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简单函数实现</title>
+  <style>
+    img {
+      position: absolute;
+      width: 40px;
+    }
+  </style>
+</head>
+
+<body>
+  <ul>
+    <li>one1</li>
+    <li>two</li>
+    <li>three</li>
+    <li>four</li>
+  </ul>
+  <span class="one"></span>
+  <span class="two"></span>
+  <img src="对像素点的理解_副本.png" alt="">
+  <script>
+    function isCompleteNum(n) {
+      let result = 1;
+      for (let i = 2; i < Math.sqrt(n); i++) {
+        if (n % i === 0) {
+          result = result + i + n / i;
+        }
+      }
+      if (result === n) return true;
+      else return false;
+    }
+    // for (let i = 0; i < 10000; i++) {
+    //   if (isCompleteNum(i)) console.log('完全数' + i);
+    // }
+
+    function isNarcissisticNum(n) {
+      let count = 0;
+      let m = n;
+      let a = n;
+      let result = 0;
+      while (m > 0) {
+        count++;
+        m = (m - m % 10) / 10;
+      }
+      while (a > 0) {
+        let unit = a % 10;
+        let res = power(unit, count);
+        result += res;
+        a = (a - unit) / 10;
+      }
+      if (result === n) return true;
+      else return false;
+    }
+
+    // for (let i = 0; i < 10000; i++) {
+    //   if (isNarcissisticNum(i)) console.log('自恋数: ' + i);
+    // }
+    function power(x, n) {
+      let result = 1;
+      for (let i = 0; i < n; i++) {
+        result *= x;
+      }
+      return result;
+    }
+
+    function palindromicNum(n) {
+      let result = 0;
+      let m = n;
+      while (m > 0) {
+        let unit = m % 10;
+        result = result * 10 + unit;
+        m = (m - unit) / 10;
+      }
+      if (result === n) return true;
+      else return false;
+    }
+    //console.log(palindromicNum(12344321));
+    //console.log(palindromicNum(1234321));
+    //console.log(palindromicNum(123456));
+
+    function isPrime(n) {
+      let maxI = Math.sqrt(n);
+      for (let i = 2; i <= maxI; i++) {
+        if (n % i === 0) return false;
+      }
+      return true;
+    }
+    // for (let i = 2; i < 100; i++) {
+    //   if (isPrime(i)) console.log('一百以内素数: ' + i);
+    // }
+
+    function indexOf(array, target) {
+      for (let i = 0; i < array.length; i++) {
+        if (array[i] === target) return i;
+      }
+    }
+    //console.log(indexOf([1, 2, 3, 4, 6, 7], 6));
+
+    //以下是课堂函数完成记录； 
+    function sliceSelf(array, start, end = array.length) {
+      //模拟剪切函数； 
+      let result = [];
+      for (let i = start; i < end; i++) {
+        result.push(array[i]);
+      }
+      return result;
+    }
+
+    function concatSelf(...arrays) {
+      //拼接多个数组； 
+      let result = [];
+      for (let item of arrays) {
+        for (let it of item) {
+          result.push(it);
+        }
+      }
+      return result;
+    }
+
+    function spliceSelf(array, start = array.length, deleteCount = 0, alternates = '') {
+      //数组的剪切和替换； 
+      let result = [];
+      for (let i = 0; i < start; i++) {
+        result.push(array[i]);
+      }
+      if (alternates === '') {
+        var newStart = start + deleteCount;
+      }
+      for (let i = newStart; i < array.length; i++) {
+        result.push(array[i]);
+      }
+      return result;
+    }
+
+    function range(m, n) {
+      let result = [];
+      for (let i = m; i <= n; i++) {
+        result.push(i);
+      }
+      return result;
+    }
+
+    function sum(arr) {
+      let result = 0;
+      for (let item of arr) {
+        result += item;
+      }
+      return result;
+    }
+    function reverseArr(arr) {
+      //创建新的数组； 
+      let result = [];
+      for (let i = arr.length - 1; i >= 0; i--) {
+        result.push(arr[i]);
+      }
+      return result;
+    }
+    //0 1 2 3 4 
+    //0 1 2 3 4 5 
+    function reverseInplace(arr) {
+      //原地反转数组； 
+      let j = arr.length - 1;
+      let end = arr.length >>> 1;
+      for (let i = 0; i < end; i++) {
+        swap(arr, i, j);
+        j--;
+      }
+      return arr;
+    }
+    function swap(arr, i, j) {
+      let temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+
+    function isEqual(a, b) {
+      if (typeof a !== null && typeof a === 'object' && typeof b !== null && typeof b === 'object') {
+        let countA = countKeys(a);
+        let countB = countKeys(b);
+        if (countA !== countB) return false;
+        for (let key in a) {
+          if (!isEqual(a[key], b[key])) {
+            return false;
+          }
+        }
+        return true;
+      } else {
+        return a === b;
+      }
+      return true;
+    }
+    function countKeys(obj) {
+      let count = 0;
+      for (let key in obj) {
+        count++;
+      }
+      return count;
+    }
+
+    function deepCopy(a) {
+      if (typeof a !== null && typeof a === 'object') {
+        if (Array.isArray(a)) {
+          let res = [];
+          for (let item of a) {
+            res.push(deepCopy(item));
+          }
+          return res;
+        } else {
+          let result = {};
+          for (let key in a) {
+            result[key] = deepCopy(a[key]);
+          }
+          return result;
+        }
+      } else {
+        return a;
+      }
+    }
+
+
+    function randomArr(n) {
+      let res = [];
+      for (let i = 0; i < n; i++) {
+        res.push(Math.random() * n | 0);
+      }
+      return res;
+    }
+    function isSort(arr) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i + 1] < arr[i]) return false;
+      }
+      return true;
+    }
+
+    function swap(arr, i, j) {
+      let temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+
+    function bubbleSort(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        let swapped = false;
+        for (let j = 0; j < i; j++) {
+          if (arr[j + 1] < arr[j]) {
+            swap(arr, j + 1, j);
+            swapped = true;
+          }
+        }
+        if (swapped === false) break;
+      }
+      return arr;
+    }
+
+    function insertionSort1(arr) {
+      for (let i = 1; i < arr.length; i++) {
+        //从第一个开始选择； 
+        let temp = arr[i];
+        for (var j = i - 1; arr[j] > temp && j > -1; j--) {
+          arr[j + 1] = arr[j];
+        }
+        arr[j + 1] = temp;
+      }
+      return arr;
+    }
+
+    function insertionSort2(arr) {
+      for (let i = 1; i < arr.length; i++) {
+        for (let j = i - 1; j > -1; j--) {
+          if (arr[j] > arr[j + 1]) swap(arr, j, j + 1);
+          else break;
+        }
+      }
+      return arr;
+    }
+
+    function selectionSort(arr) {
+      for (let i = 0; i < arr.length - 1; i++) {
+        let minI = i;
+        for (let j = i + 1; j < arr.length; j++) {
+          if (arr[j] < arr[minI]) {
+            minI = j;
+          }
+        }
+        if (minI !== i) swap(arr, minI, i);
+      }
+      return arr;
+    }
+
+    function mergeSort1(arr) {
+      //Udemy教程， 需要辅助函数； 
+      if (arr.length < 2) return arr.slice();
+      let mid = arr.length >> 1;
+      let leftArr = arr.slice(0, mid);
+      let rightArr = arr.slice(mid);
+      return helpMerge(mergeSort1(leftArr), mergeSort1(rightArr));
+    }
+    function helpMerge(arr1, arr2) {
+      let res = [], i = 0, j = 0;
+      while (i < arr1.length && j < arr2.length) {
+        if (arr1[i] < arr2[j]) {
+          res.push(arr1[i]);
+          i++;
+        } else {
+          res.push(arr2[j]);
+          j++;
+        }
+      }
+      while (i < arr1.length) {
+        res.push(arr1[i]);
+        i++;
+      }
+      while (j < arr2.length) {
+        res.push(arr2[j]);
+        j++;
+      }
+      return res;
+    }
+
+    function mergeSort2(arr) {
+      //课堂教程， 不使用辅助函数； 
+      if (arr.length < 2) return arr;
+      let mid = arr.length >> 1;
+      let leftArr = arr.slice(0, mid);
+      let rightArr = arr.slice(mid);
+      mergeSort2(leftArr);
+      mergeSort2(rightArr);
+
+      let k = 0, i = 0, j = 0;
+      while (i < leftArr.length && j < rightArr.length) {
+        if (leftArr[i] < rightArr[j]) {
+          arr[k++] = leftArr[i++];
+        } else {
+          arr[k++] = rightArr[j++];
+        }
+      }
+      while (i < leftArr.length) arr[k++] = leftArr[i++];
+      while (j < rightArr.length) arr[k++] = rightArr[j++];
+      return arr;
+    }
+
+    function quickSort1(arr, left = 0, right = arr.length - 1) {
+      //Udemy教程， 需要辅助函数； 
+      if (left < right) {
+        let pivotI = getPivot(arr, left, right);
+        quickSort1(arr, left, pivotI - 1);
+        quickSort1(arr, pivotI + 1, right);
+      }
+      return arr;
+    }
+    function getPivot(arr, pivotI = 0, end = arr.length - 1) {
+      let swapI = pivotI;
+      for (let i = pivotI + 1; i <= end; i++) {
+        if (arr[i] < arr[pivotI]) {
+          swapI++;
+          swap(arr, swapI, i);
+        }
+      }
+      swap(arr, swapI, pivotI);
+      return swapI;
+    }
+
+    class TreeNode {
+      constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+      }
+    }
+
+    function arrayToTree(array, i = 0) {
+      if (array[i] == null || i > array.length - 1) return null;
+      let head = new TreeNode(array[i]);
+      head.left = arrayToTree(array, 2 * i + 1);
+      head.right = arrayToTree(array, 2 * i + 2);
+      return head;
+    }
+
+    function treeToArray(tree, i = 0, res = []) {
+      if (tree) {
+        res[i] = tree.val;
+        treeToArray(tree.left, 2 * i + 1, res);
+        treeToArray(tree.right, 2 * i + 2, res);
+      }
+      return res;
+    }
+
+    //[1, null, 3, 5]
+    function condenceArrToTree(arr) {
+      if (arr.length === 0) return null;
+      let temp = new TreeNode(arr[0]);
+      let roots = [temp];
+      for (let i = 1; i < arr.length; i++) {
+        let currNode = roots.shift();
+        if (arr[i] == null) {
+          currNode.left = null;
+        } else {
+          let left = new TreeNode(arr[i]);
+          currNode.left = left;
+          roots.push(left);
+        }
+        i++;
+        if (arr[i] == null) {
+          currNode.right = null;
+        } else {
+          let right = new TreeNode(arr[i]);
+          currNode.right = right;
+          roots.push(right);
+        }
+      }
+      return temp;
+    }
+
+    function treeTocondenceArr(root, res = []) {
+      if (!root) return res;
+      let roots = [root];
+      res.push(root.val);
+      while (roots.length) {
+        let currNode = roots.shift();
+        if (currNode.left) {
+          res.push(currNode.left.val);
+          roots.push(currNode.left);
+        } else {
+          res.push(null);
+        }
+        if (currNode.right) {
+          res.push(currNode.right.val);
+          roots.push(currNode.right);
+        } else {
+          res.push(null);
+        }
+      }
+      return res;
+    }
+
+    function describe(description, depth = 0, func) {
+      console.log(' '.repeat(depth) + description);
+      func();
+    }
+
+    describe('aaa', 0, () => {
+      describe('bbb', 2, () => { })
+      describe('bbb', 2, () => {
+        describe('ccc', 4, () => { })
+        describe('ccc', 4, () => { })
+      })
+      describe('bbb', 2, () => { })
+    })
+
+
+
+    function retry() {
+      for (; ;) {
+        try {
+          if (Math.random() > 0.8) {
+            console.log('Well Done')
+            break;
+          }
+          else {
+            new Error('wrong!!!!');
+          }
+        } catch (e) {
+          throw e;
+          continue;
+        }
+      }
+    }
+    function raw(literals, ...args) {
+      let res = [];
+      for (var i = 0; i < args.length; i++) {
+        res.push(literals.raw[i], args[i]);
+      }
+      res.push(literals.raw[i]);
+      return res.join('');
+    }
+
+    //以下模拟的正则和字符串的方法默认自带d和g标志； 
+    RegExp.prototype.myTest = function (str) {
+      if (this.exec(str)) return true;
+      else return false;
+    }
+
+    String.prototype.mySearch = function (value) {
+      if (typeof value === 'object') {
+        if (this.match(value)) return this.match(value).index;
+        else return -1;
+      } else {
+        return this.search(value);
+      }
+    }
+
+    String.prototype.mySplit = function (re) {
+      let res = [];
+      let match;
+      let lastLastIndex = 0
+      while (match = re.exec(this)) {
+        let i = 0;
+        res.push(this.slice(lastLastIndex, match.indices[i][0]))
+        while (match[i + 1]) {
+          res.push(match[i + 1]);
+          i++;
+        }
+        lastLastIndex = re.lastIndex;
+      }
+      res.push(this.slice(lastLastIndex));
+      return res;
+    }
+
+    String.prototype.myMatch = function (re) {
+      let res = [];
+      let match;
+      while (match = re.exec(this)) {
+        res.push(match[0]);
+      }
+      return res;
+    }
+
+    String.prototype.myReplace = function (re, func) {
+      let res = [];
+      let match;
+      let lastLastIndex = 0;
+      while (match = re.exec(this)) {
+        res.push(this.slice(lastLastIndex, match.indices[0][0]));
+        res.push(func(match[0]));
+        lastLastIndex = re.lastIndex;
+      }
+      res.push(this.slice(lastLastIndex));
+      return res.join('');
+    }
+
+
+    //JSON解析： 
+    function JSONParse(string) {
+      let i = 0;
+      return parseValue();
+
+      function parseObject() {
+        i++;
+        let res = {};
+        let key = '';
+        let value;
+        if (string[i] === '}') {
+          i++;
+          return res;
+        }
+        while (i < string.length) {
+          key = parseString();
+          i++;
+          value = parseValue();
+          res[key] = value;
+          if (string[i] === '}') {
+            i++; //skip the close curly bracket}
+            break;
+          }
+          i++; //skip the comma,
+        }
+        return res;
+      }
+
+      function parseArray() {
+        i++; //skip the open bracket
+        let res = [];
+        if (string[i] === ']') {
+          i++; //skip the close bracket
+          return res;
+        }
+        while (i < string.length) {
+          let value = parseValue();
+          res.push(value);
+          if (string[i] === ']') {
+            i++;//skip the close bracket
+            break;
+          }
+          i++;//skip the comma,
+        }
+        return res;
+      }
+
+      function parseString() {
+        i++; //skip the double open double qoute
+        let currI = i;
+        while (string[i] !== '"') i++;
+
+        let value = string.slice(currI, i);
+        i++;//skip the close double qoute
+        return value;
+      }
+
+      function parseNumber() {
+        let currI = i;
+        while (string[i] >= '0' && string[i] <= '9') i++;
+        return Number(string.slice(currI, i));
+      }
+
+      function parseValue() {
+        if (string[i] === 't') {
+          i += 4;
+          return true;
+        } else if (string[i] === 'f') {
+          i += 5;
+          return false;
+        } else if (string[i] === '{') {
+          return parseObject();
+        } else if (string[i] === '[') {
+          return parseArray();
+        } else if (string[i] === 'n') {
+          i += 4;
+          return null;
+        } else if (string[i] === '"') {
+          return parseString();
+        } else {
+          return parseNumber();
+        }
+      }
+    }
+
+    //JS解析：
+
+
+    function getByTag1(node, tag) {
+      let res = [];
+      tag = tag.toUpperCase();
+      if (node.nodeType === document.ELEMENT_NODE) {
+        for (let item of node.children) {
+          if (item.tagName === tag) {
+            res.push(item);
+          }
+          res.push(...getByTag1(item, tag));
+        }
+      }
+      return res;
+    }
+
+    function getByTag2(node, tag) {
+      let res = [];
+      tag = tag.toUpperCase();
+      traverse1(node, item => {
+        if (item.tagName === tag) {
+          res.push(item);
+        }
+      })
+      return res;
+    }
+
+    function traverse1(node, func) {
+      if (node.nodeType === document.ELEMENT_NODE) {
+        for (let item of node.children) {
+          func(item)
+          traverse1(item, func);
+        }
+      }
+      return
+    }
+
+
+    function getById1(id, node = document.body) {
+      let res = null;
+      traverse2(node, item => {
+        if (item.id === id) {
+          res = item;
+          return false;
+        }
+      })
+      return res;
+    }
+
+    function traverse2(node, func) {
+      if (node.nodeType === document.ELEMENT_NODE) {
+        if (func(node) === false) return false;
+        for (let item of node.children) {
+          if (traverse2(item, func) === false) return false;
+        }
+      }
+    }
+
+    function elt(tagName, ...args) {
+      //利用tagName创建新的标签， 将args放进标签， 创建一个dom树
+      let node =  document.createElement(tagName);
+      for (let item of args) {
+        if (item.nodeType === document.ELEMENT_NODE) {
+          node.append(item);
+        } else {
+          let temp = document.createTextNode(item);
+          node.append(temp);
+        }
+      }
+      return node;
+    }
+
+
+    function time(name, func) {
+      let start = Date.now();
+      func();
+      let during = Date.now() - start;
+      return name + '  spend  '  + during + ' ms';
+    }
+
+    function slow() {
+      let span = document.querySelector('.one');
+      while (span.offsetWidth < 2000) {
+        //2000px
+        let t = document.createTextNode('X');
+        span.append(t);
+      }
+    }
+    function quick() {
+      let span = document.querySelector('.two');
+      let target = document.createTextNode('XXXXX');
+      span.append(target);
+      let len = Math.ceil(2000 / (span.offsetWidth / 5));
+      
+      for (let i = 5; i < len; i++) {
+        span.append(document.createTextNode('X'));
+      }
+    }
+
+    let angle = 0, lastTime = null; 
+
+    function animation(time) {
+      let img = document.querySelector('img');
+      if (lastTime === null) lastTime = time; 
+      angle = (time - lastTime) * 0.001;
+
+      // angle += 0.01;
+      
+      // angle = Date.now() * 0.001;
+      img.style.top = Math.sin(angle) * 100 + 200 + 'px';
+      img.style.left = Math.cos(angle) * 100 + 200 + 'px';
+
+      requestAnimationFrame(animation);
+    }
+    requestAnimationFrame(animation);
+
+    // let lists = document.querySelectorAll('li');
+    // for (let i = 0; i < lists.length; i++) {
+    //   let li = lists[i]; 
+    //   li.addEventListener('click', () => {
+    //     console.log(i);
+    //   })
+    // }
+
+    let ul = document.querySelector('ul');
+    ul.addEventListener('click', e => {
+      if (e.target.matches('li')) {
+        let i = [...ul.children].indexOf(e.target);
+        console.log(i);
+      }
+    })
+  </script>
+
+
+</body>
+
+</html>

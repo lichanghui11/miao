@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useRef, useEffect, useCallback, useMemo, useState } = React;
+      //外框为可视框， relative
+      //内框包裹所有items元素， absolute
+      //单个item写一个组件
+      //大组件中包含多个item组件
+      const list = new Array(10000).fill(0).map((it) => Math.random());
+      function List({ rawHeight, height, width, Item }) {
+        const innerHeight = list.length * rawHeight;
+
+        const [scrollTop, setScrollTop] = useState(0);
+        const [isScrolling, setIsScrolling] = useState(false);
+        const elRef = useRef();
+        useEffect(() => {
+          console.log("in the useEffect....");
+          function handleScrollEnd() {
+            console.log(isScrolling);
+            setIsScrolling(false);
+          }
+          elRef.current.addEventListener("scrollend", handleScrollEnd);
+
+          return () => {
+            elRef.current.removeEventListener("scrollend", handleScrollEnd);
+          };
+        }, [elRef.current]);
+
+        function handleScroll(e) {
+          console.log(scrollTop);
+          setScrollTop(e.target.scrollTop);
+          setIsScrolling(true);
+        }
+
+        const items = useMemo(() => {
+          console.log("in the memo...");
+          let startI = Math.floor(scrollTop / rawHeight);
+          let endI = Math.ceil((scrollTop + height) / rawHeight);
+          if (endI > list.length - 1) endI = list.length - 1;
+
+          let visibleItems = [];
+          for (let i = startI; i <= endI; i++) {
+            let item = Item({
+              style: {
+                position: "absolute",
+                border: "solid",
+                marginTop: "5px",
+                height: rawHeight,
+                top: i * rawHeight,
+                left: 0,
+                width: "100%",
+              },
+              key: i,
+              id: i,
+              isScrolling,
+            });
+            visibleItems.push(item);
+          }
+          return visibleItems;
+        }, [scrollTop, isScrolling]);
+        return (
+          <div
+            onScroll={handleScroll}
+            ref={elRef}
+            className={`relative overflow-auto w-[${width}px] h-[${height}px]`}
+          >
+            <div className={` h-[${innerHeight}px] w-full`}>{items}</div>
+          </div>
+        );
+      }
+
+      function Item({ style, key, id, isScrolling }) {
+        if (isScrolling)
+          return (
+            <div key={key} style={style}>
+              Loading......
+            </div>
+          );
+        return (
+          <div key={key} style={style}>
+            {list[id]}
+          </div>
+        );
+      }
+
+      function MyApp() {
+        return (
+          <>
+            {console.log("islist....")}
+            <List rawHeight={20} height={200} width={200} Item={Item} />
+          </>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>被审查的键盘</title>
+</head>
+<body>
+  <input type="text"> 
+  <script>
+    let input = document.querySelector('input');
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Q' || e.key === 'X' || e.key === 'W') {
+        e.preventDefault();
+      }
+    }) 
+    // input.addEventListener('paste', (e) => {
+    //   let text = e.clipboardData.getData('text/plain');
+    //   if (text.match(/[WQX]/)) {
+    //     let filtered = text.replace(/[WQX]/g, '*');
+    //     e.preventDefault();
+    //     input.value = filtered;
+    //   }
+    // })
+
+    input.addEventListener('paste', e => {
+      let text = e.clipboardData.getData('text/plain');
+      if (text.match(/[WQX]/)) {
+        e.preventDefault()
+        let cursorStart = input.selectionStart; 
+        let cursorEnd = input.selectionEnd; 
+        let filtered = text.replaceAll(/[WQX]/g, '$');
+        let newValue = input.value.slice(0, cursorStart); 
+        newValue += filtered; 
+        newValue += input.value.slice(cursorEnd)
+        input.value = newValue;
+        input.selectionStart = input.selectionEnd = cursorStart + filtered.length;
+      }
+    })
+    let descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(input), 'value');
+    Object.defineProperty(input, 'value', {
+      get: function() {
+        return descriptor.get.call(input);
+      },
+      set: function(val) {
+        let newValue = val.replaceAll(/[WQX]/g, '$');
+        descriptor.set.call(input, newValue);
+      }
+    })
+  </script>
+</body>
+</html>

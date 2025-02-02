@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>联级菜单效果</title>
+  <style>
+    x* {
+      box-shadow: 0 0 2px 0 red inset;
+    }
+    div {
+      width: 70%;
+      margin: auto;
+    }
+    div > ul {
+      width: 70%;
+      margin: auto;
+      list-style: none;
+      border: 2px solid lightblue;
+      
+      > li {
+        display: inline-block;
+        padding: 10px;
+        position: relative;
+        border: 1px solid;
+        &:hover {
+          background-color: lightgreen;
+          > ul {
+            display: block;
+          }
+        }
+
+        > ul {
+          list-style: none;
+          border: 1px solid;
+          position: absolute;
+          left: 0;
+          top: 100%;
+          padding-left: 0;
+          width: 100px;
+          display: none;
+
+          > li {
+            display: block;
+            border: 1px solid;
+            position: relative;
+            &:hover {
+              background-color: lawngreen;
+              > ul {
+                display: block;
+              }
+            }
+            > ul {
+              position: absolute;
+              list-style: none;
+              display: none;
+              border: 1px solid;
+              background-color: lightslategray;
+              left: 100%;
+              top: 0;
+              width: 150px;
+              padding: 0;
+              > li:hover {
+                background-color: lightsalmon;
+              }
+            }
+          }
+        }
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <ul>
+      <li>
+        水果
+        <ul>
+          <li>
+            香蕉
+            <ul>
+              <li>喜欢</li>
+              <li>不喜欢</li>
+            </ul>
+          </li>
+          <li>
+            苹果
+            <ul>
+              <li>喜欢</li>
+              <li>不喜欢</li>
+            </ul>
+          </li>
+          <li>
+            葡萄
+            <ul>
+              <li>喜欢</li>
+              <li>不喜欢</li>
+            </ul>
+          </li>
+          <li>
+            橘子
+            <ul>
+              <li>喜欢</li>
+              <li>不喜欢</li>
+            </ul>
+          </li>
+          <li>
+            菠萝
+            <ul>
+              <li>喜欢</li>
+              <li>不喜欢</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        蔬菜
+        <ul>
+          <li>大白菜</li>
+          <li>大白菜</li>
+          <li>大白菜</li>
+          <li>大南瓜</li>
+          <li>大南瓜</li>
+        </ul>
+      </li>
+      <li>
+        玩具
+        <ul>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+        </ul>
+      </li>
+      <li>
+        文具
+        <ul>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+        </ul>
+      </li>
+      <li>
+        职业
+        <ul>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+          <li>menu</li>
+        </ul>
+      </li>
+    </ul>
+  </div> 
+</body>
+</html>

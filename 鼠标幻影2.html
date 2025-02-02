@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼠标幻影</title>
+
+  <style>
+    .shadow {
+      width: 10px;
+      height: 10px;
+      background-size: contain;
+      background-image: url(data:image/png;base64,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);
+      position: fixed;
+    }
+  </style>
+</head>
+<body>
+ 
+  <script>
+    function throttle(func, delay) {
+      let lastTime = 0; 
+      return (...args) => {
+        let now = Date.now(); 
+        if (now - lastTime < delay) return; 
+        func(...args);
+        lastTime = now;
+      }
+    }
+
+    window.addEventListener('mousemove', throttle(e => {
+      let mouseX = e.pageX; 
+      let mouseY = e.pageY; 
+      let span = document.createElement('span');
+      span.className = 'shadow';
+      span.style.left = mouseX + 'px'; 
+      span.style.top = mouseY + 'px';
+      document.body.appendChild(span);
+      console.log('ok')
+      setTimeout(() => {
+        document.body.removeChild(span);
+      }, 16 * 9)
+    }, 16))
+  </script>
+</body>
+</html>

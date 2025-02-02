@@ -1,0 +1,32 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+div.win {
+  width: 150px;
+  height: 150px;
+  background-color: lightblue;
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  border: 1px solid ;
+  >h1 {
+    background-color: violet;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+  }
+  >span {
+    width: 5px;
+    height: 5px;
+    cursor: nwse-resize;
+    background-color: lightblue;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}

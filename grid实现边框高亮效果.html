@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>grid实现边框高亮</title>
+  <style>
+    d* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+    div {
+      box-sizing: border-box;
+      width: 300px;
+      height: 300px;
+      margin: 100px auto;
+      > section {
+        display: grid;
+        grid-template-rows: repeat(3, 100px);
+        grid-template-columns: repeat(3, 100px);
+        > span {
+          margin-top: -1px;
+          margin-left: -1px;
+          display: inline-block;
+          border: 1px solid;
+          position: relative;
+          &:hover {
+            border-color: red;
+            z-index: 999;
+          }
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <section>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </section>
+  </div>
+</body>
+</html>

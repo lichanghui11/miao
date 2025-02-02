@@ -1,0 +1,135 @@
+* {
+  margin: 0;
+  padding: 0; 
+  background-color: #fff;
+  font-weight: 100;
+  box-sizing: border-box;
+}
+
+.bottom-bar {
+  height: 50px;
+  background-color: #2193b0;
+  margin-top: 300px;
+}
+
+
+.header {
+  width: 100%; 
+  height: 130px;
+  background-color: #2193b0;
+  font-size: 60px;
+  padding-left: 50px;
+}
+
+textarea {
+}
+
+#result {
+  overflow: auto;
+  > b {
+    &:nth-of-type(odd) {
+      background-color: #d5ebff;
+      font-weight: normal;
+    }
+    &:nth-of-type(even) {
+      background-color: #9fcfff;
+      font-weight: normal;
+    }
+  }
+}
+
+
+
+[data-group-index='0'] {
+  background-color: #d5ebff;
+}
+[data-group-index='1'] {
+  background-color: #c4e8ac;
+}
+[data-group-index='2'] {
+  background-color: #f6d7a6;
+}
+[data-group-index='3'] {
+  background-color: #c8c8ff;
+}
+[data-group-index='4'] {
+  background-color: #f2cfff;
+}
+
+
+b {
+  font-style: normal;
+  font-weight: 100 !important;
+  &:not(:has(:hover)):hover b{
+    background-color: inherit;
+  }
+  &:not(:has(:hover)):hover {
+    border: 2px solid grey;
+  }
+}
+
+.zero-width-assertion {
+  width: 2px;
+  border-left: -1px;
+  border-right: -1px;
+  border: dotted blueviolet;
+  &:hover {
+    box-shadow: 0 0 3px red;
+  }
+}
+
+.output {
+  position: relative;
+  width: 500px;
+  height: 100px;
+  > #testInput, #result {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* position: absolute; */
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
+    line-height: 1.5;
+  }
+  > #testInput {
+    z-index: 1;
+    background-color: transparent;
+  }
+  > #result {
+    background-color: transparent;
+  }
+}
+.flags {
+  width: 300px;
+  margin: 10px;
+  border-bottom: solid ;
+  margin-left: 0;
+  margin-bottom: 5px;
+}
+
+.testStr {
+  width: 300px;
+  border-bottom: solid;
+}
+label {
+  margin-top: 10px;
+  > input {
+    margin-right: 5px;
+  }
+}
+
+#tips {
+  border: solid red;
+  width: 300px;
+}
+button {
+  font-weight: 500;
+}

@@ -1,0 +1,261 @@
+<script>
+
+  /**
+   * 堆与堆排序
+   * 堆又叫优先队列，Priority Queue、Heap（不常用）
+   * 优先队列就是一种只关注一个动态集合中最值元素的数据结构
+   * 其中的“优先”意思就是最值元素处于优先位置（即所谓的队头）
+   * 即在这个结构中，队头元素永远是最值
+   * 
+   * 堆是一颗完全二叉树
+   * 既然它是一颗完全二叉树，那么它可以使用简单数组来存
+   * 树结构的特定位置的值直接就存入数组特定下标
+   * 因为这样存并不会浪费任何空间，同时也不必使用链式结构，还节省空间
+   * 
+   * 堆中每个结点的值都比其两个子结点要大或小
+   * 结点的值大于等于子结点的堆叫最大堆/大顶堆
+   * 结点的值小于等于子结点的堆叫最小堆/小顶堆
+   * 最大堆中堆顶元素是最大值
+   * 最小堆中堆顶元素是最小值
+   * 
+   * 堆支持两个操作：
+   * 1 删除堆顶元素（并维护堆的性质）
+   * 2 向堆中增加一个元素（并维护堆的性质）
+   * 
+   * 
+   * 
+   */
+
+  class PriorityQueue {
+    constructor() {
+      this._items = []
+    }
+    // 交换items中i和j位置的值
+    _swap(i, j) {
+      var t = this._items[i]
+      this._items[i] = this._items[j]
+      this._items[j] = t
+    }
+    // 从某个结点开始向上调整，idx为结点的位置
+    _heapUp(idx) {
+
+      // 目标元素不在堆顶，才有必要向上调整
+      while (idx > 0) {
+        var pIdx = (idx - 1) >> 1 // 相当于减1除2取整, pIdx 为idx 的父节点
+        if (this._items[idx] > this._items[pIdx]) {
+          this._swap(idx, pIdx)
+          idx = pIdx
+        } else {
+          break
+        }
+      }
+    }
+    push(value) {
+      this._items.push(value)
+      this._heapUp(this._items.length - 1)
+      return this
+    }
+    pop() {
+      if (this._items.length < 3) {
+        return this._items.shift()// 元素小于3个时，直接删除并返回堆顶元素即可，无需调整
+        // 因为只剩余一个或0个元素，不用调整了
+      }
+
+      var result = this._items[0]
+      var last = this._items.pop()
+      this._items[0] = last
+
+      this._heapDown(0) // 从堆顶开始向下调整，因为堆顶的元素被换掉了，它可能不满足堆的性质
+
+      return result
+    }
+    _heapDown(idx) {
+      while(true) {//可以写成真，因为里面一定会break，因为当元素被交换到最后一行时，必然没有子结点了，也就不会交换了，那么必然就break了
+        var maxIdx = idx // 先认为这个元素为最大的，记录它的下标为最大下标
+
+        var leftIdx = idx * 2 + 1
+        // 判断leftIdx < this._items.length的作用是确保它的子结点还存在
+        if (leftIdx < this._items.length && this._items[leftIdx] > this._items[maxIdx]) {
+          maxIdx = leftIdx
+        }
+
+        var rightIdx = idx * 2 + 2
+        if (rightIdx < this._items.length && this._items[rightIdx] > this._items[maxIdx]) {
+          maxIdx = rightIdx
+        }
+
+        if (maxIdx !== idx) {
+          this._swap(maxIdx, idx)
+          idx = maxIdx
+        } else {
+          break
+        }
+      }
+    }
+    // 查看但不删除堆顶元素
+    peek() {
+      return this._items[0]
+    }
+    get size() {
+      return this._items.length
+    }
+  }
+
+  /**
+   * 复杂度：
+   *   由于存储的是完全二叉树，所以树的高度严格的为log(n)，n为元素数量
+   *   而两个调整函数最多就是从堆顶到堆底，或反过来
+   * 所以push和pop的复杂度都为log(n)
+   * 
+   */
+  class PriorityQueue2 {
+    // predicate谓词函数，元素在堆中的位置由其传给这个函数后的返回值决定
+    constructor(predicate = it => it) {
+      this._items = []
+      this.predicate = predicate
+    }
+    // 交换items中i和j位置的值
+    _swap(i, j) {
+      var t = this._items[i]
+      this._items[i] = this._items[j]
+      this._items[j] = t
+    }
+    // 从某个结点开始向上调整，idx为结点的位置
+    _heapUp(idx) {
+
+      // 目标元素不在堆顶，才有必要向上调整
+      while (idx > 0) {
+        var pIdx = (idx - 1) >> 1 // 相当于减1除2取整
+        if (this.predicate(this._items[idx]) > this.predicate(this._items[pIdx])) {
+          this._swap(idx, pIdx)
+          idx = pIdx
+        } else {
+          break
+        }
+      }
+    }
+    push(value) {
+      this._items.push(value)
+      this._heapUp(this._items.length - 1)
+      return this
+    }
+    pop() {
+      if (this._items.length < 3) {
+        return this._items.shift()// 元素小于3个时，直接删除并返回堆顶元素即可，无需调整
+        // 因为只剩余一个或0个元素，不用调整了
+      }
+
+      var result = this._items[0]
+      var last = this._items.pop()
+      this._items[0] = last
+
+      this._heapDown(0) // 从堆顶开始向下调整，因为堆顶的元素被换掉了，它可能不满足堆的性质
+
+      return result
+    }
+    _heapDown(idx) {
+      while(true) {//可以写成真，因为里面一定会break，因为当元素被交换到最后一行时，必然没有子结点了，也就不会交换了，那么必然就break了
+        var maxIdx = idx // 先认为这个元素为最大的，记录它的下标为最大下标
+
+        var leftIdx = idx * 2 + 1
+        // 判断leftIdx < this._items.length的作用是确保它的子结点还存在
+        if (leftIdx < this._items.length && this.predicate(this._items[leftIdx]) > this.predicate(this._items[maxIdx])) {
+          maxIdx = leftIdx
+        }
+
+        var rightIdx = idx * 2 + 2
+        if (rightIdx < this._items.length && this.predicate(this._items[rightIdx]) > this.predicate(this._items[maxIdx])) {
+          maxIdx = rightIdx
+        }
+
+        if (maxIdx !== idx) {
+          this._swap(maxIdx, idx)
+          idx = maxIdx
+        } else {
+          break
+        }
+      }
+    }
+    // 查看但不删除堆顶元素
+    peek() {
+      return this._items[0]
+    }
+    get size() {
+      return this._items.length
+    }
+  }
+
+  function heapSort(array) {
+    // 由于用到了一个额外的优先队列，所以有额外的空间占用
+    var p = new PriorityQueue()
+    for (var item of array) {
+      p.push(item)
+    }
+    for (var i = 0; i < array.length; i++) {
+      array[i] = p.pop()
+    }
+    return array
+  }
+
+
+  function swap(array, i, j) {
+    var t = array[i]
+    array[i] = array[j]
+    array[j] = t
+  }
+  // 从数组的idx位置向下调堆，只调range之内的元素，range及其之外的不调
+  function heapDown(array, idx, range = array.length) {
+    while(true) {//可以写成真，因为里面一定会break，因为当元素被交换到最后一行时，必然没有子结点了，也就不会交换了，那么必然就break了
+      var maxIdx = idx // 先认为这个元素为最大的，记录它的下标为最大下标
+
+      var leftIdx = idx * 2 + 1
+      // 判断leftIdx < this._items.length的作用是确保它的子结点还存在
+      if (leftIdx < range && (array[leftIdx]) > (array[maxIdx])) {
+        maxIdx = leftIdx
+      }
+
+      var rightIdx = idx * 2 + 2
+      if (rightIdx < range && (array[rightIdx]) > (array[maxIdx])) {
+        maxIdx = rightIdx
+      }
+
+      if (maxIdx !== idx) {
+        swap(array, maxIdx, idx)
+        idx = maxIdx
+      } else {
+        break
+      }
+    }
+  }
+  // 将一个无序数组不使用任何额外空间的情况下原地调整成一个堆
+  // 可以起名叫“堆化”
+  function heapify(array) {
+    for (var i = (array.length - 1) >> 1; i >= 0; i--) {
+      heapDown(array, i)
+    }
+    return array
+  }
+  /**
+   * 复杂度：
+   *   空间复杂度：O(1)
+   *   时间复杂度：O(n*log(n))
+   * 而且这个算法的复杂度一定不会退化
+   * 
+   * 堆排序在排全部相同的数组时是有优势的，思考为什么。
+   * 
+   */
+  function heapSortInplace(array) {
+    heapify(array)
+
+    // 每次把堆部分中，堆顶的元素放到堆部分的末尾，并把末尾排除在堆之外
+    for (var i = array.length - 1; i > 0; i--) {
+      swap(array, 0, i)
+      heapDown(array, 0, i)
+    }
+    return array
+  }
+
+</script>
+
+https://leetcode.cn/problems/merge-k-sorted-lists/
+https://leetcode.cn/problems/kth-largest-element-in-a-stream/

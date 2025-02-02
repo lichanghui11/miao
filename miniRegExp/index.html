@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini RegExp</title>
+  <link rel="stylesheet" href="index.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-w-[600px] ">
+  <header class="header overflow-hidden">Regular Expressions</header> 
+  <div class="ml-[40px]">
+    <div class="">
+      请输入正则表达式： 
+    </div>
+    <input value="a(b(c)(d))(ef)" type="text" id="reInput" class="outline-double">
+    <br>
+    <button class="my-[10px] outline-double px-[10px] hover:bg-[#2193b0] duration-500" id="submit">Press Me to Run</button>
+    <span class="checking"></span>
+    <div id="tips">这里是错误提示！</div>
+    <div class="flags">以下勾选标记位: </div>
+    <label><input id="flag-i" type="checkbox">i</label>
+    <label><input id="flag-g" type="checkbox" checked>g</label>
+    <label><input id="flag-m" type="checkbox">m</label>
+    <label><input id="flag-d" type="checkbox" checked>d</label>
+    <label><input id="flag-s" type="checkbox">s</label>
+    <label><input id="flag-y" type="checkbox">y</label>
+    <label><input id="flag-u" type="checkbox">u</label>
+    <div class="testStr mb-[10px]">以下为待匹配文本</div>
+    <div class="output">
+      <textarea name="" id="testInput" class="border-2 border-pink-600">
+        this is my first project.
+        abcdef
+        feel free to test your text. 
+        wheere dsjfklfj
+        1 
+        2 kids
+        abcdef
+      </textarea>
+      <div id="result" class="border-2 border-indigo-600"></div>
+    </div>
+  </div>
+
+
+
+  <div class="bottom-bar"></div>
+</body>
+  <script src="index.js"></script>
+</html>

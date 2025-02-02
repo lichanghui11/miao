@@ -1,0 +1,350 @@
+<!-- 排序算法 -->
+<script>
+
+  //交换数组的第i和第j项
+  function swap(array, i, j) {
+    var t = array[i]
+    array[i] = array[j]
+    array[j] = t
+  }
+
+  function randomArray(n) {
+    var result = []
+    for (var i = 0; i < n; i++) {
+      result.push(Math.random() * n | 0)
+    }
+    return result
+  }
+
+  function isSorted(array) {
+    for (var i = 1; i < array.length; i++) {
+      if (array[i] < array[i - 1]) {
+        return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * 冒泡排序
+   * 空间复杂度：O(1)，因为使用了固定数量的变量
+   * 时间复杂度：O(n*n)
+   */
+  function bubbleSort(array) {
+    for (var end = array.length - 1; end > 0; end--) {
+      var swapped = false
+      for (var i = 0; i < end; i++) {
+        if (   array[i] > array[i + 1]   ) {
+          swap(array, i, i + 1)
+          swapped = true
+        }
+      }
+      if (swapped == false) {
+        break
+      }
+    }
+
+    return array
+  }
+  function bubbleSortBy(array, predicate = it => it) {
+    for (var end = array.length - 1; end > 0; end--) {
+      var swapped = false
+      for (var i = 0; i < end; i++) {
+        if (   predicate(array[i]) > predicate(array[i + 1])   ) {
+          swap(array, i, i + 1)
+          swapped = true
+        }
+      }
+      if (swapped == false) {
+        break
+      }
+    }
+
+    return array
+  }
+  
+
+  // compare函数会接收数组中的某两个元素，通过返回正负和0来区分谁大谁小
+  // 而排序函数就根据compare返回的值来知道谁排前后
+  function bubbleSortWith(array, compare) {
+    for (var end = array.length - 1; end > 0; end--) {
+      var swapped = false
+      for (var i = 0; i < end; i++) {
+        if (   compare(array[i], array[i + 1]) > 0  ) {
+          swap(array, i, i + 1)
+          swapped = true
+        }
+      }
+      if (swapped == false) {
+        break
+      }
+    }
+
+    return array
+  }
+
+  bubbleSortBy(array, it => it)
+  bubbleSortBy(array, it => it.died)
+  bubbleSortBy(array, it => it.name.length)
+  bubbleSortBy(array, it => it.born)
+  bubbleSortBy(array, it => it.died - it.born)
+
+  bubbleSortWith(array, (a, b) => {
+    return a - b
+    return b - a
+    return a.born - b.born
+    return b.born - a.born
+  })
+
+  /**
+   * 
+   * 选择排序：依次选择数组中更大的元素，放在最前面
+   * 空间复杂度：O(1)，因为使用了固定数量的变量
+   * 时间复杂度：O(n*n)
+   */
+  function selectSort(array) {
+    for (i = 0; i < array.length - 1; i++) {
+      var minIdx = i
+      for (var j = i + 1; j < array.length; j++) {
+        if (array[j] < array[minIdx]) {
+          minIdx = j
+        }
+      }
+      swap(array, i, minIdx)
+    }
+    return array
+  }
+
+  
+  /**
+   * 
+   * 插入排序：每次选择下一个元素将其插入到有序部分的正确位置
+   * 空间复杂度：O(1)，因为使用了固定数量的变量
+   * 时间复杂度：O(n*n)
+   */
+  function insertSort(array) {
+    // i指向当前需要插入到有序部分的数
+    for (var i = 1; i < array.length; i++) {
+      for (var j = i - 1; j >= 0; j--) {
+        if (array[j] > array[j + 1]) {
+          swap(array, j, j + 1)
+        } else {
+          break
+        }
+      }
+    }
+    return array
+  }
+
+  // https://leetcode.cn/problems/sort-an-array/description/
+
+
+  /**
+   * 归并排序：
+   *    将原数组一分为二，分别排序，之后合并为一个数组
+   * 时间复杂度：O(n*log(n))
+   * 空间复杂度：O(n+log(n)) 即 O(n) 因为相对于n来讲，log(n)是低阶项
+   * 
+   * 
+   * 
+   */
+  function mergeSort(array) {
+    if (array.length < 2) return array
+    
+    var midIdx = array.length >> 1 // 除以2之后取整
+    var leftArray = array.slice(0, midIdx)
+    var rightArray = array.slice(midIdx)
+
+    leftArray = mergeSort(leftArray)
+    rightArray = mergeSort(rightArray)
+
+    var i = 0, j = 0, k = 0
+
+    while (i < leftArray.length && j < rightArray.length) {
+      if (leftArray[i] < rightArray[j]) {
+        array[k++] = leftArray[i++]
+      } else {
+        array[k++] = rightArray[j++]
+      }
+    }
+
+    while (i < leftArray.length) {
+      array[k++] = leftArray[i++]
+    }
+
+    while (j < rightArray.length) {
+      array[k++] = rightArray[j++]
+    }
+
+    return array
+  }
+
+
+  /**
+   * 快速排序：
+   *    从原数组中随机选择一个数p
+   *  然后将原数组分成两组：
+   *    小于等于p的在一组
+   *    大于p的在一组
+   * 然后分别对两组数进行排序，之后直接拼接（不是归并）
+   * 另一种做法是将数们分成三组
+   * 小于p的，等于p的，大于p的
+   * 对小于和大于的排序
+   * 之后拼接
+   * 
+   * 下面这个写法的时间与空间复杂度跟归并排序一样
+   * 
+   */
+  function quickSort(array) {
+    if (array.length < 2) {
+      return array.slice() // slice的目的是为了保持跟后面一样返回新的数组
+    }
+    var pivotIdx = Math.random() * array.length | 0
+    var pivot = array[pivotIdx]
+    var left = []
+    var middle = []
+    var right = []
+    for (var i = 0; i < array.length; i++) {
+      var item = array[i]
+      if (item < pivot) {
+        left.push(item)
+      } else if (item === pivot) {
+        middle.push(item)
+      } else {
+        right.push(item)
+      }
+    }
+
+    left = quickSort(left)
+    right = quickSort(right)
+
+    return left.concat(middle, right)
+  }
+
+  /**
+   * 快速排序的原地版本
+   * 时间复杂度：O( n*log(n) )
+   * 空间复杂度：O( log(n) )
+   * 
+   * 函数的定义：对数组从left到right（不包含right）的元素进行快速排序
+   */
+  function quickSortInPlace(array, left = 0, right = array.length) {
+    if (right - left < 2) {
+      return array
+    }
+
+    // 随机找出哨兵元素
+    var pivotIdx = Math.floor((right - left) * Math.random() + left)
+    var pivot = array[pivotIdx]
+
+    // 先把哨兵元素放到最后一个位置上
+    swap(array, pivotIdx, right - 1)
+
+    // 就地对元素进行分组
+    var i = left
+    for (var j = left; j < right - 1; j++) {
+      if (array[j] < pivot) {
+        swap(array, i, j)
+        i++
+      }
+    }
+    swap(array, i, right - 1)
+    // 到此时为止，i位置放的就是哨兵元素
+    // 其左边都小于它，右边都大于等于它
+    // 后续的排序i位置的数肯定不再需要变化位置了
+    // 接下来对其左边和右边分别递归即可
+    quickSortInPlace(array, left, i)
+    quickSortInPlace(array, i + 1, right)
+
+    return array
+  }
+
+
+  function quickSort2() {
+
+    var i = left;
+    var j = right - 1;
+
+    while (i < j) {
+      while(array[i] < pivot) {
+        i++
+      }
+      while(array[j] >= pivot) {
+        j--
+      }
+      swap(array, i, j)
+      if (xx) {
+        break
+      }
+    }
+    swap()
+
+  }
+  function quickSort3(array) {
+    
+    var pivot = xxx
+
+    var idx = partition(array, pivot)
+    quickSort3(left, idx - 1)
+    quickSort3(idx + 1, right)
+  }
+
+  // 用快排思路做一下这个题目
+  // https://leetcode.cn/problems/kth-largest-element-in-an-array/description/
+  // https://leetcode.cn/problems/sort-an-array/description/
+
+
+// https://leetcode.com/problems/add-two-numbers
+// https://leetcode.com/problems/merge-two-sorted-lists
+// https://leetcode.com/problems/reverse-linked-list
+// https://leetcode.com/problems/sort-list
+// https://leetcode.com/problems/remove-nth-node-from-end-of-list
+// https://leetcode.com/problems/remove-duplicates-from-sorted-list
+// https://leetcode.com/problems/linked-list-cycle
+// https://leetcode.com/problems/palindrome-linked-list
+
+
+// https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list
+
+
+  /**
+   * 排序算法的稳定性：
+   *   即相同元素的相对位置在排序前后是否能保持不变
+   *    当总能保持不变时，称这个排序算法为稳定的
+   *    反之，不能保证保持不变时，称这个排序算法为不稳定的
+   * 
+   * 各排序算法的稳定性：
+   *   冒泡：稳定
+   *   选择：不稳定
+   *   插入：稳定
+   * 
+   *   归并排序：稳定
+   * 
+   *   快速排序：不稳定
+   *   堆排序：不稳定
+   * 
+   *   排序二叉树排序：稳定
+   * 
+   *   桶排序
+   *   基数排序
+   *   希尔排序：不稳定
+   *   计数排序：不考虑稳定性，因为它只能排纯数值
+   * 
+   * 
+   * 排序算法的稳定性有什么作用？
+   *   当我们想要实现类似成绩单一样的多级排序时，排序的稳定性作用就体现出来了
+   *     即当语文成绩相同，按数学成绩排，数学成绩相同，但英语成绩排。。。。
+   *   只需要用稳定的排序算法先按英语排，再按数学排，再按语文排即可
+   *    因为当按英语排好后，数学相同的人相对顺序不变，该顺序就是之前基于英语的顺序，依次类推
+   * 
+   */
+  
+  // name  yuwen math  eng  cs
+  // zhan  280   98   120   100
+  // xue   290   88    98   88
+  // li    280   88   120   90
+  // zhao  280   85   110   92
+ 
+
+
+</script>

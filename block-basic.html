@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block Basic</title>
+  <style>
+    div.a {
+      background-color: red;
+      margin: 10px 20px;
+      > p {
+        width: 700px;
+        margin: auto;
+        background-color: red;
+      }
+    }
+
+    div.b {
+      width: 700px;
+      border: 2px solid;
+      margin: auto;
+      margin-top: 20px;
+      > .aa, .cc {
+        margin: 10px;
+        height: 100px;
+        overflow: auto;
+      }
+      > .bb {
+        height: 50px;
+        margin: 10px;
+        background-color: lightgreen;
+        &:hover {
+          margin-left: -10px;
+          margin-right: -10px;
+        }
+      }
+    }
+
+    .alpha {
+      border: 50px solid orange;
+      width: 0;
+      margin: auto;
+      margin-top: 50px;
+      border-color: white white orange white;
+      margin-bottom: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="a">
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates atque, quia autem dolore voluptatum similique velit accusamus minus modi cumque incidunt. Maxime, quisquam minus accusantium labore laborum fuga voluptas doloremque.</p>
+  </div>
+
+  <div class="b">
+    <div class="aa">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus culpa, sequi animi iste, praesentium labore quo minus soluta qui provident sunt quis nam, magni consequuntur tempora natus sint? Hic, natus?Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem blanditiis quaerat aliquid adipisci placeat voluptate illum officia eos minus nulla architecto non, quis, reiciendis saepe modi consequatur tempora perspiciatis enim.</div>
+    <div class="bb"></div>
+    <div class="cc">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus culpa, sequi animi iste, praesentium labore quo minus soluta qui provident sunt quis nam, magni consequuntur tempora natus sint? Hic, natus?Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem blanditiis quaerat aliquid adipisci placeat voluptate illum officia eos minus nulla architecto non, quis, reiciendis saepe modi consequatur tempora perspiciatis enim.</div>
+  </div>
+  <div class="alpha"></div>
+</body>
+</html>

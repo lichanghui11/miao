@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Carousel</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function MyApp() {
+        return (
+          <>
+            <Carousel
+              imgs={[
+                {
+                  img: "https://www.12306.cn/index/images/abanner01.jpg",
+                  url: "https://cx.12306.cn/tlcx/index.html",
+                },
+                {
+                  img: "https://www.12306.cn/index/images/abanner05.jpg",
+                  url: "https://kyfw.12306.cn/otn/view/my_insurance.html",
+                },
+                {
+                  img: "https://travel.12306.cn/imgs/resources/uploadfiles/images/243945e6-c45d-4870-9cf5-77e488068646_product_W572_H370.jpg",
+                  url: "",
+                },
+                {
+                  img: "https://travel.12306.cn/imgs/resources/uploadfiles/images/fcd7173f-7651-46e7-a126-bdc199e1f6f7_product_W572_H370.jpg",
+                  url: "",
+                },
+                {
+                  img: "https://travel.12306.cn/imgs/resources/uploadfiles/images/1716878f-79a2-4db1-af8c-b9c2039f0b3c_product_W572_H370.jpg",
+                  url: "",
+                },
+              ]}
+              play={true}
+            />
+            <h1 className="my-[50px]">
+              使用CSS拿到hover的状态， 可以在刷新页面时就访问到hover的状态，
+              从而停止自动播放， mouseLeave的时候继续自动播放
+            </h1>
+          </>
+        );
+      }
+
+      function Carousel({ imgs, play }) {
+        const [idx, setIdx] = React.useState(0);
+        const [hover, setHover] = React.useState(false);
+
+        //利用CSS拿到hover的元素可以在页面刚加载成功的时候访问到是否hover的变量
+        React.useEffect(() => {
+          console.log('检测到hover....')
+          let targ = document.querySelector(".targ");
+          let hoverings = document.querySelectorAll(":hover");
+          console.log("has hover?");
+          if (Array.from(hoverings).includes(targ)) {
+            console.log("hovering");
+            setHover(true);
+          }
+        }, []);
+        React.useEffect(() => {
+          let id;
+          if (hover === false) {
+            console.log(hover);
+            if (play) {
+              id = setInterval(() => {
+                console.log("changing.....");
+                prev();
+                console.log(idx);
+              }, 1000);
+            }
+          }
+
+          return () => {
+            clearTimeout(id);
+          };
+        }, [hover]);
+
+        function handleMouseEnter() {
+          setHover(true);
+        }
+
+        function handleMouseLeave() {
+          setHover(false);
+        }
+
+        function prev() {
+          setIdx((i) => (i === 0 ? imgs.length - 1 : i - 1));
+        }
+
+        function next() {
+          if (idx === imgs.length - 1) {
+            setIdx(0);
+          } else {
+            setIdx((i) => i + 1);
+          }
+        }
+
+        return (
+          <>
+            <div
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              className="targ relative w-[200px] h-[100px] bg-red-100"
+            >
+              <div>
+                <a href={imgs[idx].url}>
+                  <img src={imgs[idx].img} alt="" />
+                </a>
+              </div>
+              <button
+                onClick={prev}
+                className="absolute left-0 bg-slate-500 top-1/2"
+              >
+                prev
+              </button>
+              <button
+                onClick={next}
+                className="absolute bg-green-500 right-0 top-1/2"
+              >
+                next
+              </button>
+            </div>
+          </>
+        );
+      }
+
+      let hovers = document.querySelector(":hover");
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

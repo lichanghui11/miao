@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>grid实现横向布局</title>
+  <style>
+    s* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.07);
+    }
+
+    div {
+      height: 400px;
+      width: 800px;
+      margin: 100px auto;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 14px;
+
+      > span {
+        background-color: lightblue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      > span:first-child {
+        grid-area: 1/1/5/2;
+      }
+      > span:nth-child(n + 2) {
+        grid-row: span 2;
+        &:nth-last-child(-n + 2) {
+          grid-row: span 1;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <span>01</span>
+    <span>02</span>
+    <span>03</span>
+    <span>04</span>
+    <span>05</span>
+    <span>06</span>
+    <span>07</span>
+    <span>08</span>
+    <span>09</span>
+    <span>10</span>
+    <span>11</span>
+    <span>12</span>
+
+  </div> 
+</body>
+</html>

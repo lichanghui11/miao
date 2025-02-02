@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scan QR Code for Audio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  </head>
+  <body>
+    <h2>Scan the QR Code to listen to the audio</h2>
+    <div id="qrcode"></div>
+
+    <script>
+      // 你的音频文件链接
+      var audioUrl = "mayYouHappy.m4a";
+
+      // 生成二维码
+      var qrCode = new QRCode(document.getElementById("qrcode"), {
+        text: audioUrl,
+        width: 200,
+        height: 200,
+      });
+    </script>
+  </body>
+</html>

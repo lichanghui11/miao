@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IOS checkbox 效果</title>
+  <style>
+    x* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+    div {
+      width: 300px;
+      height: 300px;
+      margin: 100px auto;
+      display: flow-root;
+      > section {
+        width: 200px;
+        height: 100px;
+        margin: 100px auto;
+        border-radius: 999px;
+        border: 1px solid #cbc7ca;
+        transition: 1.5s;
+        box-shadow: 0 0 0 0 #cbc7ca inset;
+        position: relative;
+        &:hover {
+          box-shadow: 0 0 0 100px #30f34d inset;
+          > main {
+            transition: 1s;
+            transform: translateX(100px);
+            background-color: white;
+          }
+        }
+        > main {
+          display: inline-block;
+          width: 90px;
+          height: 90px;
+          border-radius: 999px;
+          position: absolute;
+          left: 5px;
+          top: 5px;
+          border: 1px solid #cbc7ca;
+          box-shadow: 0 2px 3px 0;
+          transform: translateX(0px);
+          position: relative; 
+          z-index: 999; 
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <section>
+      <main></main>
+    </section>
+  </div> 
+</body>
+</html>

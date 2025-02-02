@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>轮播图效果实现</title>
+
+  <style>
+    x* {
+      box-shadow: 0 0 2px 0 red inset;
+    }
+    body > div {
+      width: 700px;
+      height: 500px;
+      margin: auto;
+      position: relative;
+      > div {
+        width: 150px;
+        height: 30px;
+        position: absolute;
+        top: 90%;
+        left: calc(50% - 125px);
+        > label {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 99999px;
+          background-color: gray;
+          border: 1px solid;
+          margin-left: 10px;
+          &:hover {
+            background-color: orange;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    
+    input {
+      display: none;
+    }
+    
+    img {
+      width: 500px;
+      height: 400px;
+      position: absolute;
+      left: calc(50% - 250px);
+      top: 30px;
+      display: none;
+    }
+    
+
+    input:checked + * + * + * + *{
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <input name="r" type="radio" id="r1" checked>
+    <input name="r" type="radio" id="r2">
+    <input name="r" type="radio" id="r3">
+    <input name="r" type="radio" id="r4">
+    
+    
+      <img src="https://www.12306.cn/index/images/abanner01.jpg" alt="">
+      <img src="https://www.12306.cn/index/images/abanner04.jpg" alt="">
+      <img src="https://www.12306.cn/index/images/abanner02.jpg" alt="">
+      <img src="https://www.12306.cn/index/images/abanner06.jpg" alt="">
+    
+    <div> 
+      <label  for="r1"></label>
+      <label  for="r2"></label>
+      <label  for="r3"></label>
+      <label  for="r4"></label>
+    </div>
+  </div> 
+</body>
+</html>

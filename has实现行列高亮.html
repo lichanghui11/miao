@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>has实现行列高亮</title>
+  <style>
+    * {
+      background-color: rgba(0, 0, 0, 0.07);
+      box-shadow: 0 0 2px 0 red inset;
+    }
+    td {
+      width: 50px;
+      height: 50px;
+      
+    }
+    tfoot, thead {
+      background-color: pink;
+    }
+
+
+    table {
+      border-collapse: collapse;
+      margin: 100px auto;
+      > caption {
+        caption-side: bottom;
+        padding: 10px;
+      }
+      &:has(td:first-child:hover) col:first-child, 
+      &:has(td:first-child:hover) tbody tr:first-child {
+        background-color: red;
+      }
+      &:has(td:nth-child(2):hover) col:nth-child(2), 
+      &:has(td:nth-child(2):hover) tbody tr:nth-child(2){
+        background-color: orange;
+      }
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <caption>行列高亮</caption>
+    
+    <thead>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </thead>
+
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table> 
+</body>
+</html>

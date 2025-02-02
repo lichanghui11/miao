@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实现对象的 for of功能</title>
+</head>
+
+<body>
+  实现对象的for of 功能需要定义一个迭代器;
+  <p>普通函数会创建新的作用域</p>
+  <p>箭头函数继承外层的作用域</p>
+  <script>
+    let obj = {
+      'a': 1,
+      'b': 2,
+      'c': 3,
+      'd': 4,
+      'e': 5,
+      [Symbol.iterator]() {
+        let i = 0;
+        let key = Object.keys(this);
+        return {
+          next: () => {
+            if (i < key.length) {
+              let k = [key[i]];
+              let v = this[key[i]];
+              i++;
+              return {
+                value: {
+                  k: v
+                },
+                done: false
+              };
+            } else {
+              return { done: true };
+            }
+          }
+        }
+      }
+    }
+    for (let item of obj) console.log(item);
+
+
+    function generator(num) {
+      let state = 0;
+      return {
+        next: () => {
+          if (state <= num) {
+            let i = state;
+            state++;
+            return { value: i, done: false };
+          } else {
+            return { done: true };
+          }
+        }
+      }
+    }
+    let gen = generator(10);
+
+
+    //练习生成器函数： 
+    function* generator1() {
+      let i = 0;
+      while (true) {
+        //这里并没有上一个yield表达式， 因此next()传入的值会被忽略， 不会被返回；
+        let temp = yield i;
+        i++;
+      }
+    }
+    let gen1 = generator1();
+    console.log(gen1.next(33));
+
+    console.log(gen1.next(88));
+
+    console.log(gen1.throw(new Error('hello')));
+  </script>
+</body>
+
+</html>

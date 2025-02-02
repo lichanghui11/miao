@@ -1,0 +1,126 @@
+x* {
+  box-shadow: 0 0 2px 0 red;
+}
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+div.container {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #6b665a;
+}
+
+div.header {
+  height: 100px;
+  width: 100%;
+  background-color: #a2be49;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px #a2b349;
+
+  >div {
+    justify-items: start;
+
+    >h2 {
+      margin: 0;
+      font-size: 20px;
+      margin-top: 10px;
+      margin-left: 15px;
+    }
+
+    >p {
+      margin: 0;
+      color: #6b665a;
+      font-size: 13px;
+      margin-left: 15px;
+    }
+  }
+}
+
+
+div.input {
+  position: relative;
+
+  >.reg-exp {
+    position: relative;
+    margin: 20px;
+    width: auto;
+    height: 40px;
+    background-color: #cbcbba;
+    padding: 5px 10px;
+    outline: none;
+    margin-bottom: 10px;
+
+    &::after {
+      position: absolute;
+      content: attr(data-placeholder);
+      top: 5px;
+      left: 10px;
+      color: grey;
+    }
+
+    &:focus::after {
+      display: none;
+    }
+
+    &:not(:empty)::after {
+      display: none;
+    }
+  }
+
+  >.display {
+    margin-left: 20px;
+    background-color: #a2be49;
+    border: 1px;
+    border-radius: 3px;
+    width: 80px;
+    padding: .2rem;
+    cursor: pointer;
+  }
+
+  label {
+    position: absolute;
+    right: 20px;
+  }
+
+  i {
+    cursor: pointer;
+  }
+
+  .download {
+    cursor: pointer;
+    background-color: inherit;
+    border: 1px;
+    text-decoration: underline;
+  }
+}
+
+div.output {
+  margin: 20px;
+  min-height: 10px;
+  overflow-x: auto;
+
+  svg {
+    background-color: white;
+    width: 100%;
+    height: 50px;
+    color: black;
+  }
+}
+
+div.footer {
+  margin: 20px;
+  width: auto;
+
+  p {
+    font-size: 13px;
+  }
+}

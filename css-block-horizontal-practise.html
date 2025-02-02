@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>块元素水平布局练习</title>
+  <style>
+    * {
+      box-shadow: 0 0 2px 0 green inset;
+    }
+    body {
+      margin: 0;
+    }
+    .header {
+      background-color: red;
+      > div {
+        width: 600px;
+        margin: auto;
+      }
+    }
+    p.blue {
+      border: 2px solid blue;
+      width: 700px;
+      margin-left: calc(100% - 700px);
+    }
+    p.pink {
+      margin-left: 30px;
+      margin-right: 30px;
+      width: auto;
+      border: 2px solid pink;
+    }
+    p.green {
+      width: 700px;
+      margin-left: 30px;
+      border: 2px solid green;
+    }
+    p.dotted {
+      border: 2px dashed violet;
+      margin-left: 100px;
+      margin-right: 100px;
+    }
+    p.black {
+      border: 5px solid;
+      border-radius: 8px;
+      width: 700px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+  <div>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit earum quisquam architecto ad adipisci l</div> </div>
+  <p class="blue">lookjsldkjflaskjfadlskjfkaldsf;alsdkfjals;kdfjasdlf</p>
+  <p class="pink">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium amet, reprehenderit dolore eaque maiores dolorem ratione quod excepaque expedita.</p>
+  <p class="green">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem nisi odit cum et ducimus quisis ex nesciunt!</p>
+  <p class="dotted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni laboriosam ex necesitis et at?</p>
+  <p class="black">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Libero aliquam placeat amet, excepturi t</p>
+</body>
+</html>

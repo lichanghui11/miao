@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>solar system</title>
+  <style>
+    .sun, .earth, .moon {
+      border-radius: 99999px;
+      position: fixed;
+    }
+    .sun {
+      width: 100px;
+      height: 100px;
+      background-color: gold;
+    }
+    .earth {
+      width: 30px;
+      height: 30px;
+      background-color: blue;
+    }
+    .moon {
+      width: 20px;
+      height: 20px;
+      background-color: rosybrown;
+    }
+  </style>
+</head>
+<body>
+  <div class="sun" onclick="console.log(window.event)"></div>
+  <div class="earth"></div>
+  <div class="moon"></div>
+
+  <script>
+    var sun = document.querySelector('.sun')
+    var earth = document.querySelector('.earth')
+    var moon = document.querySelector('.moon')
+
+
+    requestAnimationFrame(function animate(time) {
+      
+      var angle1 = Date.now() / 1200 // 地球的转动角度
+      var angle2 = Date.now() / 100  // 月球的转动角度
+
+      var x0 = window.innerWidth / 2 - 25
+      var y0 = window.innerHeight / 2 - 25
+
+      sun.style.left = x0 + 'px'
+      sun.style.top =  y0 + 'px'
+
+      var x1 = x0 + 50 - 15 + Math.sin(angle1) * 200
+      var y1 = y0 + 50 - 15 + Math.cos(angle1) * 200
+
+      earth.style.left = x1 + 'px'
+      earth.style.top = y1 + 'px'
+
+
+      var x2 = x1 + 15 /*加上地球的一半*/ - 10/*减去月球的一半*/ + Math.sin(angle2) * 40
+      var y2 = y1 + 15 /*加上地球的一半*/ - 10/*减去月球的一半*/ + Math.cos(angle2) * 40
+
+      moon.style.left = x2 + 'px'
+      moon.style.top  = y2 + 'px'
+
+
+      requestAnimationFrame(animate)
+    })
+  </script>
+</body>
+</html>

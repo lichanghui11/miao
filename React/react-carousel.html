@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function MyApp() {
+        let imgs = [
+          {
+            img: "https://www.12306.cn/index/images/abanner01.jpg",
+            url: "https://cx.12306.cn/tlcx/index.html",
+          },
+          {
+            img: "https://www.12306.cn/index/images/abanner05.jpg",
+            url: "https://kyfw.12306.cn/otn/view/my_insurance.html",
+          },
+          {
+            img: "https://www.12306.cn/index/images/abanner02.jpg",
+            url: "https://kyfw.12306.cn/otn/view/my_insurance.html",
+          },
+          {
+            img: "https://www.12306.cn/index/images/abanner06.jpg",
+            url: "https://kyfw.12306.cn/otn/view/my_insurance.html",
+          },
+          {
+            img: "https://travel.12306.cn/imgs/resources/uploadfiles/images/b0c76b21-531b-4af4-a607-cf5672c72ded_product_W572_H370.jpg",
+            url: "https://kyfw.12306.cn/otn/view/my_insurance.html",
+          },
+        ];
+
+        return (
+          <div>
+            <MyCarousel imgs={imgs} />
+          </div>
+        );
+      }
+
+      class MyCarousel extends React.Component {
+        constructor(props) {
+          super(props);
+
+          this.state = {
+            i: 0,
+          };
+        }
+
+        prev = () => {
+          let i = this.state.i - 1;
+          if (i < 0) i = this.props.imgs.length - 1;
+          this.setState({
+            i: i,
+          });
+        };
+
+        next = () => {
+          let i = this.state.i + 1;
+          if ((i === this.props.imgs.length)) i = 0;
+          this.setState({
+            i: i,
+          });
+        };
+
+        render() {
+          let i = this.state.i;
+          return (
+            <div>
+              <button onClick={this.prev}>prev</button>
+              <a href={this.props.imgs[i].url} target="_blank">
+                <img src={this.props.imgs[i].img} alt="This is a pic" />
+              </a>
+              <button onClick={this.next}>next</button>
+            </div>
+          );
+        }
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

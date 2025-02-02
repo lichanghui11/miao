@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regular Expression Validation</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div class="header">
+    <!-- The header area -->
+    <div class="helper">
+      <header>Regular Expression Validation</header>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- The test area -->
+    <div class="input">
+      <!-- a(b(c(de)f)) -->
+      <input id="inputReg" type="text" value="p((u)r(e))">
+      <button class="run">TEST</button>
+      <span class="state" id="state">State</span>
+    </div>
+
+    <div class="output">
+      <pre id="tips"></pre>
+      <div class="hint">There are no errors.</div>
+      <div class="flag">FLAGS</div>
+      <div class="flags">
+        <label><input name="g" type="checkbox" class="">g</label>
+        <label><input name="i" type="checkbox" class="">i</label>
+        <label><input name="m" type="checkbox" class="">m</label>
+        <label><input name="d" type="checkbox" class="" checked>d</label>
+        <label><input name="x" type="checkbox" class="">x</label>
+        <label><input name="s" type="checkbox" class="">s</label>
+        <label><input name="u" type="checkbox" class="">u</label>
+      </div>
+
+      <div class="teststring">TESTSTRING</div>
+      <div class="result" contenteditable="true" spellcheck="false">This is a pure string!</div>
+      <div class="replaceDes">SUBSTITUTION</div>
+      <div class="replaceText" contenteditable="true"></div>
+      <div class="finalText">This is a pure string!</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <!-- This is a footer -->
+    <div class="author">weeesti470@gmail.com &copy;lichanghui</div>
+  </div>
+  <script src="index.js"></script>
+</body>
+
+</html>

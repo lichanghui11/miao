@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>以数据为中心</title>
+</head>
+<div id="app">
+
+</div>
+
+<body>
+  <script>
+    let todos = JSON.parse(localStorage.getItem('TODOS')) || [
+      {
+        text: 'hello',
+        completed: true,
+      },
+      {
+        text: 'tomn',
+        completed: true,
+      },
+      {
+        text: 'sweep',
+        completed: true,
+      },
+    ]
+
+    render()
+    function render() {
+      localStorage.setItem('TODOS', JSON.stringify(todos));
+      app.innerHTML = `
+        <h1>Todos</h1>
+        <div>
+          <input type="checkbox" name="" id="toggleAll" ${todos.every(it => it.completed === true) ? 'checked' : ''}>
+          <input type="text" placeholder="What needs to be done?" id="todo-input">
+        </div>
+
+        <div class="todo-output">
+          <ul id="todo-output">
+            ${todos.map((todo, idx) => {
+        return `
+                 <li>
+                  <input data-idx="${idx}" type="checkbox" ${todo.completed ? 'checked' : ''} ">
+                  <span>${todo.text}</span>
+                  <button data-idx="${idx}">&times;</button>
+                </li>
+              `
+      }).join('')}
+          </ul>
+        </div>
+        <div>
+          <div>
+            <span id="left-count">${todos.filter(todo => todo.completed === false).length} items left</span>
+          </div>
+          <div id="selects">
+            <input type="radio" checked value="all" name="selects" id=""> all
+            <input type="radio" value="active" name="selects" id=""> active
+            <input type="radio" value="completed" name="selects" id=""> completed
+          </div>
+            ${todos.some(todo => todo.completed === true) ? '<button>clear completed</button>' : ''}
+        </div>
+      `
+    }
+
+    app.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        if (e.target.matches('#todo-input')) {
+          let text = e.target.value.trim();
+          if (text) {
+            let todo = {
+              text,
+              completed: false,
+            }
+            todos.push(todo);
+            render();
+            app.querySelector('input[type="text"]').focus();
+          }
+        }
+      }
+    })
+
+
+    app.addEventListener('click', e => {
+      let i = e.target.dataset.idx;
+      if (e.target.matches('li button')) {
+        todos.splice(i, 1);
+        render();
+      } else if (e.target.matches('li input[type="checkbox"]')) {
+        todos[i].completed = !todos[i].completed;
+        render();
+      } else if (e.target.matches('input#toggleAll')) {
+        if (todos.every(it => it.completed === false)) {
+          todos.forEach(it => it.completed = true);
+        } else {
+          todos.forEach(it => it.completed = false);
+        }
+        render();
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>setup组件 追踪鼠标</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp, ref, onBeforeUnmount, onMounted } = Vue;
+    let app = createApp({
+      template: `
+        <div id="app">
+          <find-cursor/> 
+        </div>
+      `,
+    });
+
+    app.component('find-cursor', {
+      template: `
+        <div>
+          {{ time }}
+          <hr>
+          X轴: {{ x }}
+          <br>
+          Y轴: {{ y }}
+        </div>
+      `,
+
+      setup() {
+        let x = ref(0);
+        let y = ref(0);
+        function mouseMove(e) {
+          x.value = e.clientX;
+          y.value = e.clientY;
+          console.log('事件代理运行中。。。')
+        }
+        onMounted(() => {
+          window.addEventListener('mousemove', mouseMove);
+        })
+        onBeforeUnmount(() => {
+          window.removeEventListener('mousemove', mouseMove);
+        })
+
+
+        let id = 0;
+        let time = ref(new Date());
+        onMounted(() => {
+          id = setInterval(() => {
+            time.value = new Date();
+            console.log('计时器运行中。。。')
+          }, 1000)
+        })
+
+        onBeforeUnmount(() => {
+          clearInterval(id);
+        })
+
+        return { x, y, time };
+      },
+    })
+
+    app.mount('#app');
+  </script>
+</body>
+
+</html>

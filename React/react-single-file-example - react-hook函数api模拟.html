@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+
+      // 如一个函数想要记录自己被调用了多少次
+      // 再如一个递归函数想要知道当前的递归层次（这个需求可以用也可以不用全局变量）
+      
+
+      // 将会是由函数映射到其状态集合
+      // {f: [[2, f], [5, f]],  g: [],}
+      var funcStateMap = new Map()
+
+      function useState(initialState) {
+        // 下面的数组记录了当前正在运行的函数的状态集（函数首次运行时为空，则每个useState的调用会创建相应的状态）
+        var currentFuncState = funcStateMap.get(currentRunningFunc)
+        var f = currentRunningFunc
+        var i = useStateCallCount // useState在当前函数内的调用顺序，我们是通过这个顺序从数组里读出相应顺序的状态的
+
+        // 当前useState的调用次数在数组中有对应的状态，则返回
+        // 如果没有，大概率说明函数是第一次被run调用
+        let ret
+        if (useStateCallCount in currentFuncState) {
+          ret = currentFuncState[useStateCallCount]
+        } else {
+          ret = [initialState, (newState) => {
+            ret[0] = newState
+            Promise.resolve().then(() => run(f))
+          }]
+          currentFuncState.push(ret)
+        }
+
+        useStateCallCount++
+        return ret
+      }
+      
+      var useStateCallCount = 0
+      var currentRunningFunc = null
+
+      // 只要通过run调用的函数，就可以使用useState
+      function run(f, ...args) {
+        // 函数如果是首次运行，则在我们维护的映射中为它建立保存状态集的空数组
+        if (!funcStateMap.has(f)) {
+          funcStateMap.set(f, [])
+        }
+        var previousUseStateCallCount = useStateCallCount
+        useStateCallCount = 0
+
+        var previousRunningFunc = currentRunningFunc
+        currentRunningFunc = f
+        try {
+          return f(...args)
+        } finally {
+          useStateCallCount = previousUseStateCallCount
+          currentRunningFunc = previousRunningFunc
+        }
+      }
+
+      function foo() {
+        var [count, setCount] = useState(5)
+        // if (xx) {
+        //   var [a, setA] = useState(0)
+        // }
+        var [age, setAge] = useState(0)
+        
+        run(bar)
+        console.log(count, setCount, age, setAge)
+      }
+
+      function bar() {
+        var [x, setX] = useState(0)
+
+        console.log(x, setX)
+      }
+
+    </script>
+  </body>
+</html>

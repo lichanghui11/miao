@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tabs 练习</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp } = Vue;
+
+    let app = createApp({
+      template: `
+        <div id="app">
+          <tabs :defaultActiveKey="'3'" :items="content"></tabs>   
+        </div>
+      `,
+      data() {
+        return {
+          content: [
+            {
+              key: '1',
+              label: 'Tab 1',
+              children: '一号内容',
+            },
+            {
+              key: '2',
+              label: 'Tab 2',
+              children: '二号内容',
+            },
+            {
+              key: '3',
+              label: 'Tab 3',
+              children: '三号内容',
+            },
+            {
+              key: '4',
+              label: 'Tab 4',
+              children: '四号内容',
+            },
+          ]
+        }
+      },
+      methods: {
+
+      },
+    });
+
+    app.component('tabs', {
+      props: {
+        items: {
+          type: Array,
+          required: true,
+        },
+        defaultActiveKey: {
+          type: String,
+        }
+      },
+      template: `
+        <div>
+          <div>
+            <button @click="activeKey = item.key" v-for="item of items">{{ item.label }}</button>
+          </div>
+          <div>
+            {{ items.find(it => it.key === activeKey).children }}
+          </div>
+        </div> 
+      `,
+
+      data() {
+        return {
+          activeKey: this.defaultActiveKey ?? this.items[0].key,
+        }
+      }
+    })
+
+    app = app.mount('#app');
+  </script>
+</body>
+
+</html>

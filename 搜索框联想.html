@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>搜索框联想</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: lightyellow;
+    }
+
+    input {
+      background-color: lightblue;
+    }
+
+    ul {
+      list-style: none;
+      background-color: lightblue;
+      > li {
+        margin-bottom: 2px;
+        border-bottom: 1px solid orange;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <input placeholder="goooooooooooooogle" type="text">
+  <ul></ul>
+
+  <script>
+    let ul = document.querySelector('ul');
+    let input = document.querySelector('input');
+    
+    let originalLTime = 0; //已经展示出来的建议的时间； 
+    let inputTime = Date.now(); //当前建议的展示时间； 
+    input.addEventListener('input',() => {
+
+      if (inputTime < originalLTime) return;
+      originalLTime = inputTime;
+
+      if (input.value === '') {
+        ul.innerHTML = '';
+        return;
+      }
+
+      let keyWord = input.value;
+      ul.innerHTML = '';
+      getInfo(keyWord, item=> {
+        item.forEach((it) => {
+          let li = document.createElement('li');
+          li.textContent = it;  
+          ul.append(li);
+        })  
+      })
+    })
+
+    function debounce(func, time) {
+      let id = null;
+      return function(...args) {
+        clearTimeout(id);
+        id = setTimeout(() => {
+          func(...args); 
+        }, time);
+      }
+    }
+
+    function getInfo(val, func) {
+      let funcName = 'func' + Math.random().toString().slice(3);
+      window[funcName] = function(obj) {
+        let res = obj.g.map(it => it.q);
+        func(res);
+      }
+      let link = `https://www.baidu.com/sugrec?pre=1&p=3&ie=utf-8&json=1&prod=pc&from=pc_web&sugsid=60277,61027,61129,61113,61141,61159,61207,61211,61209,61214,61244&wd=${val}&his=%5B%7B%22time%22%3A1725627834%2C%22kw%22%3A%22google%22%2C%22fq%22%3A2%7D%2C%7B%22time%22%3A1726985974%2C%22kw%22%3A%22%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%22%2C%22fq%22%3A2%7D%5D&req=2&csor=2&pwd=t&cb=${funcName}`
+
+      let body = document.querySelector('body');
+      let script = document.createElement('script');
+      script.src = link;
+      body.append(script);
+    }
+  </script>
+</body>
+
+</html>

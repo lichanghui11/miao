@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac底部Doc效果</title>
+  <style>
+    s* {
+      box-shadow: 0 0 2px 0 red inset;
+    }
+    div {
+      display: flex;
+      width: 600px;
+      height: 80px;
+      margin: 100px auto;
+      align-items: end;
+      justify-content: space-between;
+      > span {
+        width: 50px;
+        height: 50px;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: lightgray;
+      }
+      > span:has(+ span:hover), 
+      > span:hover + span {
+        width: 55px;
+        height: 55px;
+        background-color: gray;
+      }
+      > span:hover {
+        width: 70px;
+        height: 70px;
+        background-color: lightslategray;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+   <span>01</span>
+   <span>02</span>
+   <span>03</span>
+   <span>04</span>
+   <span>05</span>
+   <span>06</span>
+   <span>07</span>
+   <span>08</span>
+   <span>09</span>
+  </div>
+</body>
+</html>

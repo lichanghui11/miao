@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>方块游戏</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    .square {
+      width: 100px;
+      height: 100px;
+      background-color: lightgreen;
+      position: fixed;
+      margin: 0;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+ <div class="square"></div> 
+ <script>
+  let div = document.querySelector('.square');
+  let vx = 0, vy = 0;
+  let speed = 1;
+  requestAnimationFrame(function animation() {
+    div.style.left = parseFloat(window.getComputedStyle(div).left) + vx * speed + 'px';
+    div.style.top = parseFloat(window.getComputedStyle(div).top) + vy * speed + 'px';
+
+    // console.log(parseFloat(div.style.top));
+    requestAnimationFrame(animation);
+  })
+  if(parseFloat(window.getComputedStyle(div).left) < 0) div.style.left = 0 + 'px';
+  if(parseFloat(window.getComputedStyle(div).top) < 0) div.style.top = 0 + 'px';
+
+  let ArrowLeft = false, ArrowRight = false, ArrowDown = false, ArrowUp = false;
+  window.addEventListener('keydown', (e) => {
+    if (e.key == 'Shift') {
+      speed = 4;
+    } else if (e.key == 'ArrowLeft') {
+      ArrowLeft = true;
+      vx = -1;
+    } else if (e.key == 'ArrowRight') {
+      ArrowRight = true;
+      vx = 1;
+    } else if (e.key == 'ArrowUp') {
+      ArrowUp = true;
+      vy = -1; 
+    } else if (e.key == 'ArrowDown') {
+      ArrowDown = true;
+      vy = 1;
+    }
+  })
+
+  window.addEventListener('keyup', (e) => {
+    if (e.key == 'ArrowLeft') {
+      ArrowLeft = false;
+      if (ArrowRight) {
+        vx = 1;
+      } else {
+        vx = 0;
+      }
+    } else if (e.key == 'ArrowRight') {
+      ArrowRight = false;
+      if (ArrowLeft) {
+        vx = -1; 
+      } else {
+        vx = 0;
+      }
+    } else if (e.key == 'ArrowUp') {
+      ArrowUp = false;
+      if (ArrowDown) {
+        vy = 1; 
+      } else {
+        vy = 0; 
+      }
+    } else if (e.key == 'ArrowDown') {
+      ArrowDown = false;
+      if (ArrowUp) {
+        vy = -1; 
+      } else {
+        vy = 0;
+      }
+    } 
+    if (e.key === 'Shift') speed = 1;
+  })
+ </script>
+</body>
+</html>

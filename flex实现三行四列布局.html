@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flex实现三行四列布局</title>
+  <style>
+    * {
+      box-shadow: 0 0 2px 0 red inset;
+      box-sizing: border-box;
+    }
+
+    div {
+      
+      display: flex;
+      gap: 15px 30px;
+      flex-wrap: wrap;
+      width: 600px;
+      margin: 50px auto;
+      > span {
+        width: 180px;
+        height: 40px;
+        border: 2px solid;
+        background-color: lightpink;
+        &:hover {
+          background-color: red;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+ 
+<div>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+</body>
+</html>

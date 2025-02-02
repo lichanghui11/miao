@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>button 练习</title>
+</head>
+
+<body>
+  <div id="app">
+    <counter :currentA="3" :start="3"></counter>
+    <counter :currentA="5" :start="1"></counter>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp } = Vue;
+    let app = createApp({
+      data() {
+        return {
+
+        }
+      }
+    })
+    app.component('counter', {
+      props: {
+        currentA: {
+          type: Number,
+          default: 0,
+        },
+        start: {
+          type: Number,
+          default: 1,
+        },
+      },
+      template: `
+        <div>
+          <button @click="dec">-{{ this.deps }}</button>
+          {{ a }}
+          <button @click="inc">+{{ this.deps }}</button>
+        </div>
+    `,
+      data() {
+        return {
+          a: this.currentA,
+          deps: this.start,
+        }
+      },
+      methods: {
+        dec() {
+          this.a -= this.deps;
+        },
+        inc() {
+          this.a += this.deps;
+        },
+      }
+    })
+
+
+
+    app.mount('#app');
+  </script>
+</body>
+
+</html>

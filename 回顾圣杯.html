@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>回顾圣杯布局</title>
+  <style>
+    z* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgb(0, 0, 0, 0.07);
+    }
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    div {
+      overflow: hidden;
+      > header {
+        height: 50px;
+        background-color: lightgoldenrodyellow;
+        text-align: center;
+        line-height: 50px;
+      }
+      > main {
+        overflow: auto;
+        float: left;
+        width: calc(100% - 400px);
+        height: 300px;
+        background-color: lightblue;
+        margin-left: 200px; 
+        margin-right: 200px;
+        strong {
+          color: rgb(228, 26, 218);
+        }
+      }
+      > .left, .right {
+        overflow: auto;
+        width: 200px;
+        height: 300px;
+        float: left;
+        &.left {
+          background-color: lightpink;
+          margin-left: -100%;
+        }
+        &.right {
+          background-color: lightgreen;
+          margin-left: -200px;
+        }
+      }
+      > footer {
+        clear: both;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        background-color: lightsalmon;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <header>header</header>
+    <main>
+      <h2>这是内容主体</h2>
+      <p><strong>main标签加左右margin </strong>
+        Adipisci minima iure, fuga repellat possimus temporibus magni et consequuntur itaque nesciunt numquam veritatis explicabo quisquam ex laborum accusantium, quod molestiae aut!
+      </p>
+    </main>
+    <aside class="left">
+      <h3>这是侧边栏</h3>
+      <p>这是左边， Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam nihil, perferendis iure distinctio commodi est quod eum fugit sapiente, perspiciatis quia nesciunt harum itaque? Facere sit nulla quo aut possimus?</p>
+    </aside>  
+    <aside class="right">
+      <h3>这是侧边栏</h3>
+      <p>这是右边 Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta quas rerum nobis et debitis enim quo suscipit nostrum eaque? Perspiciatis harum atque distinctio delectus excepturi quidem temporibus ut voluptate eum.</p>
+    </aside>
+    <footer>foter</footer>
+  </div>
+</body>
+</html>

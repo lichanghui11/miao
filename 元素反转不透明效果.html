@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>qq登陆界面元素翻转效果</title>
+  <style>
+    s* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.07);
+    }
+    div.wrap {
+      width: 300px;
+      height: 300px;
+      margin: 100px auto;
+      position: relative;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      transition: 1s;
+      &:hover {
+        transform: rotateY(180deg);
+      }
+      > div {
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        left: calc(50% - 100px);
+        top: calc(50% - 100px);
+
+        &:first-child {
+          background-color: olive;
+        }
+        &:nth-child(2) {
+          transform: rotateY(180deg);
+          backface-visibility: hidden;
+          background-color: orange;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div>登录(hover me)</div>
+    <div>设置</div>
+ </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>微信朋友圈效果</title>
+  <style>
+    * {
+      xbox-shadow: 0 0 2px 0 red inset;
+      xbackground-color: rgba(0, 0, 0, 0.03);
+      box-sizing: border-box;
+    }
+    div {
+      width: 300px;
+      margin: auto;
+      > ul {
+        padding: 0;  
+        width: 100%;
+        font-size: 0;
+      }
+    }
+    ul li {
+      float: left;
+      list-style: none;
+      width: 100px;
+      height: 100px;
+      border: dashed green 1px;
+      background-color: lightgrey;
+      &:nth-child(1):last-child {
+        width: 200px;
+        height: 200px;
+      }
+      &:nth-child(1):nth-last-child(2), 
+      &:nth-child(1):nth-last-child(2) ~ li{
+        width: 100px;
+        height: 100px;
+      }
+
+      &:nth-child(1):nth-last-child(3), 
+      &:nth-child(2):nth-last-child(2) {
+        width: 100px;
+        height: 100px;
+      }
+      &:nth-child(3):nth-last-child(1) {
+        width: 100px;
+        height: 100px;
+      }
+
+      &:nth-child(4):nth-last-child(1) {
+        width: 150px;
+        height: 150px;
+        position: relative;
+        left: 75px;
+      }
+
+      &:nth-child(4):nth-last-child(2), 
+      &:nth-child(5):nth-last-child(1) {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        left: 50px;
+      }
+
+      &:nth-child(7):nth-last-child(1) {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        left: 100px;
+      }
+
+      &:nth-child(7):nth-last-child(2), 
+      &:nth-child(8):nth-last-child(1) {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        left: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <ul>
+    
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正则模拟网站</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #result strong {
+      font-weight: normal;
+      &:nth-of-type(odd) {
+        background-color: #9fcfff;
+      }
+      &:nth-of-type(even) {
+        background-color: #d5ebff;
+      }
+    }
+    #output {
+      position: relative;
+      > textarea, #result {
+        font-family: consolas;
+        white-space: pre-wrap;
+        word-break: break-all;
+        width: 100%;
+        height: 100%;
+        border: 1px solid;
+        overflow: auto;
+        background-color: transparent; 
+      }
+    }
+
+    em {
+      font-style: normal;
+    }
+    
+    #result > em:nth-of-type(odd) {
+      /* --bgc: white; */
+    }
+    #result > em:nth-of-type(even) {
+      /* --bgc: black; */
+      opacity: 0.5;
+    }
+    /* 一个元素的里面如果有hover的元素，自己就不要框了 */
+    /* 如果一个元素里面没有被hover的元素，但其自身被hover，则显示框 */
+    em:not(:has(:hover)):hover {
+      outline: 2px solid grey;
+    }
+    em:not(:has(:hover)):hover em {
+      background-color: inherit;
+    }
+    /* 实际上这个选择器：em:not(:has(:hover)):hover
+      就是只选中了直接被hover的元素，不选中这个元素的祖先元素
+      简单的:hover 选择器在选中一个元素的同时，也选中了其所有的祖先元素
+    */
+    [data-group-index="0"] {
+      background-color: #9fcfff;
+    }
+    [data-group-index="1"] {
+      background-color: #9fcba1;
+    }
+    [data-group-index="2"] {
+      background-color: #e0bf8b;
+    }
+    [data-group-index="3"] {
+      background-color: #acadfc;
+    }
+    [data-group-index="4"] {
+      background-color: #e1abf5;
+    }
+    .zero-width-assert {
+      /* width: 2px; */
+      border-left: 2px dotted magenta;
+      opacity: 1 !important;
+      margin-left: -1px;
+      margin-right: -1px;
+      position: relative;
+      z-index: 8;
+      &:hover {
+        box-shadow: 0 0 2px red;
+      }
+    }
+  </style>
+</head>
+
+<body class="mb-[500px]">
+  <div>
+    <div>REGULAR EXPRESSION 正则模拟</div>
+    <input type="text" class="border border-indigo-500 outline-none" id="reInput" onkeyup="run()" value="\b\d{4}\b">
+    <button class="border-2 border-indigo-500 outline-none">RUN</button>
+    <div id="tips 提示"></div>
+    <div>FLAGS</div>
+    <label><input type="checkbox" id="flag-g" checked>g</label>
+    <label><input type="checkbox" id="flag-m">m</label>
+    <label><input type="checkbox" id="flag-i">i</label>
+    <label><input type="checkbox" id="flag-y">y</label>
+    <label><input type="checkbox" id="flag-u">u</label>
+    <label><input type="checkbox" id="flag-s">s</label>
+    <label><input type="checkbox" id="flag-d" checked>d</label>
+    <label><input type="checkbox" id="flag-v">v</label>
+    <div>TEST STRING 测试字符串</div>
+    <div id="output" class="">
+      <div class="border border-slate-500 w-[600px] h-[200px] relative" onscroll="syncScroll2()" id="result"></div>
+      <textarea class="border-2 border-slate-500 w-[600px] h-[200px]" id="testStringInput" onscroll="syncScroll()">
+        This is an example of Regular Expression. I am styling this website by myown. Thanks for any comments and any suggestions. 
+        Email: weeesti470@gmail.com
+        Tel: 12335667546
+        Thanks again!!!
+      </textarea>
+    </div>
+  </div>
+
+  <script>
+    run();
+
+    function run () {
+      let reString = reInput.value; 
+      if (reString == '') {
+        return;
+      }
+      let flags = getFlags ();
+      try {
+        let re = new RegExp(reString, flags);
+      } catch(e) {
+        if (e instanceof SyntaxError) {
+          tips.innerHTML = e.message;
+          return;
+        } else {
+          throw e;
+        }
+      }
+      tips.innerHTML = '';
+      let testString = testStringInput.value;
+      let html = '';
+      let match;
+      let lastLastIndex = 0;
+      let matchIndex = 0;
+      while (match = re.exec(testString)) {
+        html += testString.slice(lastLastIndex, match.index);
+        html += highlightMatch(match, matchIndex);
+        lastLastIndex = re.lastIndex;
+
+        if (match[0].length == 0) {
+          re.lastIndex++;
+        }
+        if (re.global == false) {
+          break;
+        }
+        matchIndex++;
+      }
+      html += testString.slice(lastLastIndex);
+      result.innerHTML = html;
+    }
+
+    function synScroll() {
+      result.scrollTop = testStringInput.scrollTop;
+    }
+
+    function syncScroll2() {
+      testStringInput.scrolltop = result.scrollTop;
+    }
+
+    function highlightMatch (match, matchIndex) {
+      if (match[0].length == 0) {
+        let info = [
+          `Match ${matchIndex}`, 
+          `-----`,
+          `Group 0: [empty string]`,
+          `Pos: ${match.index}-${match.index}`
+        ].join('\n');
+        return `<u class="zero-width-assert" title="${info}"></u>`;
+      }
+      
+      let helper = new Array(match[0].length + 1).fill('');
+      let groupIndex = 0;
+      for (let index of match.indices) {
+        let start = index[0] - match.index;
+        let end = index[i] - match.index;
+        let info = [
+          `Match ${matchIndex + 1}`, 
+          `-----`, 
+          `Group: ${groupIndex}`,
+          `Pos: ${index[0]}-${index[1]}`,
+        ].join('\n');
+        helper[start] += `<em data-group-index="${groupIndex}" title="${info}">`;
+        helper[end] = '</em>' + helper[end];
+        groupIndex++;
+      } 
+
+      let result = '';
+      for (let i = 0; i < match[0].length; i++) {
+        result += helper[i] + match[0][i];
+      }
+      result += helper[i];
+      return result;
+    }
+
+    function getFlags () {
+      let flags = ['g', 'm', 'i', 'y', 'u', 's', 'd', 'v']
+      return flags.filter(it => {
+        let element = document.getElementById('flag-' + it);
+        if (element.checked) {
+          return true;
+        } else {
+          return false;
+        }
+      }).join('');
+    }
+  </script>
+</body>
+
+</html>

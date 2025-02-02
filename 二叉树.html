@@ -1,0 +1,292 @@
+<script>
+
+  // 二叉树
+  /**
+   * 树状结构在生活中和计算机科学中都非常常见
+   * 如：家谱，书籍的目录，文件夹的结构
+   * html，作用域之间的关系，编程语言的语法
+   * JSON的语法
+   * 
+   * 二叉树的定义：
+   *    空是一个合法的二叉树
+   *    一个结点，有一个左子树，有一个右子树
+   * 为什么学习二叉树而不是一/三/四叉树？
+   *    一叉树其实表达的是有序结构，典型情况下就是链表，但用任何形式存储这个有序结构其实都可以
+   *    （链表是一个限定了存储方式的概念）
+   *    （但二叉树/一叉树并没有限制存储方式，虽然最常见的存在方式就是链式存储）
+   * 
+   *   学了二叉树，其它多叉树也都差不多了
+   * 
+   * 二叉树的一些概念和数学关系：
+   *    最上层的结点叫根结点（root node）
+   *    没有子结点的结点叫叶子结点（leaf node）
+   *    完全二叉树：除最后一层以外，每一层的结点都是满的，最后一层从左往右不缺结点
+   *    当完全二叉树的最后一层也是满的时候，称为“满二叉树”
+   *    在一颗有n个结点的链式存储的二叉树中，一共有2n个箭头，由于其中的n-1个结点都被箭头指向，所以没有指向结点的箭头有2n-(n-1) = n+1个
+   *    如果对一个完全二叉树的结点从上到下从左到右从0开始编号，那么一个编号为n的结点的两个子结点的编号分别为2n+1和2n+2
+   * 
+   * 
+   * 二叉树的表示/存储：
+   *   1 链式结构，类似链表，但每个结点存储了其左右子树的位置/引用/地址/指向
+   *   2 将任何二叉树先写满为一个完全二叉树，然后从上到下从左往右将值存入数组
+   *        但是这个写法在二叉树缺失较多结点时会比较浪费空间
+   *   
+   */
+
+
+  class TreeNode {
+    constructor(val, left = null, right = null) {
+      this.val = val
+      this.left = left
+      this.right = right
+    }
+  }
+
+  // 将【按照固定位置存储固定结点的方式】存储的二叉树转换为链式存储
+  // pos是根结点的位置
+  // 此时函数的定义应该转换为从数组中将根结点在pos位置的二叉树转换成链式表达的二叉树
+  function arrayToTree(array, pos = 0) {
+    if (array[pos] == null) {
+      return null
+    }
+
+    var root = new TreeNode(array[pos])
+
+    root.left = arrayToTree(array, pos * 2 + 1)
+    root.right = arrayToTree(array, pos * 2 + 2)
+
+    return root
+  }
+
+  // 上面函数的相反操作
+
+  function treeToArray(root, idx = 0, array = []) {
+    if (root) {
+      array[idx] = root.val
+      treeToArray(root.left, idx * 2 + 1, array)
+      treeToArray(root.right, idx * 2 + 2, array)
+    }
+    return array
+  }
+
+  // 将leetcode表示树的数组转换为链式表达
+  function condensedArrayToTree(array) {
+    if (array.length == 0) {
+      return null
+    }
+    
+    var root = new TreeNode(array[0])
+
+    var nodes = [root]
+
+    for (var i = 1; i < array.length; i++) {
+      var currNode = nodes.shift()
+
+      var val = array[i]
+      if (val == null) {
+        var node = null
+      } else {
+        var node = new TreeNode(val)
+        nodes.push(node)
+      }
+      currNode.left = node
+
+      i++
+
+      var val = array[i]
+      if (val == null) {
+        var node = null
+      } else {
+        var node = new TreeNode(val)
+        nodes.push(node)
+      }
+      currNode.right = node
+    }
+
+    return root
+  }
+
+  // 上面函数的反向运算
+  // 即传入一个链式表达的二叉树，返回其被用稠密的方式放入数组中的结果
+  function treeToCondensedArray(root) {
+    var result = []
+    if (root == null) {
+      return result
+    }
+
+    var nodes = [root]
+    while(nodes.length > 0) {
+      var node = nodes.shift()
+      if (node) {
+        result.push(node.val)
+        nodes.push(node.left, node.right)
+      } else {
+        result.push(node)
+      }
+    }
+
+    return result
+  }
+
+
+  /**
+   * 二叉树的遍历：
+   *   即将一颗二叉树中的值按某种顺序规则一个个列出来
+   * 
+   * 先序遍历
+   *  先根结点，再左子树，再右子树
+   * 中序遍历
+   *  再左子树，先根结点，再右子树
+   * 后序遍历
+   *  再左子树，再右子树，先根结点
+   * 
+   * 其中遍历子树时，依然是按照同样的顺序遍历子树的不同部分
+   * 一种写出遍历方式的办法是沿着二叉树绘制它的轮廓
+   *  当按照左边、下边、右边的顺序把遇到的结点写出来，将分别得到先、中、后序遍历序列
+   * 
+   * 另一种理解方式：
+   *   将树想成一本书，每个结点是一章/一节/一小节
+   *   那么按照“读过每一部分”的顺序对每一部分排序，得到先序遍历
+   *   按“读到一半”排序得到的是中序
+   *   按“读完排序”得到的是后序
+   * 
+   * 
+   * 
+   * 
+   */
+
+  // 先序遍历一颗二叉树
+  function preOrderTraverse(root, 操作) {
+    if (root) {
+      操作(root.val)
+      preOrderTraverse(root.left, 操作)
+      preOrderTraverse(root.right, 操作)
+    }
+  }
+
+  // 将二叉树转换为先序遍历的顺序组成的数组
+  function toPreOrder(root) {
+    if (root) {
+      var val = root.val
+      var order1 = toPreOrder(root.left)
+      var order2 = toPreOrder(root.right)
+      return [val, ...order1, ...order2]
+    }
+    return []
+  }
+  // 中序
+  function inOrderTraverse(root, 操作) {
+    if (root) {
+      inOrderTraverse(root.left, 操作)
+      操作(root.val)
+      inOrderTraverse(root.right, 操作)
+    }
+  }
+  // 后序
+  function postOrderTraverse(root, 操作) {
+    if (root) {
+      postOrderTraverse(root.left, 操作)
+      postOrderTraverse(root.right, 操作)
+      操作(root.val)
+    }
+  }
+
+  class MultiplicatorUnitFailure extends Error { }
+
+function primitiveMultiply(a, b) {
+  if (Math.random() > 0.5) {
+    return a * b
+  } else {
+    throw new MultiplicatorUnitFailure('failed')
+  }
+}
+
+function multiply(a, b) {
+
+}
+
+
+
+
+
+
+
+
+
+var box = {
+  locked: true,
+  unlock: function () { this.locked = false; },
+  lock: function () { this.locked = true; },
+  _content: [],
+  get content() {
+    if (this.locked) throw new Error(" Locked !");
+    return this._content;
+  }
+};
+</script>
+leetcode题目：
+https://leetcode.cn/problems/binary-tree-inorder-traversal/
+https://leetcode.cn/problems/binary-tree-preorder-traversal/
+https://leetcode.cn/problems/binary-tree-postorder-traversal/
+https://leetcode.cn/problems/invert-binary-tree/
+https://leetcode.cn/problems/same-tree/
+https://leetcode.cn/problems/binary-tree-level-order-traversal/
+https://leetcode.cn/problems/symmetric-tree/
+https://leetcode.cn/problems/maximum-depth-of-binary-tree/
+https://leetcode.cn/problems/minimum-depth-of-binary-tree/
+https://leetcode.cn/problems/path-sum/
+https://leetcode.cn/problems/binary-tree-paths/
+https://leetcode.cn/problems/sum-of-left-leaves/
+https://leetcode.cn/problems/merge-two-binary-trees/
+https://leetcode.cn/problems/construct-string-from-binary-tree/
+https://leetcode.cn/problems/print-binary-tree/
+
+
+
+二叉树第二波题目：
+https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal
+https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree
+https://leetcode.cn/problems/balanced-binary-tree
+https://leetcode.cn/problems/convert-sorted-list-to-binary-search-tree
+https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal
+
+
+
+https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-postorder-traversal
+https://leetcode.cn/problems/validate-binary-search-tree
+https://leetcode.cn/problems/flatten-binary-tree-to-linked-list
+https://leetcode.cn/problems/serialize-and-deserialize-binary-tree
+https://leetcode.cn/problems/search-in-a-binary-search-tree
+https://leetcode.cn/problems/insert-into-a-binary-search-tree
+https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree
+https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree
+
+
+
+正则表达式相关题目
+https://www.codewars.com/kata/credit-card-mask
+https://www.codewars.com/kata/exclamation-marks-series-number-5-remove-all-exclamation-marks-from-the-end-of-words
+https://www.codewars.com/kata/cancer-cells
+https://www.codewars.com/kata/counting-duplicates
+https://www.codewars.com/kata/decipher-this
+https://www.codewars.com/kata/regex-validate-pin-code
+^和\b的作用的区别
+https://www.codewars.com/kata/a-string-with-bugs
+正则表达式里面对单词取反只能使用零宽断言；
+
+
+
+
+         
+
+
+https://www.codewars.com/kata/mod4-regex
+https://www.codewars.com/kata/trim-method
+https://www.codewars.com/kata/kebabize
+https://www.codewars.com/kata/convert-string-to-camel-case
+https://www.codewars.com/kata/valid-phone-number
+https://www.codewars.com/kata/extract-file-name
+https://www.codewars.com/kata/string-incrementer
+https://www.codewars.com/kata/extract-the-domain-name-from-a-url-1
+https://www.codewars.com/kata/calculating-with-functions
+https://www.codewars.com/kata/basic-markdown-to-html

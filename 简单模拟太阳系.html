@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模拟太阳系动画2</title>
+  <style>
+    body, html {
+      margin: 0;
+      box-sizing: border-box;
+      background-color: lightblue;
+      height: 100%;
+      width: 100%;
+      --sun-radius: 100px;
+      --earth-radius: 50px;
+      --moon-radius: 25px;
+    }
+    div.containter {
+    }
+    .sun {
+      width: var(--sun-radius);
+      height: var(--sun-radius);
+      background-color: red;
+      border-radius: 999px;
+      position: fixed;
+    }
+    .earth {
+      width: var(--earth-radius);
+      height: var(--earth-radius);
+      background-color: blue;
+      border-radius: 999px;
+      position: fixed;
+    }
+    .moon {
+      width: var(--moon-radius);
+      height: var(--moon-radius);
+      background-color: grey;
+      border-radius: 999px;
+      position: fixed;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <div class="sun"></div>
+    <div class="moon"></div>
+    <div class="earth"></div>
+  </div>
+  <script> 
+    let lastTime = null;
+    let angle = 0; 
+    function animation(time) {
+      if (lastTime === null) {
+        lastTime = time;
+      }
+      angle += (time - lastTime); 
+      lastTime = time;
+      let angle1 = angle * 0.01; //地球每帧旋转角度； 
+      let angle2 = angle * 0.12; //月球每帧旋转角度;
+
+      let x1 = window.innerHeight / 2 - 50; //太阳的坐标； 
+      let y1 = window.innerWidth / 2 - 50;
+
+      let x2 = Math.sin(angle1) * 200 + x1 + 50 - 15; //地球坐标； 
+      let y2 = Math.cos(angle1) * 200 + y1 + 50 - 15; //地球坐标；  
+
+      let x3 = Math.cos(angle2) * 50 + x2 + 25 - 12; //月球坐标； 
+      let y3 = Math.sin(angle2) * 50 + y2 + 25 - 12; 
+
+      let sun = document.querySelector('.sun');
+      let earth = document.querySelector('.earth');
+      let moon = document.querySelector('.moon');
+
+      sun.style.top = x1 + 'px';
+      sun.style.left = y1 + 'px';
+
+      earth.style.top = x2 + 'px';
+      earth.style.left = y2 + 'px';
+
+      moon.style.top = x3 + 'px';
+      moon.style.left = y3 + 'px';
+ 
+      requestAnimationFrame(animation);
+   }
+      requestAnimationFrame(animation);
+  </script>
+</body>
+</html>

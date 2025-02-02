@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>grid实现instagram布局</title>
+  <style>
+    a* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    html, body {
+      height: 100%;
+      margin: 0; 
+    }
+    div {
+      width: 300px;
+      margin: auto;
+      height: 100%;
+      display: grid;
+      grid-template-rows: repeat(12, 100px);
+      grid-template-columns: repeat(3, 100px);
+      > span {
+        aspect-ratio: 1 / 1;
+        background-color: palegoldenrod;
+        border: 1px green dashed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+        font-weight: bold;
+      }
+      > span:first-child,
+      > span:nth-child(12n + 1), 
+      > span:nth-child(12n + 8) {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <span>001</span><span>002</span><span>003</span><span>004</span><span>005</span><span>006</span><span>007</span><span>008</span><span>009</span><span>010</span><span>011</span><span>012</span><span>013</span><span>014</span><span>015</span><span>016</span><span>017</span><span>018</span><span>019</span><span>020</span><span>021</span><span>022</span><span>023</span><span>024</span><span>025</span><span>026</span><span>027</span><span>028</span><span>029</span><span>030</span><span>031</span><span>032</span><span>033</span>
+</body>
+</html>

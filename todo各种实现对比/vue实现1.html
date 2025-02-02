@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue todo 练习</title>
+</head>
+
+<body>
+  <div id="app">
+    <h1>todos</h1>
+
+    <div class="input">
+      <input type="checkbox">
+      <input class="inputString" type="text" @keydown.enter="addTodo()" value="">
+    </div>
+
+    <ul :class="'visible-' + text">
+      <li v-for="(todo, idx) of todos">
+        <input type="checkbox" v-model="todo.completed">
+        <span>{{ todo.text }}</span>
+        <button @click="deleteTodo(idx)">&times;</button>
+      </li>
+    </ul>
+
+    <div>
+      <span>{{ leftCount }}item{{ leftCount > 1 ? 's' : ''}} left!</span>
+      <div>
+        <label for=""><input type="radio" name="status" v-model="text" value="All">All</label>
+        <label for=""><input type="radio" name="status" v-model="text" value="Active">Active</label>
+        <label for=""><input type="radio" name="status" v-model="text" value="Completed">Completed</label>
+      </div>
+    </div>
+
+  </div>
+  <script src="vue-2.7.16.js"></script>
+  <script>
+    let app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          todos: [{
+            text: 'hello',
+            completed: true,
+          },
+          {
+            text: 'hekjdfk',
+            completed: false,
+          },
+          {
+            text: 'hekjdfk',
+            completed: false,
+          },
+          {
+            text: 'hekjdfk',
+            completed: false,
+          },
+          ],
+          text: 'All',
+        }
+      },
+      methods: {
+        addTodo() {
+          let input = document.querySelector('.inputString');
+          let text = {
+            text: input.value.trim(),
+            completed: false,
+          };
+
+          this.todos.push(text);
+          input.value = '';
+        },
+        deleteTodo(idx) {
+          this.todos.splice(idx, 1);
+        },
+        upDate(e) {
+          let val = e.target.value;
+          this.todos.push({ status })
+        }
+      },
+      computed: {
+        leftCount() {
+          return this.todos.filter(it => it.completed === false).length;
+        },
+      }
+    })
+  </script>
+</body>
+
+</html>

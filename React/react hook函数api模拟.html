@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<!-- saved from url=(0151)https://class.damiaoedu.com:44313/codes/%E6%A1%86%E6%9E%B6/react/react-single-file-example%20-%20react-hook%E5%87%BD%E6%95%B0api%E6%A8%A1%E6%8B%9F.html -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Hello World</title>
+    <script src="./react hook函数api模拟_files/react.development.js"></script>
+    <script src="./react hook函数api模拟_files/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="./react hook函数api模拟_files/babel.min.js"></script>
+    <script src="./react hook函数api模拟_files/saved_resource"></script>
+
+    <style>
+      *,
+      ::before,
+      ::after {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-gradient-from-position: ;
+        --tw-gradient-via-position: ;
+        --tw-gradient-to-position: ;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgb(59 130 246 / 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+        --tw-contain-size: ;
+        --tw-contain-layout: ;
+        --tw-contain-paint: ;
+        --tw-contain-style: ;
+      }
+      ::backdrop {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-gradient-from-position: ;
+        --tw-gradient-via-position: ;
+        --tw-gradient-to-position: ;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgb(59 130 246 / 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+        --tw-contain-size: ;
+        --tw-contain-layout: ;
+        --tw-contain-paint: ;
+        --tw-contain-style: ;
+      } /* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */
+      *,
+      ::after,
+      ::before {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+        border-color: #e5e7eb;
+      }
+      ::after,
+      ::before {
+        --tw-content: "";
+      }
+      :host,
+      html {
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+        -moz-tab-size: 4;
+        tab-size: 4;
+        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        margin: 0;
+        line-height: inherit;
+      }
+      hr {
+        height: 0;
+        color: inherit;
+        border-top-width: 1px;
+      }
+      abbr:where([title]) {
+        -webkit-text-decoration: underline dotted;
+        text-decoration: underline dotted;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: inherit;
+        font-weight: inherit;
+      }
+      a {
+        color: inherit;
+        text-decoration: inherit;
+      }
+      b,
+      strong {
+        font-weight: bolder;
+      }
+      code,
+      kbd,
+      pre,
+      samp {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        font-size: 1em;
+      }
+      small {
+        font-size: 80%;
+      }
+      sub,
+      sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+      }
+      sub {
+        bottom: -0.25em;
+      }
+      sup {
+        top: -0.5em;
+      }
+      table {
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+      }
+      button,
+      input,
+      optgroup,
+      select,
+      textarea {
+        font-family: inherit;
+        font-feature-settings: inherit;
+        font-variation-settings: inherit;
+        font-size: 100%;
+        font-weight: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+        margin: 0;
+        padding: 0;
+      }
+      button,
+      select {
+        text-transform: none;
+      }
+      button,
+      input:where([type="button"]),
+      input:where([type="reset"]),
+      input:where([type="submit"]) {
+        -webkit-appearance: button;
+        background-color: transparent;
+        background-image: none;
+      }
+      :-moz-focusring {
+        outline: auto;
+      }
+      :-moz-ui-invalid {
+        box-shadow: none;
+      }
+      progress {
+        vertical-align: baseline;
+      }
+      ::-webkit-inner-spin-button,
+      ::-webkit-outer-spin-button {
+        height: auto;
+      }
+      [type="search"] {
+        -webkit-appearance: textfield;
+        outline-offset: -2px;
+      }
+      ::-webkit-search-decoration {
+        -webkit-appearance: none;
+      }
+      ::-webkit-file-upload-button {
+        -webkit-appearance: button;
+        font: inherit;
+      }
+      summary {
+        display: list-item;
+      }
+      blockquote,
+      dd,
+      dl,
+      figure,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      hr,
+      p,
+      pre {
+        margin: 0;
+      }
+      fieldset {
+        margin: 0;
+        padding: 0;
+      }
+      legend {
+        padding: 0;
+      }
+      menu,
+      ol,
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      dialog {
+        padding: 0;
+      }
+      textarea {
+        resize: vertical;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        opacity: 1;
+        color: #9ca3af;
+      }
+      [role="button"],
+      button {
+        cursor: pointer;
+      }
+      :disabled {
+        cursor: default;
+      }
+      audio,
+      canvas,
+      embed,
+      iframe,
+      img,
+      object,
+      svg,
+      video {
+        display: block;
+        vertical-align: middle;
+      }
+      img,
+      video {
+        max-width: 100%;
+        height: auto;
+      }
+      [hidden]:where(:not([hidden="until-found"])) {
+        display: none;
+      }
+    </style>
+    <script>
+      // 如一个函数想要记录自己被调用了多少次
+      // 再如一个递归函数想要知道当前的递归层次（这个需求可以用也可以不用全局变量）
+
+      // 将会是由函数映射到其状态集合
+      // {f: [[2, f], [5, f]],  g: [],}
+      var funcStateMap = new Map();
+      function useState(initialState) {
+        // 下面的数组记录了当前正在运行的函数的状态集（函数首次运行时为空，则每个useState的调用会创建相应的状态）
+        var currentFuncState = funcStateMap.get(currentRunningFunc);
+        var f = currentRunningFunc;
+        var i = useStateCallCount; // useState在当前函数内的调用顺序，我们是通过这个顺序从数组里读出相应顺序的状态的
+
+        // 当前useState的调用次数在数组中有对应的状态，则返回
+        // 如果没有，大概率说明函数是第一次被run调用
+        let ret;
+        if (useStateCallCount in currentFuncState) {
+          ret = currentFuncState[useStateCallCount];
+        } else {
+          ret = [
+            initialState,
+            (newState) => {
+              ret[0] = newState;
+              Promise.resolve().then(() => run(f));
+            },
+          ];
+          currentFuncState.push(ret);
+        }
+        useStateCallCount++;
+        return ret;
+      }
+      var useStateCallCount = 0;
+      var currentRunningFunc = null;
+
+      // 只要通过run调用的函数，就可以使用useState
+      function run(f, ...args) {
+        // 函数如果是首次运行，则在我们维护的映射中为它建立保存状态集的空数组
+        if (!funcStateMap.has(f)) {
+          funcStateMap.set(f, []);
+        }
+        var previousUseStateCallCount = useStateCallCount;
+        useStateCallCount = 0;
+        var previousRunningFunc = currentRunningFunc;
+        currentRunningFunc = f;
+        try {
+          return f(...args);
+        } finally {
+          useStateCallCount = previousUseStateCallCount;
+          currentRunningFunc = previousRunningFunc;
+        }
+      }
+      function foo() {
+        var [count, setCount] = useState(5);
+        // if (xx) {
+        //   var [a, setA] = useState(0)
+        // }
+        var [age, setAge] = useState(0);
+        run(bar);
+        console.log(count, setCount, age, setAge);
+      }
+      function bar() {
+        var [x, setX] = useState(0);
+        console.log(x, setX);
+      }
+      //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJmdW5jU3RhdGVNYXAiLCJNYXAiLCJ1c2VTdGF0ZSIsImluaXRpYWxTdGF0ZSIsImN1cnJlbnRGdW5jU3RhdGUiLCJnZXQiLCJjdXJyZW50UnVubmluZ0Z1bmMiLCJmIiwiaSIsInVzZVN0YXRlQ2FsbENvdW50IiwicmV0IiwibmV3U3RhdGUiLCJQcm9taXNlIiwicmVzb2x2ZSIsInRoZW4iLCJydW4iLCJwdXNoIiwiYXJncyIsImhhcyIsInNldCIsInByZXZpb3VzVXNlU3RhdGVDYWxsQ291bnQiLCJwcmV2aW91c1J1bm5pbmdGdW5jIiwiZm9vIiwiY291bnQiLCJzZXRDb3VudCIsImFnZSIsInNldEFnZSIsImJhciIsImNvbnNvbGUiLCJsb2ciLCJ4Iiwic2V0WCJdLCJzb3VyY2VzIjpbIklubGluZSBCYWJlbCBzY3JpcHQiXSwic291cmNlc0NvbnRlbnQiOlsiXG5cbiAgICAgIC8vIOWmguS4gOS4quWHveaVsOaDs+imgeiusOW9leiHquW3seiiq+iwg+eUqOS6huWkmuWwkeasoVxuICAgICAgLy8g5YaN5aaC5LiA5Liq6YCS5b2S5Ye95pWw5oOz6KaB55+l6YGT5b2T5YmN55qE6YCS5b2S5bGC5qyh77yI6L+Z5Liq6ZyA5rGC5Y+v5Lul55So5Lmf5Y+v5Lul5LiN55So5YWo5bGA5Y+Y6YeP77yJXG4gICAgICBcblxuICAgICAgLy8g5bCG5Lya5piv55Sx5Ye95pWw5pig5bCE5Yiw5YW254q25oCB6ZuG5ZCIXG4gICAgICAvLyB7ZjogW1syLCBmXSwgWzUsIGZdXSwgIGc6IFtdLH1cbiAgICAgIHZhciBmdW5jU3RhdGVNYXAgPSBuZXcgTWFwKClcblxuICAgICAgZnVuY3Rpb24gdXNlU3RhdGUoaW5pdGlhbFN0YXRlKSB7XG4gICAgICAgIC8vIOS4i+mdoueahOaVsOe7hOiusOW9leS6huW9k+WJjeato+WcqOi/kOihjOeahOWHveaVsOeahOeKtuaAgembhu+8iOWHveaVsOmmluasoei/kOihjOaXtuS4uuepuu+8jOWImeavj+S4qnVzZVN0YXRl55qE6LCD55So5Lya5Yib5bu655u45bqU55qE54q25oCB77yJXG4gICAgICAgIHZhciBjdXJyZW50RnVuY1N0YXRlID0gZnVuY1N0YXRlTWFwLmdldChjdXJyZW50UnVubmluZ0Z1bmMpXG4gICAgICAgIHZhciBmID0gY3VycmVudFJ1bm5pbmdGdW5jXG4gICAgICAgIHZhciBpID0gdXNlU3RhdGVDYWxsQ291bnQgLy8gdXNlU3RhdGXlnKjlvZPliY3lh73mlbDlhoXnmoTosIPnlKjpobrluo/vvIzmiJHku6zmmK/pgJrov4fov5nkuKrpobrluo/ku47mlbDnu4Tph4zor7vlh7rnm7jlupTpobrluo/nmoTnirbmgIHnmoRcblxuICAgICAgICAvLyDlvZPliY11c2VTdGF0ZeeahOiwg+eUqOasoeaVsOWcqOaVsOe7hOS4reacieWvueW6lOeahOeKtuaAge+8jOWImei/lOWbnlxuICAgICAgICAvLyDlpoLmnpzmsqHmnInvvIzlpKfmpoLnjofor7TmmI7lh73mlbDmmK/nrKzkuIDmrKHooqtydW7osIPnlKhcbiAgICAgICAgbGV0IHJldFxuICAgICAgICBpZiAodXNlU3RhdGVDYWxsQ291bnQgaW4gY3VycmVudEZ1bmNTdGF0ZSkge1xuICAgICAgICAgIHJldCA9IGN1cnJlbnRGdW5jU3RhdGVbdXNlU3RhdGVDYWxsQ291bnRdXG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgcmV0ID0gW2luaXRpYWxTdGF0ZSwgKG5ld1N0YXRlKSA9PiB7XG4gICAgICAgICAgICByZXRbMF0gPSBuZXdTdGF0ZVxuICAgICAgICAgICAgUHJvbWlzZS5yZXNvbHZlKCkudGhlbigoKSA9PiBydW4oZikpXG4gICAgICAgICAgfV1cbiAgICAgICAgICBjdXJyZW50RnVuY1N0YXRlLnB1c2gocmV0KVxuICAgICAgICB9XG5cbiAgICAgICAgdXNlU3RhdGVDYWxsQ291bnQrK1xuICAgICAgICByZXR1cm4gcmV0XG4gICAgICB9XG4gICAgICBcbiAgICAgIHZhciB1c2VTdGF0ZUNhbGxDb3VudCA9IDBcbiAgICAgIHZhciBjdXJyZW50UnVubmluZ0Z1bmMgPSBudWxsXG5cbiAgICAgIC8vIOWPquimgemAmui/h3J1buiwg+eUqOeahOWHveaVsO+8jOWwseWPr+S7peS9v+eUqHVzZVN0YXRlXG4gICAgICBmdW5jdGlvbiBydW4oZiwgLi4uYXJncykge1xuICAgICAgICAvLyDlh73mlbDlpoLmnpzmmK/pppbmrKHov5DooYzvvIzliJnlnKjmiJHku6znu7TmiqTnmoTmmKDlsITkuK3kuLrlroPlu7rnq4vkv53lrZjnirbmgIHpm4bnmoTnqbrmlbDnu4RcbiAgICAgICAgaWYgKCFmdW5jU3RhdGVNYXAuaGFzKGYpKSB7XG4gICAgICAgICAgZnVuY1N0YXRlTWFwLnNldChmLCBbXSlcbiAgICAgICAgfVxuICAgICAgICB2YXIgcHJldmlvdXNVc2VTdGF0ZUNhbGxDb3VudCA9IHVzZVN0YXRlQ2FsbENvdW50XG4gICAgICAgIHVzZVN0YXRlQ2FsbENvdW50ID0gMFxuXG4gICAgICAgIHZhciBwcmV2aW91c1J1bm5pbmdGdW5jID0gY3VycmVudFJ1bm5pbmdGdW5jXG4gICAgICAgIGN1cnJlbnRSdW5uaW5nRnVuYyA9IGZcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICByZXR1cm4gZiguLi5hcmdzKVxuICAgICAgICB9IGZpbmFsbHkge1xuICAgICAgICAgIHVzZVN0YXRlQ2FsbENvdW50ID0gcHJldmlvdXNVc2VTdGF0ZUNhbGxDb3VudFxuICAgICAgICAgIGN1cnJlbnRSdW5uaW5nRnVuYyA9IHByZXZpb3VzUnVubmluZ0Z1bmNcbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICBmdW5jdGlvbiBmb28oKSB7XG4gICAgICAgIHZhciBbY291bnQsIHNldENvdW50XSA9IHVzZVN0YXRlKDUpXG4gICAgICAgIC8vIGlmICh4eCkge1xuICAgICAgICAvLyAgIHZhciBbYSwgc2V0QV0gPSB1c2VTdGF0ZSgwKVxuICAgICAgICAvLyB9XG4gICAgICAgIHZhciBbYWdlLCBzZXRBZ2VdID0gdXNlU3RhdGUoMClcbiAgICAgICAgXG4gICAgICAgIHJ1bihiYXIpXG4gICAgICAgIGNvbnNvbGUubG9nKGNvdW50LCBzZXRDb3VudCwgYWdlLCBzZXRBZ2UpXG4gICAgICB9XG5cbiAgICAgIGZ1bmN0aW9uIGJhcigpIHtcbiAgICAgICAgdmFyIFt4LCBzZXRYXSA9IHVzZVN0YXRlKDApXG5cbiAgICAgICAgY29uc29sZS5sb2coeCwgc2V0WClcbiAgICAgIH1cblxuICAgICJdLCJtYXBwaW5ncyI6IkFBRU07QUFDQTs7QUFHQTtBQUNBO0FBQ0EsSUFBSUEsWUFBWSxHQUFHLElBQUlDLEdBQUcsQ0FBQyxDQUFDO0FBRTVCLFNBQVNDLFFBQVFBLENBQUNDLFlBQVksRUFBRTtFQUM5QjtFQUNBLElBQUlDLGdCQUFnQixHQUFHSixZQUFZLENBQUNLLEdBQUcsQ0FBQ0Msa0JBQWtCLENBQUM7RUFDM0QsSUFBSUMsQ0FBQyxHQUFHRCxrQkFBa0I7RUFDMUIsSUFBSUUsQ0FBQyxHQUFHQyxpQkFBaUIsRUFBQzs7RUFFMUI7RUFDQTtFQUNBLElBQUlDLEdBQUc7RUFDUCxJQUFJRCxpQkFBaUIsSUFBSUwsZ0JBQWdCLEVBQUU7SUFDekNNLEdBQUcsR0FBR04sZ0JBQWdCLENBQUNLLGlCQUFpQixDQUFDO0VBQzNDLENBQUMsTUFBTTtJQUNMQyxHQUFHLEdBQUcsQ0FBQ1AsWUFBWSxFQUFHUSxRQUFRLElBQUs7TUFDakNELEdBQUcsQ0FBQyxDQUFDLENBQUMsR0FBR0MsUUFBUTtNQUNqQkMsT0FBTyxDQUFDQyxPQUFPLENBQUMsQ0FBQyxDQUFDQyxJQUFJLENBQUMsTUFBTUMsR0FBRyxDQUFDUixDQUFDLENBQUMsQ0FBQztJQUN0QyxDQUFDLENBQUM7SUFDRkgsZ0JBQWdCLENBQUNZLElBQUksQ0FBQ04sR0FBRyxDQUFDO0VBQzVCO0VBRUFELGlCQUFpQixFQUFFO0VBQ25CLE9BQU9DLEdBQUc7QUFDWjtBQUVBLElBQUlELGlCQUFpQixHQUFHLENBQUM7QUFDekIsSUFBSUgsa0JBQWtCLEdBQUcsSUFBSTs7QUFFN0I7QUFDQSxTQUFTUyxHQUFHQSxDQUFDUixDQUFDLEVBQUUsR0FBR1UsSUFBSSxFQUFFO0VBQ3ZCO0VBQ0EsSUFBSSxDQUFDakIsWUFBWSxDQUFDa0IsR0FBRyxDQUFDWCxDQUFDLENBQUMsRUFBRTtJQUN4QlAsWUFBWSxDQUFDbUIsR0FBRyxDQUFDWixDQUFDLEVBQUUsRUFBRSxDQUFDO0VBQ3pCO0VBQ0EsSUFBSWEseUJBQXlCLEdBQUdYLGlCQUFpQjtFQUNqREEsaUJBQWlCLEdBQUcsQ0FBQztFQUVyQixJQUFJWSxtQkFBbUIsR0FBR2Ysa0JBQWtCO0VBQzVDQSxrQkFBa0IsR0FBR0MsQ0FBQztFQUN0QixJQUFJO0lBQ0YsT0FBT0EsQ0FBQyxDQUFDLEdBQUdVLElBQUksQ0FBQztFQUNuQixDQUFDLFNBQVM7SUFDUlIsaUJBQWlCLEdBQUdXLHlCQUF5QjtJQUM3Q2Qsa0JBQWtCLEdBQUdlLG1CQUFtQjtFQUMxQztBQUNGO0FBRUEsU0FBU0MsR0FBR0EsQ0FBQSxFQUFHO0VBQ2IsSUFBSSxDQUFDQyxLQUFLLEVBQUVDLFFBQVEsQ0FBQyxHQUFHdEIsUUFBUSxDQUFDLENBQUMsQ0FBQztFQUNuQztFQUNBO0VBQ0E7RUFDQSxJQUFJLENBQUN1QixHQUFHLEVBQUVDLE1BQU0sQ0FBQyxHQUFHeEIsUUFBUSxDQUFDLENBQUMsQ0FBQztFQUUvQmEsR0FBRyxDQUFDWSxHQUFHLENBQUM7RUFDUkMsT0FBTyxDQUFDQyxHQUFHLENBQUNOLEtBQUssRUFBRUMsUUFBUSxFQUFFQyxHQUFHLEVBQUVDLE1BQU0sQ0FBQztBQUMzQztBQUVBLFNBQVNDLEdBQUdBLENBQUEsRUFBRztFQUNiLElBQUksQ0FBQ0csQ0FBQyxFQUFFQyxJQUFJLENBQUMsR0FBRzdCLFFBQVEsQ0FBQyxDQUFDLENBQUM7RUFFM0IwQixPQUFPLENBQUNDLEdBQUcsQ0FBQ0MsQ0FBQyxFQUFFQyxJQUFJLENBQUM7QUFDdEIiLCJpZ25vcmVMaXN0IjpbXX0=
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      // 如一个函数想要记录自己被调用了多少次
+      // 再如一个递归函数想要知道当前的递归层次（这个需求可以用也可以不用全局变量）
+
+      // 将会是由函数映射到其状态集合
+      // {f: [[2, f], [5, f]],  g: [],}
+      var funcStateMap = new Map();
+
+      function useState(initialState) {
+        // 下面的数组记录了当前正在运行的函数的状态集（函数首次运行时为空，则每个useState的调用会创建相应的状态）
+        var currentFuncState = funcStateMap.get(currentRunningFunc);
+        var f = currentRunningFunc;
+        var i = useStateCallCount; // useState在当前函数内的调用顺序，我们是通过这个顺序从数组里读出相应顺序的状态的
+
+        // 当前useState的调用次数在数组中有对应的状态，则返回
+        // 如果没有，大概率说明函数是第一次被run调用
+        let ret;
+        if (useStateCallCount in currentFuncState) {
+          ret = currentFuncState[useStateCallCount];
+        } else {
+          ret = [
+            initialState,
+            (newState) => {
+              ret[0] = newState;
+              Promise.resolve().then(() => run(f));
+            },
+          ];
+          currentFuncState.push(ret);
+        }
+
+        useStateCallCount++;
+        return ret;
+      }
+
+      var useStateCallCount = 0;
+      var currentRunningFunc = null;
+
+      // 只要通过run调用的函数，就可以使用useState
+      function run(f, ...args) {
+        // 函数如果是首次运行，则在我们维护的映射中为它建立保存状态集的空数组
+        if (!funcStateMap.has(f)) {
+          funcStateMap.set(f, []);
+        }
+        var previousUseStateCallCount = useStateCallCount;
+        useStateCallCount = 0;
+
+        var previousRunningFunc = currentRunningFunc;
+        currentRunningFunc = f;
+        try {
+          return f(...args);
+        } finally {
+          useStateCallCount = previousUseStateCallCount;
+          currentRunningFunc = previousRunningFunc;
+        }
+      }
+
+      function foo() {
+        var [count, setCount] = useState(5);
+        // if (xx) {
+        //   var [a, setA] = useState(0)
+        // }
+        var [age, setAge] = useState(0);
+
+        run(bar);
+        console.log(count, setCount, age, setAge);
+      }
+
+      function bar() {
+        var [x, setX] = useState(0);
+
+        console.log(x, setX);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM</title>
+</head>
+<body>
+  <p><span id="one"></span></p> 
+  <p><span id="two"></span></p>
+
+  <p style="text-align: cente; margin-top: 150px; margin-left: 200px;">
+    <img style="width: 80px; position: relative; " src="images/cat.jpeg" alt="This is a cute cat!">
+  </p>
+  <p>Click this document to activate the handler.</p>
+  <script>
+    let cat = document.querySelector('img'); 
+    let angle = 0; 
+    let lastTime = null; 
+    function animate (time) {
+      //if (lastTime != null) {
+      //  angle += (time - lastTime) * 0.001; 
+      //}
+      //lastTime = time; 
+
+      //angle += 0.01;
+      //angle = time / 1000;
+      angle = Date.now() /1000;
+
+      cat.style.top = (Math.sin(angle) * 20) + 'px'; 
+      cat.style.left = (Math.cos(angle) * 200) + 'px'; 
+      requestAnimationFrame(animate); 
+    }
+    requestAnimationFrame(animate); 
+
+
+    addEventListener('click', function func () {
+      console.log("You clicked!"); 
+    })
+    /*
+    function foo () {
+      let start = Date.now(); 
+      let img = document.querySelector('img'); 
+      let r = 100; //radius; 
+      for (let i = 0; i < 10000; i++) {
+        let angle = i / 100; 
+        let left = Math.cos(angle) * r; 
+        let top = Math.sin(angle) * r; 
+        console.log(left, top);
+        img.style.left = left + 'px'; 
+        img.style.top = top + 'px'; 
+      }
+      console.log(Date.now() - start);
+    }  
+    */
+
+    /*
+    function time (name, action) {
+      let start = Date.now(); //current time in milliseconds; 
+      action(); 
+      console.log(name, "took", Date.now() - start, "ms");
+    }
+    
+    time("naive",  function naive() {
+      let target = document.getElementById("one"); 
+      while (target.offsetWidth < 2000) {
+         target.appendChild(document.createTextNode("X")); 
+      }
+    })
+
+    time("clever", function clever() {
+      let target = document.getElementById("two"); 
+      target.appendChild(document.createTextNode("XXXXX")); 
+      let total = Math.ceil(4000 / (target.offsetWidth / 5)); //五个X的宽度除以5， 得到一个X的宽度，， 2000 除以一个X的宽度， 得到X的个数； 
+      for (let i = 5; i < 10000; i++) {
+        target.appendChild(document.createTextNode("X")); 
+      }
+    })
+
+    function count (selector) {
+      //数标签的个数； 
+      return document.querySelectorAll(selector).length; 
+    }
+    */
+
+  </script>
+</body>
+</html>

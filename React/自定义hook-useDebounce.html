@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      function debounce(func, delay) {
+        // 防抖
+        let id = null;
+        return function (...args) {
+          if (id) clearTimeout(id);
+          id = setTimeout(() => func(...args), delay);
+        };
+      }
+
+      function throttle(func, delay) {
+        let lastTime = 0;
+        return function (...args) {
+          let now = Date.now();
+          if (now - lastTime >= delay) {
+            func(...args);
+            lastTime = now;
+          }
+        };
+      }
+    </script>
+    <script type="text/babel">
+      function MyApp() {
+        return (
+          <>
+            <h1>useDebounce</h1>
+            <Button1 />
+            <hr />
+            <Button2 />
+            <hr />
+            <Button3 />
+          </>
+        );
+      }
+
+      function useDebounceFunc(func, time) {
+        let funcRef = React.useRef();
+        funcRef.current = func;
+
+        let idRef = React.useRef();
+
+        let timeRef = React.useRef();
+        timeRef.current = time;
+
+        let ret = React.useCallback((...args) => {
+          clearTimeout(idRef.current);
+
+          idRef.current = setTimeout(() => {
+            funcRef.current(...args);
+          }, timeRef.current);
+        }, []);
+
+        return ret;
+      }
+
+      function Button1() {
+        let [count, setCount] = React.useState(0);
+
+        let debounce = useDebounceFunc(() => {
+          setCount((i) => i + 1);
+        }, 500);
+
+        return (
+          <>
+            <div>
+              <p>第一种Debounce 用法</p>
+              <button onClick={debounce}>fast: {count}</button>
+            </div>
+          </>
+        );
+      }
+
+      function useDebounceFunc1(func, time) {
+        let funcRef = React.useRef();
+        funcRef.current = func;
+
+        let timeRef = React.useRef();
+        timeRef.current = time;
+
+        let ret = React.useCallback(
+          debounce((...args) => {
+            funcRef.current(...args);
+          }, timeRef.current),
+          []
+        );
+
+        return ret;
+      }
+
+      function Button2() {
+        let [count, setCount] = React.useState(0);
+        let debouncedFunc = useDebounceFunc1(() => {
+          setCount((i) => i + 1);
+        }, 500);
+
+        return (
+          <>
+            <p>第二种Debounce实现</p>
+            <button onClick={debouncedFunc}>fast: {count}</button>
+          </>
+        );
+      }
+
+      function useDebounceFunc2(func, time) {
+        let funcRef = React.useRef();
+        funcRef.current = func;
+
+        let timeRef = React.useRef();
+        timeRef.current = time;
+
+        let ret = React.useMemo(() => {
+          return debounce((...args) => {
+            funcRef.current(...args);
+          }, timeRef.current);
+        }, []);
+
+        return ret;
+      }
+
+      function Button3() {
+        let [count, setCount] = React.useState(0);
+
+        let debouncedFunc = useDebounceFunc2(() => {
+          setCount((i) => i + 1);
+        }, 500);
+
+        return (
+          <>
+            <p>第三种debounce实现</p>
+            <button onClick={debouncedFunc}>fast: {count}</button>
+          </>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>滚动事件</title>
+  <style>
+    .progress {
+      border: 1px solid blue;
+      width: 100px;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+
+    .progress>div {
+      height: 12px;
+      background: blue;
+      width: 0%;
+    }
+
+    body {
+      height: 2000px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress">
+    <div></div>
+  </div>
+  <p>滚动我。。。</p>
+
+  <script>
+    let bar = document.querySelector('.progress div'); 
+    addEventListener('scroll', e =>  {
+      let max = document.body.scrollHeight - innerHeight; //scrollHeight是指网页的高度， innerHeight是指窗口的高度； 
+      let percent = (pageYOffset / max) * 100; //pageYOffset是指页面偏移的高度， 即已经滚动到窗口上面的网页的高度； 
+      bar.style.width = percent + '%'; 
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>require 函数简单实现</title>
+</head>
+
+<body>
+
+
+
+  <script>
+
+    function getCode(filename) {
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', filename, false);
+      xhr.send();
+      return xhr.responseText;
+    }
+
+    function require(filename) {
+      if (filename in require.fileCache) {
+        return require.fileCache[filename].exports;
+      }
+      let code = getCode(filename);
+      let module = {
+        id: filename,
+        path: filename,
+        loaded: false,
+        exports: {},
+      }
+      let moduleFunc = new Function('exports', 'module', code);
+      require.fileCache[filename] = module;
+      moduleFunc(module.exports, module);
+      module.loaded = true;
+      return module.exports;
+    }
+    require.fileCache = {};
+
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼠标波动追踪</title>
+  <style>
+    div.container {
+      > span {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        background-color: red;
+      }
+    }
+  </style>
+</head>
+<body>
+ <div class="container">
+  <span class="flow1">哈</span>
+  <span class="flow2">哈</span>
+  <span class="flow3">哈</span>
+  <span class="flow4">哈</span>
+  <span class="flow5">哈</span>
+  <span class="flow6">哈</span>
+  <span class="flow7">哈</span>
+  <span class="flow8">哈</span>
+  <span class="flow9">哈</span>
+  <span class="flow10">哈</span>
+</div> 
+<script>
+  let lastTime = null;
+  let mouseX, mouseY;
+  window.addEventListener('mousemove', (e) => {
+    [mouseX, mouseY] = [e.clientX, e.clientY];
+
+  })
+  requestAnimationFrame(function animation(time) {
+    let span1 = document.querySelector('.flow1'); 
+    let span2 = document.querySelector('.flow2'); 
+    let span3 = document.querySelector('.flow3'); 
+    let span4 = document.querySelector('.flow4'); 
+    let span5 = document.querySelector('.flow5'); 
+    let span6 = document.querySelector('.flow6'); 
+    let span7 = document.querySelector('.flow7'); 
+    let span8 = document.querySelector('.flow8'); 
+    let span9 = document.querySelector('.flow9'); 
+    let span10 = document.querySelector('.flow10'); 
+
+    let now = Date.now();
+
+    let angle1 = now * 0.01; 
+    let y1 = Math.cos(angle1) * 20 + mouseY;
+    let x1 = mouseX;
+
+    let y2 = Math.cos(angle1 + 10) * 20 + y1;
+    let x2 = x1 + 20;
+
+    let y3 = Math.cos(angle1 + 20) * 20 + y2;
+    let x3 = x2 + 20;
+
+    let y4 = Math.cos(angle1 + 30) * 20 + y3;
+    let x4 = x3 + 20;
+
+    let y5 = Math.cos(angle1 + 40) * 20 + y4;
+    let x5 = x4 + 20;
+
+    let y6 = Math.cos(angle1 + 50) * 20 + y5;
+    let x6 = x5 + 20;
+
+    let y7 = Math.cos(angle1 + 60) * 20 + y6;
+    let x7 = x6 + 20;
+
+    let y8 = Math.cos(angle1 + 70) * 20 + y7;
+    let x8 = x7 + 20;
+
+    let y9 = Math.cos(angle1 + 80) * 20 + y8;
+    let x9 = x8 + 20;
+
+    let y10 = Math.cos(angle1 + 90) * 20 + y9;
+    let x10 = x9 + 20;
+
+    span1.style.top = y1 + 'px';
+    span1.style.left = x1 + 'px';
+
+    span2.style.top = y2 + 'px';
+    span2.style.left = x2 + 'px';
+
+    span3.style.top = y3 + 'px';
+    span3.style.left = x3 + 'px';
+
+    span4.style.top = y4 + 'px';
+    span4.style.left = x4 + 'px';
+
+    span5.style.top = y5 + 'px';
+    span5.style.left = x5 + 'px';
+
+    span6.style.top = y6 + 'px';
+    span6.style.left = x6 + 'px';
+
+    span7.style.top = y7 + 'px';
+    span7.style.left = x7 + 'px';
+
+    span8.style.top = y8 + 'px';
+    span8.style.left = x8 + 'px';
+
+    span9.style.top = y9 + 'px';
+    span9.style.left = x9 + 'px';
+
+    span10.style.top = y10 + 'px';
+    span10.style.left = x10 + 'px';
+
+    lastTime = time;
+    requestAnimationFrame(animation)
+  })
+</script>
+</body>
+</html>

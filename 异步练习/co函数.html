@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>co coroutine 函数</title>
+</head>
+
+<body>
+
+  <script>
+    //非async/await
+    function getValue(val, time) {
+      return new Promise((rs, rj) => {
+        setTimeout(() => {
+          rs(val);
+        }, time);
+      })
+    }
+    function* generator() {
+      console.log(1);
+      let a = yield getValue(111, 1000);
+      console.log(a);
+      let b = yield getValue(222, 1000);
+      console.log(b);
+      let c = yield getValue(333, 1000);
+      console.log(c);
+      let d = yield new Error('eeeeeeeee')
+      console.log(d);
+      return 'done';
+    }
+    async function generator1() {
+      let a = await getValue(111, 1000);
+      console.log(a);
+      let b = await getValue(222, 1000);
+      console.log(b);
+      let c = await getValue(333, 1000);
+      console.log(c);
+      let d = await new Error('eeeeeeeee')
+      console.log(d);
+      return 'done';
+    }
+
+    async function* generator2() {
+      let a = await getValue(666, 5000);
+      console.log(a)
+      let A = yield 'aaaaaaaaa';
+      console.log(A)
+
+      let b = await getValue(888, 5000);
+      console.log(b)
+      let B = yield 'aaaaaaaaa';
+      console.log(B)
+
+      let c = await getValue(111, 5000);
+      console.log(c)
+      let C = yield 'aaaaaaaaa';
+      console.log(C)
+
+      let d = await getValue(333, 5000);
+      console.log(d)
+      let D = yield 'aaaaaaaaa';
+      console.log(D)
+
+      let e = await getValue(444, 5000);
+      console.log(e)
+      let E = yield 'aaaaaaaaa';
+      console.log(E)
+    }
+    /*
+    一般步骤： 
+      1， 创建生成器实例； 
+      2， 定义递归函数来处理gen.next()返回的结果； 
+      3， 每次从生成器中过的{value, done};
+        如果done为false， 则value应该是一个Promise;
+        再继续调用next();
+    */
+    function co(gene) {
+      let generator = gene();
+      let gened
+      return new Promise((rs, rj) => {
+        try {
+          gened = generator.next();
+          step();
+        } catch (e) {
+          rj(e);
+        }
+
+        function step() {
+          if (gened.done === false) {
+            Promise.resolve(gened.value).then((val) => {
+              try {
+                gened = generator.next(val);
+                step();
+              } catch (e) {
+                rj(e);
+              }
+            }, (reason) => {
+              try {
+                gened = generator.throw(reason);
+                step();
+              } catch (e) {
+                rj(e);
+              }
+            })
+          } else {
+            rs(gened.value);
+          }
+        }
+      })
+    }
+
+  </script>
+</body>
+
+</html>

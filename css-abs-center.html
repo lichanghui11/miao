@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>其中绝对居中方案</title>
+  <style>
+    * {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    div {
+      width: 300px;
+
+      height: 300px; 
+      margin: 100px auto; 
+    }
+    span {
+      width: 70px;
+      height: 70px;
+    }
+    .position {
+      position: relative;
+      background-color: lightblue;
+      > span {
+        position: absolute;
+        background-color: lightcoral;
+        margin: auto;
+        inset: 0;
+      }
+    }
+    .position2 {
+      background-color: lightgray;
+      position: relative;
+      > span {
+        position: absolute;
+        background-color: lightblue;
+        left: 50%;
+        top: 50%; 
+        transform: translateX(-50%) translateY(-50%);
+      }
+    }
+    .grid {
+      display: grid;
+      background-color: lightpink;
+      justify-content: center;
+      align-items: center;
+      > span {
+        background-color: orange;
+      }
+    }
+    .flex {
+      display: flex;
+      background-color: lightgreen;
+      justify-content: center;
+      align-items: center;
+      > span {
+        background-color: orange;
+      }
+    }
+    .block {
+      background-color: lightblue;
+      display: block;
+      line-height: 300px;
+      font-size: 0;
+      text-align: center;
+      > span {
+        font-size: 16px;
+        background-color: lightgreen;
+        display: inline-block;
+        line-height: 70px;/*line-height为可继承属性， 需要在内层元素重置该属性*/
+        vertical-align: middle;
+      }
+    }
+    .table {
+      background-color: rgb(225, 176, 85);
+      display: table-cell;
+      vertical-align: middle;
+      > span {
+        background-color: lightblue;
+        display: block;
+        margin: auto; 
+      }
+    }
+    .psudo {
+      background-color: lightblue;
+      display: block;
+      font-size: 0;
+      text-align: center;
+      &::before {
+        content: '';
+        height: 300px;
+        display: inline-block;
+        line-height: 300px;
+        vertical-align: middle;
+      }
+      > span {
+        background-color: orange;
+        display: inline-block;
+        font-size: 16px;
+        text-align: center;
+        vertical-align: middle;
+      }
+    }
+  </style>
+</head>
+<body>
+   <div class="position">
+    <span>f</span>
+   </div>
+   <div class="position2">
+    <span>f</span>
+   </div>
+   <div class="grid">
+    <span>f</span>
+   </div>
+   <div class="flex">
+    <span>f</span>
+   </div>
+   <div class="block">
+    <span>dds</span>
+   </div>
+   <div class="wrap">
+   <div class="table">
+    <span>d</span>
+   </div>
+  </div>
+  <div class="psudo">
+    <span>f</span>
+  </div>
+</body>
+</html>

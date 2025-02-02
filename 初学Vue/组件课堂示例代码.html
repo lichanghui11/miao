@@ -1,0 +1,386 @@
+<script src="vue-3.5.11.global.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div id="app">
+</div>
+
+<script>
+  // import { createApp } from 'https://esm.sh/vue/dist/vue.esm-browser.js'
+  const { createApp } = Vue
+
+
+  var app = createApp({
+    template: `
+      <div id="app">
+        <counter :start="0" :step="2"></counter>
+        <counter :start="10" :step="5"></counter>
+        <counter :step="1"></counter>
+        <counter></counter>
+
+        <map-input v-model="obj"></map-input>
+
+        <date-input v-model="birthday"></date-input>
+
+        <list-input v-model="fruits"></list-input>
+
+        <carousel @change="log($event)" ref="lunbotu1" class="foo bar" :slides="火车图片们"></carousel>
+
+        <carousel ref="lunbotu2" v-if="showXiaomi" :slides="小米产品图片"></carousel>
+
+        <tabs a="woef" b="owife" c="weifj" defaultActiveKey="2" :items="tabInfos" @change="log($event)"></tabs>
+
+
+        {{ message }}
+        {{ numbers }}
+        
+        <multi-root-el-comp x=1></multi-root-el-comp>
+
+        <async-comp1 v-if="false"></async-comp1>
+      </div>
+    `,
+    data() {
+      var x = {
+        obj: {
+          a: 1,
+          b: 2,
+          c: 3,
+        },
+        birthday: new Date(),
+        fruits: ['apple', 'banana'],
+        showXiaomi: false,
+        message: 'Hello Vue! <em>aaa</em> ',
+        numbers: [1, 2, 3, 4],
+        火车图片们: [{
+          link: 'https://www.jd.com',
+          imgUrl: 'https://www.12306.cn/index/images/abanner06.jpg',
+        }, {
+          link: 'https://www.mi.com',
+          imgUrl: 'https://www.12306.cn/index/images/abanner01.jpg',
+        }],
+        小米产品图片: [{
+          link: 'https://www.mi.com/shop/buy?product_id=20425',
+          imgUrl: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/45cd41662e2e43993d0f9c392e9339a4.jpg?w=2452&h=920',
+        }, {
+          link: 'https://www.mi.com/shop/buy?product_id=20426',
+          imgUrl: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/fbcb40da7fdd41d4fabf86666d2798a9.jpg?thumb=1&w=1103&h=414&f=webp&q=90',
+        }, {
+          link: 'https://www.xiaomiev.com/',
+          imgUrl: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/397f2569b126d8fba446b6bbf57ef771.jpg?thumb=1&w=1103&h=414&f=webp&q=90'
+        }],
+        tabInfos: [{
+          key: '1',
+          label: 'Tab 1',
+          children: 'Content of Tab Pane 1',
+        },
+        {
+          key: '2',
+          label: 'Tab 2',
+          children: 'Content of Tab Pane 2',
+        },
+        {
+          key: '3',
+          label: 'Tab 3',
+          children: 'Content of Tab Pane 3',
+        },]
+      }
+      return x
+    },
+    methods: {
+      log(...args) {
+        console.log(...args)
+      }
+    }
+  })
+
+
+
+  app.component('counter', {
+    // 声明这个组件将会接收什么属性（类似于函数的参数）
+    // 声明的参数后续可以直接通过this访问
+    // props: ['step', 'start'],
+    props: {
+      step: {
+        type: Number,
+        default: 1,
+      },
+      start: {
+        type: Number,
+        default: 0,
+      },
+    },
+    template: `
+      <div>
+        <button @click="dec">-{{this.step}}</button>
+        {{ currentCount }}
+        <button @click="inc">+{{this.step}}</button>
+      </div>
+    `,
+    data() {
+      return {
+        currentCount: this.start,
+      }
+    },
+    methods: {
+      dec() {
+        this.currentCount -= this.step
+      },
+      inc() {
+        this.currentCount += this.step
+      }
+    }
+  })
+
+
+  app.component('carousel', {
+    // expose: ['prev', 'next'],
+    emits: {
+      change: null,
+    },
+    props: {
+      slides: {
+        type: Array,
+        required: true,
+      },
+      autoplay: {
+        type: Number,
+        default: 0,
+      }
+    },
+    beforeUpdate() {
+      console.log('轮播图组件更新')
+    },
+    template: `
+      <div class="relative border border-2 border-slate-500 w-[300px] h-[200px]">
+        <a class="block w-full h-full" :href="slides[i].link" target="_blank">
+          <img class="w-full h-full" :src="slides[i].imgUrl"/>
+        </a>
+        <ul class="flex absolute bottom-0 z-10"><li class="w-1 h-1 rounded-full m-1" :class="{'bg-slate-500': idx == i, 'bg-slate-300': idx !== i}" v-for="(slide, idx) of slides"></li></ul>
+        <button class="absolute w-10 h-10 rounded bg-pink-500 hover:bg-cyan-300 top-0 bottom-0 m-auto" @click="prev">prev</button>
+        <button class="absolute w-10 h-10 rounded bg-pink-500 hover:bg-cyan-300 top-0 bottom-0 m-auto right-0" @click="next">next</button>
+      </div>
+    `,
+    watch: {
+      'slides.length'(newLength) {
+        if (this.i >= newLength) {
+          this.i = 0
+        }
+      }
+    },
+    data() {
+      return {
+        i: 0,
+        intervalId: 0,
+      }
+    },
+    methods: {
+      prev() {
+        this.i--
+        if (this.i == -1) {
+          this.i = this.slides.length - 1
+        }
+        this.$emit('change', this.i)
+      },
+      next() {
+        this.i++
+        if (this.i == this.slides.length) {
+          this.i = 0
+        }
+        this.$emit('change', this.i)
+      }
+    },
+    mounted() {
+      if (this.autoplay > 0) {
+        this.intervalId = setInterval(() => {
+          console.log('go next...')
+          this.next()
+        }, this.autoplay)
+      }
+    },
+    beforeUnmount() {
+      clearInterval(this.intervalId)
+    },
+  })
+
+
+  app.component('tabs', {
+    inheritAttrs: false,
+    emits: {
+      change(payload) {
+        return typeof payload === 'string'
+      }
+    },
+    props: {
+      items: {
+        type: Array,
+        required: true,
+      },
+      defaultActiveKey: {
+        type: String,
+      }
+    },
+    created() {
+      console.log(this.$attrs)
+    },
+    template: `
+      <div class="border m-2 border-black">
+        <div class="border-b border-black">
+          <button @click="switchTo(item.key)" v-for="item of items" :class=" item.key == activeKey ? 'bg-rose-500' : 'bg-slate-500' " class="text-xs rounded m-1 p-1">
+            {{ item.label }}
+          </button>
+        </div>
+        <div>
+          {{ items.find(it => it.key == this.activeKey).children }}
+        </div>
+      </div>
+    `,
+    data() {
+      return {
+        activeKey: this.defaultActiveKey ?? this.items[0].key,
+      }
+    },
+    methods: {
+      switchTo(targetKey) {
+        if (this.activeKey !== targetKey) {
+          this.activeKey = targetKey
+          // 通过带的告知组件的使用者选的中选项卡发生了变化
+          // emit的第二个参数就是这事件的事件对象，告知事件的详情
+          // 事件对象可以不是一个对象，而是任何一个值，它会不经转换就传给事件的监听者
+          this.$emit('change', this.activeKey)
+        }
+      }
+    }
+  })
+
+  app.component('list-input', {
+    props: {
+      modelValue: Array,
+    },
+    emits: {
+      'update:model-value': null,
+    },
+    template: `
+      <input :value="textInBox" @input="onInput"/>
+    `,
+    watch: {
+      modelValue(newValue) {
+        this.textInBox = newValue.join(', ')
+      }
+    },
+    data() {
+      return {
+        textInBox: this.modelValue.join(', ')
+      }
+    },
+    methods: {
+      onInput(e) {
+        var text = e.target.value
+        if (!text.endsWith(',')) {
+          var list = text.split(',').map(it => it.trim())
+          this.$emit('update:model-value', list)
+        }
+      }
+    }
+  })
+
+  app.component('multi-root-el-comp', {
+    template: `
+      <div v-bind="$attrs">aaa</div>
+      <div>bbb</div>
+    `,
+  })
+
+  app.component('map-input', {
+    emits: ['update:modelValue'],
+    props: {
+      modelValue: {
+        type: Object,
+        required: true,
+      },
+    },
+    template: `
+      <div>
+        <div v-for="(entry,idx) in entries">
+          <input class="border" v-model="entry[0]" />:
+          {{' '}}
+          <input class="border" v-model="entry[1]" />
+          {{' '}}
+          <button class="border" @click="deleteEntry(idx)">-</button>
+        </div>
+        <button class="border" @click="addEntry()">+</button>
+      </div>
+    `,
+    watch: {
+      modelValue(newValue, oldValue) {
+        if (JSON.stringify(newValue) == JSON.stringify(oldValue)) {
+
+        } else {
+          this.entries = Object.entries(newValue)
+        }
+      },
+      entries: {
+        handler(newEntries, oldEntries) {
+          var obj = Object.fromEntries(newEntries)
+          this.$emit('update:modelValue', obj)
+        },
+        deep: true,
+      }
+    },
+    data() {
+      return {
+        entries: Object.entries(this.modelValue)
+      }
+    },
+    methods: {
+      deleteEntry(idx) {
+        this.entries.splice(idx, 1)
+      },
+      addEntry() {
+        this.entries.push(['newProperty', ''])
+      }
+    }
+  })
+
+  app.component('date-input', {
+    emits: ['update:modelValue'],
+    props: {
+      modelValue: {
+        type: Date,
+        require: true,
+      }
+    },
+    template: `
+      <input type="date" v-model="date" />
+    `,
+    watch: {
+      date(newDate) {
+        var date = new Date(newDate)
+        this.$emit('update:modelValue', date)
+      },
+      modelValue(newModelValue) {
+        this.date = newModelValue.toISOString().slice(0, 10)
+      }
+    },
+    data() {
+      return {
+        date: this.modelValue.toISOString().slice(0, 10)
+      }
+    },
+    methods: {
+
+    },
+  })
+
+  app.component('async-comp1', Vue.defineAsyncComponent(() => {
+    console.log('加载asnyc comp1...')
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          template: '<div>我是异步组件</div>'
+        })
+      }, 5000);
+    })
+  }))
+
+
+  var mountedApp = app.mount('#app')
+</script>

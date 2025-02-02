@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      ul.visible-active li.completed {
+        display: none;
+      }
+      ul.visible-completed li.active {
+        display: none;
+      }
+    </style>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function MyApp() {
+        return <TodoList />;
+      }
+
+      class TodoList extends React.Component {
+        constructor(props) {
+          super(props);
+        }
+
+        state = {
+          //这里放数据
+          tasks: [
+            {
+              id: "one",
+              text: "Harry Porter",
+              completed: false,
+            },
+            {
+              id: "two",
+              text: "Sarah Waters",
+              completed: true,
+            },
+            {
+              id: "three",
+              text: "Michael",
+              completed: false,
+            },
+            {
+              id: "four",
+              text: "Batman",
+              completed: false,
+            },
+          ],
+          visibleType: "all",
+          editingI: -1,
+        };
+
+        countLeft() {
+          return this.state.tasks.filter((it) => it.completed === false).length;
+        }
+
+        isPlura() {
+          return this.countLeft() > 1 ? "s" : "";
+        }
+
+        deleteOneTask(id) {
+          console.log("deleting...");
+          this.setState({
+            tasks: this.state.tasks.filter((it, i) => {
+              if (i === id) return false;
+              else return true;
+            }),
+          });
+        }
+
+        toggle(id) {
+          console.log("checking...");
+          this.setState({
+            tasks: this.state.tasks.map((it, i) => {
+              if (i === id) {
+                console.log("inside checking...");
+                return {
+                  ...it,
+                  completed: !it.completed,
+                };
+              } else {
+                return it;
+              }
+            }),
+          });
+        }
+
+        addTodo = (e) => {
+          if (e.key === "Enter") {
+            let text = e.target.value.trim();
+            if (text) {
+              let temp = {
+                id: Math.random().toString().slice(2, 5),
+                text: text,
+                completed: false,
+              };
+              this.setState({
+                tasks: this.state.tasks.concat(...[temp]),
+              });
+              e.target.value = "";
+            }
+          }
+        };
+
+        hasTasks() {
+          return this.state.tasks.length;
+        }
+
+        isAllCompleted() {
+          if (this.state.tasks.length === 0) return false;
+          return this.state.tasks.every((it) => it.completed === true);
+        }
+
+        toggleAll = () => {
+          let temp = this.state.tasks.every((it) => it.completed === true);
+          //temp --> true --> 所有都已经完成
+          let temp1 = false;
+          if (temp) temp1 = false;
+          else temp1 = true;
+          this.setState({
+            tasks: this.state.tasks.map((it) => {
+              return {
+                ...it,
+                completed: temp1,
+              };
+            }),
+          });
+        };
+
+        clearCompleted = () => {
+          this.setState({
+            tasks: this.state.tasks.filter((it) => it.completed === false),
+          });
+        };
+
+        setVisibleType(name) {
+          console.log("render");
+          this.setState({
+            visibleType: name,
+          });
+        }
+
+        handleBlur = (e) => {
+          let text = e.target.value.trim();
+          if (text) {
+            this.setState({
+              tasks: this.state.tasks.map((it, i) => {
+                if (this.state.editingI === i) {
+                  return {
+                    ...it,
+                    text,
+                  };
+                } else {
+                  return it;
+                }
+              }),
+            });
+            this.setState({
+              editingI: -1,
+            });
+          }
+        };
+
+        handleText = (e) => {
+          if (e.key === "Escape") {
+            this.setState({
+              editingI: -1,
+            });
+          } else if (e.key === "Enter") {
+            let temp = e.target.value.trim();
+            if (temp) {
+              this.setState({
+                tasks: this.state.tasks.map((it, i) => {
+                  if (this.state.editingI === i) {
+                    return {
+                      ...it,
+                      text: temp,
+                    };
+                  } else {
+                    return it;
+                  }
+                }),
+              });
+            }
+            this.setState({
+              editingI: -1,
+            });
+          }
+        };
+
+        render() {
+          return (
+            <>
+              <h1 className="text-center mt-[20px] bg-[#2980B9]">
+                There are so many things to do!
+              </h1>
+              <div className="w-[600px] mx-auto">
+                <div className="inline-block">
+                  <div className="">
+                    <input
+                      checked={this.isAllCompleted()}
+                      type="checkbox"
+                      onChange={() => {
+                        this.toggleAll();
+                      }}
+                    ></input>
+                    <input
+                      type="text"
+                      placeholder="Who do you want to kill?"
+                      className="outline-none border"
+                      onKeyDown={this.addTodo}
+                    ></input>
+                  </div>
+                  <div>
+                    <span>
+                      {this.countLeft()} item{this.isPlura()} left.
+                    </span>
+                    <br></br>
+                    <label>
+                      <input
+                        name="aaa"
+                        value="all"
+                        type="radio"
+                        checked={this.state.visibleType === "all"}
+                        onChange={() => this.setVisibleType("all")}
+                      />
+                      All
+                    </label>
+                    <label>
+                      <input
+                        name="aaa"
+                        value="active"
+                        type="radio"
+                        checked={this.state.visibleType === "active"}
+                        onChange={() => this.setVisibleType("active")}
+                      />
+                      Active
+                    </label>
+                    <label>
+                      <input
+                        name="aaa"
+                        value="completed"
+                        type="radio"
+                        checked={this.state.visibleType === "completed"}
+                        onChange={() => this.setVisibleType("completed")}
+                      />
+                      Completed
+                    </label>
+                    <br></br>
+                    {this.hasTasks() ? (
+                      <button
+                        onClick={this.clearCompleted}
+                        className="border bg-[red] px-[5px]"
+                      >
+                        Clear Completed
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="inline-block ml-[20px] mt-[10px]">
+                  <ul className={"visible-" + this.state.visibleType}>
+                    {this.state.tasks.map((it, i) => (
+                      <li
+                        key={i}
+                        className={it.completed ? "completed" : "active"}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={it.completed}
+                          onChange={() => {
+                            this.toggle(i);
+                          }}
+                        ></input>
+                        {this.state.editingI === i ? (
+                          <input
+                            autoFocus
+                            className="outline-none border"
+                            type="text"
+                            defaultValue={it.text}
+                            onKeyDown={this.handleText}
+                            onBlur={this.handleBlur}
+                          />
+                        ) : (
+                          <span
+                            onDoubleClick={() => {
+                              this.setState({ editingI: i });
+                            }}
+                          >
+                            {it.text}
+                          </span>
+                        )}
+                        <button
+                          className="px-[10px] border bg-[#6DD5FA]"
+                          onClick={() => this.deleteOneTask(i)}
+                        >
+                          &times;
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </>
+          );
+        }
+      }
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

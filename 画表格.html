@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>画表格</title>
+  <style>
+    * {
+      box-shadow: 0 0 1px 0 green;
+      xborder: 1px solid red;
+    }
+    td, th {
+      width: 50px;
+      height: 50px;
+    }
+    
+    table {
+      margin: auto;
+    }
+
+    .a {
+      background-color: lightblue;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <caption>某公司的loge</caption>
+    <thead>
+      <tr>
+        <th colspan="5">以下是图标</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="a" rowspan="2"></td>
+        <td class="a" colspan="2"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="a" rowspan="2"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="a" colspan="2"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <th colspan="5">以上是图标</th>
+      </tr>
+    </tfoot>
+  </table> 
+</body>
+</html>

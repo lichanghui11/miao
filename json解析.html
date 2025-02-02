@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 递归下降法实现json的解析
+    // 即对于递归结构的文本的解析，通过为每种语法实现一个解析函数
+    // 解析函数开始时全局指针指向这个值在文本中开始的位置
+    // 解析函数根据说法将其解析出来，并移动指针到这个值结束位置的后面
+    // 由于结构可能是递归嵌套的，所以函数之间的调用也能映射出这种嵌套关系
+    function parseJSON(input) {
+      var i = 0
+
+      return parseValue()
+
+      // 从i位置开始扫描、解析并构建出一个对象，并返回，同时将i移动这个对象之后的位置
+      function parseObject() {
+        var result = {}
+        i++ // skip this {
+        if (input[i] === '}') {
+          i++ //skip this }
+          return result
+        }
+
+        while(i < input.length) {
+          var key = parseString()
+          if (input[i] !== ':') {
+            throw new SyntaxError('Expected `:` but got ' + input[i])
+          }
+          i++ // skip : between key and value
+          var value = parseValue()
+          result[key] = value
+          if (input[i] == ',') {
+            i++ // skip this ,
+          } else if (input[i] == '}') {
+            i++ // skip this }
+            break
+          }
+        }
+        return result
+      }
+
+      function parseArray() {
+        var result = []
+
+        i++ // 跳过数组的'['
+        if (input[i] == ']') {
+          i++ // 跳后一个]
+          return result
+        }
+
+        while(i < input.length) {
+          var value = parseValue()
+          result.push(value)
+
+          if (input[i] == ',') {
+            i++ // skip this ,
+          } else if (input[i] == ']') {
+            i++ // skip this ]
+            break
+          }
+        }
+
+        return result
+      }
+
+      function parseValue() {
+        if (input[i] == '[') {
+          return parseArray()
+        } else if (input[i] == '{') {
+          return parseObject()
+        } else if (input[i] === '"') {
+          return parseString()
+        } else if (input[i] === 't') {
+          if (input.slice(i, i + 4) === 'true') {
+            i += 4
+            return true
+          } else {
+            throw new SyntaxError('unexpected token at position: ' + i)
+          }
+        } else if (input[i] == 'f') {
+          i += 5
+          return false
+        } else if (input[i] == 'n') {
+          i += 4
+          return null
+        } else {
+          return parseNumber()
+        }
+      }
+
+      function parseString() {
+        i++ // skip the "
+        var startIdx = i
+        while(input[i] !== '"') {
+          i++
+        }
+        var result = input.slice(startIdx, i)
+        i++ // skip ending "
+        return result
+      }
+
+      // 暂时只考虑整数
+      // 实际上json支持浮点数，科学计数法，负数等
+      function parseNumber() {
+        // 注意，解析数值的时候没有i++了，因为数值没有起始标记符号
+        var startIdx = i
+        while(input[i] >= '0' && input[i] <= '9') {
+          i++
+        }
+        return Number(input.slice(startIdx, i))
+      }
+    }
+
+
+    function parseBinaryTree(input) {
+      var i = 0
+      return parseTree()
+
+      function parseTreeWithKH() {
+        i++
+        if (input[i] == ')') {
+          i++
+          return null
+        }
+        var result = parseTree()
+        i++
+        return result
+      }
+      function parseTree() {
+        var rootValue = parseNumber()
+        var root = {
+          val: rootValue,
+          left: null,
+          right: null,
+        }
+        if (input[i] === '(') {
+          root.left = parseTreeWithKH()
+        }
+        if (input[i] === '(') {// 解析完左子树后遇见一个（说明有右子树）
+          root.right = parseTreeWithKH()
+        }
+
+        return root
+      }
+
+      function parseNumber() {
+        // 注意，解析数值的时候没有i++了，因为数值没有起始标记符号
+        var startIdx = i
+        while(input[i] >= '0' && input[i] <= '9') {
+          i++
+        }
+        return Number(input.slice(startIdx, i))
+      }
+    }
+
+    function stringifyJSON(obj) {
+      
+    }
+
+    function parseBoolExpr(expr) {
+        var i = 0
+
+        var obj = parseExpr()
+        return obj
+
+        function parseCall() {
+            var obj = {
+                type: 'fcall',
+                fname: expr[i],
+                args: []
+            }
+            i++ // skip function name
+            i++ // skip (
+            if (expr[i] == ')') {
+                i++
+                return obj
+            }
+            while(true) {
+                var arg = parseExpr()
+                obj.args.push(arg)
+                if (expr[i] == ',') {
+                    i++
+                } else if (expr[i] == ')') {
+                    i++
+                    break
+                }
+            }
+            return obj
+        }
+        function parseValue() {
+            if (expr[i] == 'f') {
+                i++
+                return {type: 'value', value: false}
+            } else if (expr[i] == 't') {
+                i++
+                return {type: 'value', value: true}
+            }
+        }
+        function parseExpr() {
+            if (expr[i] == 'f' || expr[i] == 't') {
+                return parseValue()
+            } else if (expr[i] == '&' || expr[i] == '|' || expr[i] == '!') {
+                return parseCall()
+            }
+        }
+    }
+
+    function evaluate(obj) {
+        if (obj.type == 'fcall') {
+            if (obj.fname == '&') {
+                return obj.args.map(evaluate).every(it => it == true)
+            }
+            if (obj.fname == '|') {
+                return obj.args.map(evaluate).some(it => it == true)
+            }
+            if (obj.fname == '!') {
+                return !evaluate(obj.args[0])
+            }
+        } else if (obj.type == 'value') {
+            return obj.value
+        }
+    }
+
+    // 把用这个对象表示的函数调用转换成等价的js代码
+    function transform(obj) {
+        if (obj.type == 'fcall') {
+            if (obj.fname == '&') {
+                return '(' + obj.args.map(transform).join(' && ') + ')'
+            }
+            if (obj.fname == '|') {
+                return '(' + obj.args.map(transform).join(' || ') + ')'
+            }
+            if (obj.fname == '!') {
+                return '!(' + obj.args.map(transform).join(' || ') + ')'
+            }
+        } else if (obj.type == 'value') {
+            return obj.value
+        }
+    }
+
+
+
+// 上面的字符串与下面的对象表达的信息量是否一样？
+
+// 哪个更好？
+// 各有各的好：
+//   字符串式好书出来
+//   对象式容易被程序处理
+  </script>
+</body>
+</html>

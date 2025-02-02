@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise风格的seajs</title>
+</head>
+
+<body>
+
+  <script>
+    let fileCache = Object.create(null); //文件缓存； 
+    let moduleCache = Object.create(null); //模块缓存； 
+
+    function readFile(filename) {
+      return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', filename);
+        xhr.onload = () => {
+          resolve(xhr.responseText);
+        }
+        xhr.onerror = () => {
+          reject(new Error('File is invalid'));
+        }
+        xhr.send();
+      })
+    }
+
+    function require(filename) {
+      return new Promise((resolve, reject) => {
+        if (filename in moduleCache) {
+          resolve(moduleCache.filename);
+        } else {
+          let code = fileCache.filename; 
+          let module = {
+            id: filename,
+            exports: {},
+          }
+          let moduleFunc = new Function('exports', 'module', code);
+          moduleFunc(module.exports, module);
+          moduleCache.filename = module.exports;
+          resolve(module.exports);
+        }
+      })
+    }
+
+    function use(filename) {
+      return new Promise((resolve, reject) => {
+        if (filename in fileCache) {
+          resolve(require(filename));
+        } else {
+          downAllDeps(filename).then(() => {
+            resolve(require(filename));
+          })
+          .catch(reject);
+        }
+      })
+    }
+
+    function downAllDeps(filename) {
+      return readFile(filename).then(content => {
+        // 将每次请求的内容都缓存下来；
+        fileCache.filename = content; 
+
+        let deps = getAllDeps(content); // 此处获取所有的依赖的文件名称； 参数为文件的内容； 
+        if (deps.length === 0) return; //如果该份文件中没有其他依赖， 提前返回， 在此之前fileCache中已经存在该份文件； 
+        
+        let promiseChains = []; 
+        deps.forEach(dep => {
+          promiseChains.push(downAllDeps(dep));
+        })
+        return Promise.all(promiseChains);
+      })
+    }
+
+    function getAllDeps(content, callback) {
+      let re = /require\s*\(\s*(['"])\s*([^'"]+)\1\s*\)/g;
+      let re1 = /require\s*\(\s*(['"])\s*([^'"]+)\1\s*\)/;
+      let matchedFiles = content.match(re);
+      if (matchedFiles === null) {
+        return [];
+      } else {
+        return matchedFiles.map(item => {
+          return item.match(re1)[2];
+        })
+      }
+    }
+  </script>
+
+</body>
+
+</html>

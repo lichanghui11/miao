@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rgb色彩空间立方体</title>
+  <style>
+    x* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+    @keyframes cube {
+      from {
+        transform: rotate(0);
+      }
+      to {
+        transform: rotate3d(1, 1, 1, 360deg);
+      }
+    }
+    
+    div.wrap {
+      width: 300px;
+      height: 300px;
+      margin: 100px auto;
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1500px;
+      animation: cube 3s linear infinite both;
+      > div {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        left: calc(50% - 50px);
+        top: calc(50% - 50px);
+        border: 1px solid #000;
+        &.a1 {
+          transform:translateZ(50px);
+          background-color: rgb(255, 0, 255);
+          opacity: 0.9;
+        }
+        &.a2 {
+          transform: translateZ(-50px);
+          background-color: rgb(255, 0, 0);
+          opacity: 0.9;
+        }
+        &.a3 {
+          transform: translateX(-50px) rotateY(90deg);
+          background-color: rgb(0, 255, 0);
+          opacity: 0.9;
+        }
+        &.a4 {
+          transform: translateX(50px) rotateY(-90deg);
+          background-color: rgb(0, 0, 255);
+          opacity: 0.9;
+        }
+        &.a5 {
+          transform: translateY(-50px) rotateX(90deg);
+          background-color: rgb(255,255, 0);
+          opacity: 0.9;
+        }
+        &.a6 {
+          transform: translateY(50px) rotateX(-90deg);
+          background-color: rgb(0, 255, 255);
+          opacity: 0.99;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap"> 
+    <div class="a1"></div>
+    <div class="a2"></div>
+    <div class="a3"></div>
+    <div class="a4"></div>
+    <div class="a5"></div>
+    <div class="a6"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/immer@6.0.3/dist/immer.umd.production.min.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      function debounce(func, time) {
+        let id;
+        return function (...args) {
+          clearTimeout(id);
+
+          id = setTimeout(() => {
+            func(...args);
+          }, time);
+        };
+      }
+    </script>
+    <script type="text/babel">
+      const { useState, useRef, useCallback, useMemo, useEffect } = React;
+      const { produce } = immer;
+      function MyApp() {
+        return (
+          <>
+            <MouseMove />
+            <h1>
+              自定义hook函数里面, 清理副作用的返回值需要在函数体里面返回，
+              否则无效(在该例子里面无效)
+            </h1>
+            <br />
+            <TestDebounce />
+            <br />
+            <TestDebounceFunc />
+            <br />
+            <TestThrottle />
+            <br />
+            <TestImmer />
+          </>
+        );
+      }
+
+      //---------------------------------hooks------
+      function useMouseMove() {
+        const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
+
+        React.useEffect(() => {
+          const handleMouseMove = (e) => {
+            setMousePos(() => {
+              return {
+                x: e.clientX,
+                y: e.clientY,
+              };
+            });
+          };
+          window.addEventListener("mousemove", handleMouseMove);
+
+          return () => window.removeEventListener("mousemove", handleMouseMove);
+        }, []);
+
+        return mousePos;
+      }
+
+      //useDebounce
+      function useDebounce(func, wait) {
+        const funcRef = useRef();
+        funcRef.current = func;
+
+        const timeRef = useRef();
+        timeRef.current = wait;
+
+        const idRef = useRef();
+
+        const ret = useCallback((...args) => {
+          clearTimeout(idRef.current);
+
+          idRef.current = setTimeout(() => {
+            funcRef.current(...args);
+          }, timeRef.current);
+        }, []);
+
+        return ret;
+      }
+      function TestDebounce() {
+        const [count, setCount] = useState(0);
+        const debouncedFunc = useDebounce(() => {
+          setCount((i) => i + 1);
+        }, 500);
+
+        return (
+          <div>
+            停止操作500ms之后更新
+            <br />
+            Count: {count}
+            <br />
+            <button onClick={debouncedFunc}>+ 1</button>
+          </div>
+        );
+      }
+
+      //useDebouncedFunc
+      function useDebounceFunc(func, time) {
+        const ret = useMemo(() => {
+          return debounce(func, time);
+        });
+
+        return ret;
+      }
+      function TestDebounceFunc() {
+        const [count, setCount] = useState(0);
+        const debouncedFunc = useDebounceFunc(() => {
+          setCount((i) => i + 1);
+        }, 500);
+
+        return (
+          <div>
+            使用已经实现的debounce函数
+            <br />
+            Count: {count}
+            <br />
+            <button onClick={debouncedFunc}> + 1</button>
+            <br />
+          </div>
+        );
+      }
+
+      //useThrottle
+      // function useThrottle(func, time) {
+      //   const ret = useMemo((...args) => {
+      //     let delay = 0;
+      //     setInterval(() => {
+      //       let now = new Date();
+      //       if (now - delay >= time) {
+      //         func(...args);
+      //         delay = now;
+      //       }
+      //     }, time);
+      //   }, []);
+      //   return ret;
+      // }
+      function useThrottle1(func, time) {
+        const funcRef = useRef();
+        funcRef.current = func;
+        useEffect(() => {
+          funcRef.current = func;
+        }, [func]);
+
+        const timeRef = useRef();
+        timeRef.current = time;
+
+        //记住是否在throttle状态
+
+        return (function (...args) {
+          //立即调用函数， onThrottle只初始化一次
+          const onThrottle = useRef(false);
+          return (...args) => {
+            //这里才是真正返回给外部的函数
+            if (onThrottle.current === false) {
+              funcRef.current(...args);
+              onThrottle.current = true;
+              console.log("clicking......");
+              setTimeout(() => {
+                onThrottle.current = false;
+                console.log("stopped click.....");
+              }, timeRef.current);
+            }
+          };
+        })();
+      }
+
+      function TestThrottle() {
+        const [count, setCount] = useState(0);
+        const throttle = useThrottle1(() => {
+          setCount((i) => i + 1);
+        }, 1000);
+
+        return (
+          <div>
+            持续点击过程中以每500ms增加1 停止点击即停止增加
+            <br />
+            Count: {count}
+            <br />
+            <button onClick={throttle}>Faster!</button>
+          </div>
+        );
+      }
+
+      function MouseMove() {
+        const { x, y } = useMouseMove();
+
+        return (
+          <>
+            <span>X: {x}</span>
+            <br />
+            <span>Y: {y}</span>
+          </>
+        );
+      }
+
+      //---------------------------------hooks------
+
+      //useImmer
+      function useImmer(init) {
+        const [value, setValue] = useState(init);
+
+        const func = useCallback((changeSomeThing) => {
+          setValue(produce(changeSomeThing));
+        }, []);
+
+        return [value, func];
+      }
+      function TestImmer() {
+        const [value, setValue] = useImmer(() => [
+          {
+            text: "hello",
+            completed: false,
+          },
+          {
+            text: "monster",
+            completed: false,
+          },
+          {
+            text: "freen",
+            completed: true,
+          },
+          {
+            text: "gap",
+            completed: false,
+          },
+        ]);
+
+        function toggle(i) {
+          setValue((todos) => {
+            todos[i].completed = !todos[i].completed;
+          });
+        }
+
+        function addTodo(e) {
+          if (e.key === "Enter") {
+            let text = e.target.value.trim();
+            e.target.value = "";
+            if (text) {
+              setValue((todo) => {
+                todo.push({
+                  text,
+                  completed: false,
+                });
+              });
+            }
+          }
+        }
+
+        return (
+          <div>
+            <input type="text" onKeyUp={addTodo} />
+            <br />
+            <ul>
+              {value.map((it, i) => {
+                return (
+                  <li key={i}>
+                    <input
+                      type="checkbox"
+                      checked={it.completed}
+                      onChange={() => toggle(i)}
+                    />
+                    <span>{it.text}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

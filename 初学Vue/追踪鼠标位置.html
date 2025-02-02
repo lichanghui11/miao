@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>追踪鼠标位置</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp } = Vue;
+    let app = createApp({
+      template: `
+        <div id="app"> 
+          <find-cursor></find-cursor>
+        </div> 
+      `,
+      data() {
+        return {
+
+        }
+      },
+    });
+    app.component('find-cursor', {
+      template: `
+        <div>
+          {{ time }}  
+          <hr>
+          <hr>
+          鼠标的X: {{ x }}, 鼠标的Y: {{ y }}
+        </div>
+      `,
+      mounted() {
+        window.addEventListener('mousemove', this.mouseMove);
+        this.id = setInterval(() => {
+          this.time = new Date();
+        }, 1000)
+      },
+
+      onBeforeUnmount() {
+        clearInterval(this.id);
+        window.removeEventListener('mousemove', this.mouseMove);
+      },
+      data() {
+        return {
+          id: 0,
+          time: new Date(),
+          x: 0,
+          y: 0,
+        }
+      },
+      methods: {
+        mouseMove(e) {
+          this.x = e.clientX;
+          this.y = e.clientY;
+        }
+      }
+    });
+    app.mount('#app');
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      var { useEffect, useMemo, useState, useRef } = React
+
+
+      function List({
+        width,
+        height,
+        rowCount,
+        rowHeight,
+        rowRenderer,
+      }) {
+
+        var innerHeight = rowHeight * rowCount
+        var rootRef = useRef()
+
+        var [scrollTop, setScrollTop] = useState(0)
+        var [isScrolling, setIsScrolling] = useState(false)
+
+        function handleScroll(e) {
+          console.log('handleScroll...')
+          setScrollTop(e.target.scrollTop)
+          setIsScrolling(true)
+        }
+
+        useEffect(() => {
+          function onScrollEnd() {
+            setIsScrolling(false)
+          }
+          rootRef.current.addEventListener('scrollend', onScrollEnd)
+
+          return () => {
+            rootRef.current.removeEventListener('scrollend', onScrollEnd)
+          }
+        }, [rootRef.current])
+
+        var visibleItems = useMemo(() => {
+          var startIdx = Math.floor(scrollTop / rowHeight)
+          var endIdx = Math.ceil((scrollTop + height) / rowHeight)
+          if (endIdx > rowCount - 1) {
+            endIdx = rowCount - 1
+          }
+
+          var items = []
+          for (var i = startIdx; i <= endIdx; i++) {
+            var item = rowRenderer({
+              key: i,
+              index: i,
+              isScrolling: isScrolling,
+              isVisible: true,
+              style: {
+                position: 'absolute',
+                top: i * rowHeight,
+                left: 0,
+                width: '100%',
+              },
+            })
+            items.push(item)
+          }
+
+          return items
+        }, [scrollTop, isScrolling])
+
+        return (
+          <div ref={rootRef} onScroll={handleScroll} className={`w-[${width}px] h-[${height}px] border border-slate-500 overflow-auto`}>
+            <div className={`h-[${innerHeight}px] relative`}>
+              {visibleItems}
+            </div>
+          </div>
+        )
+      }
+
+
+      const list = Array(10000).fill(0).map(() => Math.random());
+
+      function rowRenderer({
+        key, // Unique key within array of rows
+        index, // Index of row within collection
+        isScrolling, // The List is currently being scrolled
+        isVisible, // This row is visible within the List (eg it is not an overscanned row)
+        style, // Style object to be applied to row (to position it)
+      }) {
+        if (isScrolling) {
+          return <div key={key} style={style}>
+            loading...
+          </div>
+        }
+        return (
+          <div key={key} style={style}>
+            <div className="flex border border-slate-500 my-1">
+              {list[index]}
+            </div>
+          </div>
+        );
+      }
+
+
+
+      function MyApp() {
+        return <h1>
+          <span>hello</span>, <strong>world!</strong>
+          <List
+            width={300}
+            height={300}
+            rowCount={list.length}
+            rowHeight={40}
+            rowRenderer={rowRenderer}
+          />
+        </h1>
+      }
+
+      const container = document.getElementById('root')
+      const root = ReactDOM.createRoot(container)
+      root.render(<MyApp />)
+
+    </script>
+  </body>
+</html>

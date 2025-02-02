@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useDeferredValue, useState, useMemo, Children } = React;
+
+      //输入的是组件， 返回的也要是组件
+      function withBorder(Comp) {
+        return function FancyButton(props) {
+          return (
+            <div className="bg-green-500 border">
+              {console.log("high order")}
+              <Comp {...props} />
+            </div>
+          );
+        };
+      }
+      let FancyButton = withBorder(Button);
+
+      function Button() {
+        const [count, setCount] = useState(0);
+        function onClick() {
+          setCount((i) => i + 1);
+        }
+
+        return <button onClick={onClick}>count: {count}</button>;
+      }
+
+      //测试useDeferredValue以及在performance面板中的行为
+      function SearchResult({ query }) {
+        let items = new Array(10000).fill(0).map((it, i) => {
+          return <li key={i}>{query}</li>;
+        });
+        return <ul>{items}</ul>;
+      }
+      function TestDeferred() {
+        const [val, setVal] = useState("");
+        const deferredVal = useDeferredValue(val);
+
+        function addToList(e) {
+          let text = e.target.value;
+          setVal(text);
+        }
+
+        return (
+          <div>
+            <input
+              className="border"
+              value={val}
+              onChange={addToList}
+              type="text"
+            />
+            <SearchResult query={val} />
+          </div>
+        );
+      }
+
+      function MyApp() {
+        return (
+          <>
+            <div className="border">
+              这里是一个普通button
+              <br />
+              <Button />
+            </div>
+            <div className="border">
+              这里是高阶转换之后的button
+              <br />
+              <FancyButton />
+            </div>
+            <br />
+            <br />
+            <br />
+            <div>
+              <Tabs>
+                <Tab name="process">Processing...</Tab>
+                <Tab name="start up">Start up...</Tab>
+                <Tab name="name">This is my name...</Tab>
+                <Tab name="age">I was young...</Tab>
+              </Tabs>
+            </div>
+          </>
+        );
+      }
+
+      //Tabs
+      function Tab({ name, children }) {
+        console.log("name:", name);
+        console.log("childrenh", children);
+        return <div>{children}</div>;
+      }
+
+      function Tabs({ children }) {
+        const [current, setCurrent] = useState(0);
+        let tabNames = Children.map(children, (it, i) => (it = it.props.name));
+        return (
+          <div>
+            {tabNames.map((it, i) => {
+              return (
+                <button
+                  className="border bg-green-500"
+                  onClick={() => setCurrent(i)}
+                  key={i}
+                >
+                  {it}
+                </button>
+              );
+            })}
+            <br />
+            <div>{children[current]}</div>
+          </div>
+        );
+      }
+
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

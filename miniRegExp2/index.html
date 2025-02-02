@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>重写正则测试网站</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+ <div class="header">
+  <header>简易正则表达式测试网站</header>
+ </div> 
+ <div class="测试区域">
+  <input type="text" value="((.)(..(.(.(..)))))\b">
+  <button>test</button>
+  <br>
+  <div class="flags">
+    <label><input type="checkbox" checked>d</label>
+    <label><input type="checkbox" checked>g</label>
+    <label><input type="checkbox">s</label>
+    <label><input type="checkbox">i</label>
+    <label><input type="checkbox">u</label>
+    <label><input type="checkbox">m</label>
+    <label><input type="checkbox">s</label>
+  </div>
+  <div class="container">
+    <textarea name="" id="" class="original-text">
+      the Soviets was now on the menu in the west. 
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, ducimus cumque! Natus, dolor alias! Aliquam consequatur, reprehenderit a eos hic reiciendis. Cum sequi distinctio laudantium molestias cupiditate quo perferendis temporibus!
+      Eveniet quia ut magnam in ex temporibus rerum provident, laboriosam officia sapiente, aspernatur quos dolorem eligendi porro alias deserunt. Nostrum quod delectus non debitis, maiores quos recusandae sapiente autem vitae?
+      Sint, animi! Animi, incidunt repudiandae? Delectus laudantium maxime assumenda dignissimos iste et voluptates, modi quibusdam quo saepe a culpa nulla sequi nesciunt, est totam corrupti praesentium omnis officia. Corporis, ex?
+    </textarea>
+    <br>
+    <div name="" id="" class="tested-text"></div>
+
+  </div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>

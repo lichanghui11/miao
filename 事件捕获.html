@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>书本事件捕获示例代码</title>
+</head>
+
+<body>
+  <p>按住V, 会改变页面颜色</p>
+  <p class="bar">拖拽可以改变宽度</p>
+  <div style="background: orange; width: 60px; height: 20px;"></div>
+  <script>
+    let p = document.querySelector('body');
+    addEventListener('keydown', e => {
+      if (e.keyCode == 86) {
+        p.style.background = 'cyan';
+      }
+    })
+    addEventListener('keyup', e => {
+      if (e.keyCode == 86) {
+        p.style.background = '';
+      }
+    })
+
+
+    /*
+    var lastX; //追踪鼠标最后的位置； 
+    var rect = document.querySelector('div');
+    rect.addEventListener('mousedown', e => {
+      if (e.which == 1) {
+        lastX = e.pageX; 
+        window.addEventListener('mousemove', moved); 
+        e.preventDefault(); //阻止选中； 
+      }
+    })
+   
+    function buttonPressed(e) {
+      //判断鼠标有无健被按下； 
+      if (e.buttons == null) {
+        return event.which != 0; 
+      } else {
+        return event.buttons != 0; 
+      }
+    }
+
+    function moved (e) { 
+      //在鼠标移动事件中， 按钮松开就解绑； 
+      if (!buttonPressed(e)) {
+        removeEventListener('mousemove', moved); 
+      } else {
+        var dist = event.pageX = lastX; 
+        var newWidth = Math.max(10, rect.offsetWidth + dist);
+        rect.style.width = newWidth + 'px'; 
+        lastX = event.pageX;
+      }
+    }
+    */
+
+
+
+    var lastX; // Tracks the last observed mouse X position
+    var rect = document.querySelector("div");
+    rect.addEventListener("mousedown", function (event) {
+      if (event.which == 1) {
+        lastX = event.pageX;
+        addEventListener("mousemove", moved);
+        event.preventDefault(); // Prevent selection
+      }
+    });
+    function moved(event) {
+      if (event.which != 1) {
+        removeEventListener("mousemove", moved);
+      } else {
+        var dist = event.pageX - lastX;
+        var newWidth = Math.max(10, rect.offsetWidth + dist);
+        rect.style.width = newWidth + "px";
+        lastX = event.pageX;
+      }
+    }
+
+  </script>
+</body>
+
+</html>

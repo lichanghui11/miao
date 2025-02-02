@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)https://class.damiaoedu.com:44313/codes/js/mini-regex101.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Regex101</title>
+  <script src="./Mini Regex101课堂示例代码_files/saved_resource"></script>
+  <style>
+    input, button {
+      outline: none;
+    }
+    #result strong {
+      font-weight: normal;
+      &:nth-of-type(odd) {
+        background-color: #9fcfff;
+      }
+      &:nth-of-type(even) {
+        background-color: #d5ebff;
+      }
+    }
+    #output {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      > textarea, #result {
+        font-family: consolas;
+        white-space: pre-wrap;
+        word-break: break-all;
+        /* position: absolute; */
+        width: 100%;
+        height: 100%;
+        border: 1px solid;
+        overflow: auto;
+        background-color: transparent;
+      }
+    }
+    em {
+      font-style: normal;
+    }
+    #result > em:nth-of-type(odd) {
+      /* --bgc: white; */
+    }
+    #result > em:nth-of-type(even) {
+      /* --bgc: black; */
+      opacity: 0.5;
+    }
+    /* 一个元素的里面如果有hover的元素，自己就不要框了 */
+    /* 如果一个元素里面没有被hover的元素，但其自身被hover，则显示框 */
+    em:not(:has(:hover)):hover {
+      outline: 2px solid grey;
+    }
+    em:not(:has(:hover)):hover em {
+      background-color: inherit;
+    }
+    /* 实际上这个选择器：em:not(:has(:hover)):hover
+      就是只选中了直接被hover的元素，不选中这个元素的祖先元素
+      简单的:hover 选择器在选中一个元素的同时，也选中了其所有的祖先元素
+    */
+    [data-group-index="0"] {
+      background-color: #9fcfff;
+    }
+    [data-group-index="1"] {
+      background-color: #9fcba1;
+    }
+    [data-group-index="2"] {
+      background-color: #e0bf8b;
+    }
+    [data-group-index="3"] {
+      background-color: #acadfc;
+    }
+    [data-group-index="4"] {
+      background-color: #e1abf5;
+    }
+    .zero-width-assert {
+      /* width: 2px; */
+      border-left: 2px dotted magenta;
+      opacity: 1 !important;
+      margin-left: -1px;
+      margin-right: -1px;
+      position: relative;
+      z-index: 8;
+      &:hover {
+        box-shadow: 0 0 2px red;
+      }
+    }
+
+    .group-hover-tip {
+      position: fixed;
+      background-color: black;
+      color: white;
+      display: none;
+      white-space: pre;
+      font-size: 12px;
+      padding: .5em;
+      border-radius: .5em;
+      transform: translateX(-50%) translateY(-100%) translateY(-5px);
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.15 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.border{border-width:1px}</style></head>
+<body>
+  <div contenteditable="">
+    hello world
+  </div>
+  <div>
+    <div>REGULAR EXPRESSION</div>
+    <input class="border" type="text" id="reInput" onkeyup="run()" value="(.(.)(.))(..) ">
+    <button class="border" onclick="run()">RUN</button>
+    <span id="matchState">okk</span>
+    <div id="tips"></div>
+    <div>FLAGS</div>
+    <label><input type="checkbox" id="flag-g" checked=""> g</label>
+    <label><input type="checkbox" id="flag-m"> m</label>
+    <label><input type="checkbox" id="flag-i"> i</label>
+    <label><input type="checkbox" id="flag-y"> y</label>
+    <label><input type="checkbox" id="flag-u"> u</label>
+    <label><input type="checkbox" id="flag-s"> s</label>
+    <label><input type="checkbox" id="flag-d" checked=""> d</label>
+    <label><input type="checkbox" id="flag-v"> v</label>
+    
+    <div>TEST STRING</div>
+    <div id="output">
+      <div contenteditable="" style="border border-red-500" oninput="run()" id="result">
+<em data-group-index="0" data-title="Match 1
+-----
+Group: 0
+Pos: 1-7"><em data-group-index="1" data-title="Match 1
+-----
+Group: 1
+Pos: 1-4"> <em data-group-index="2" data-title="Match 1
+-----
+Group: 2
+Pos: 2-3"> </em><em data-group-index="3" data-title="Match 1
+-----
+Group: 3
+Pos: 3-4"> </em></em><em data-group-index="4" data-title="Match 1
+-----
+Group: 4
+Pos: 4-6">  </em> </em>  An explan<em data-group-index="0" data-title="Match 2
+-----
+Group: 0
+Pos: 18-24"><em data-group-index="1" data-title="Match 2
+-----
+Group: 1
+Pos: 18-21">a<em data-group-index="2" data-title="Match 2
+-----
+Group: 2
+Pos: 19-20">t</em><em data-group-index="3" data-title="Match 2
+-----
+Group: 3
+Pos: 20-21">i</em></em><em data-group-index="4" data-title="Match 2
+-----
+Group: 4
+Pos: 21-23">on</em> </em>of<em data-group-index="0" data-title="Match 3
+-----
+Group: 0
+Pos: 26-32"><em data-group-index="1" data-title="Match 3
+-----
+Group: 1
+Pos: 26-29"> <em data-group-index="2" data-title="Match 3
+-----
+Group: 2
+Pos: 27-28">y</em><em data-group-index="3" data-title="Match 3
+-----
+Group: 3
+Pos: 28-29">o</em></em><em data-group-index="4" data-title="Match 3
+-----
+Group: 4
+Pos: 29-31">ur</em> </em><em data-group-index="0" data-title="Match 4
+-----
+Group: 0
+Pos: 32-38"><em data-group-index="1" data-title="Match 4
+-----
+Group: 1
+Pos: 32-35">r<em data-group-index="2" data-title="Match 4
+-----
+Group: 2
+Pos: 33-34">e</em><em data-group-index="3" data-title="Match 4
+-----
+Group: 3
+Pos: 34-35">g</em></em><em data-group-index="4" data-title="Match 4
+-----
+Group: 4
+Pos: 35-37">ex</em> </em>wi<em data-group-index="0" data-title="Match 5
+-----
+Group: 0
+Pos: 40-46"><em data-group-index="1" data-title="Match 5
+-----
+Group: 1
+Pos: 40-43">l<em data-group-index="2" data-title="Match 5
+-----
+Group: 2
+Pos: 41-42">l</em><em data-group-index="3" data-title="Match 5
+-----
+Group: 3
+Pos: 42-43"> </em></em><em data-group-index="4" data-title="Match 5
+-----
+Group: 4
+Pos: 43-45">be</em> </em>automati<em data-group-index="0" data-title="Match 6
+-----
+Group: 0
+Pos: 54-60"><em data-group-index="1" data-title="Match 6
+-----
+Group: 1
+Pos: 54-57">c<em data-group-index="2" data-title="Match 6
+-----
+Group: 2
+Pos: 55-56">a</em><em data-group-index="3" data-title="Match 6
+-----
+Group: 3
+Pos: 56-57">l</em></em><em data-group-index="4" data-title="Match 6
+-----
+Group: 4
+Pos: 57-59">ly</em> </em>gene<em data-group-index="0" data-title="Match 7
+-----
+Group: 0
+Pos: 64-70"><em data-group-index="1" data-title="Match 7
+-----
+Group: 1
+Pos: 64-67">r<em data-group-index="2" data-title="Match 7
+-----
+Group: 2
+Pos: 65-66">a</em><em data-group-index="3" data-title="Match 7
+-----
+Group: 3
+Pos: 66-67">t</em></em><em data-group-index="4" data-title="Match 7
+-----
+Group: 4
+Pos: 67-69">ed</em> </em>a<em data-group-index="0" data-title="Match 8
+-----
+Group: 0
+Pos: 71-77"><em data-group-index="1" data-title="Match 8
+-----
+Group: 1
+Pos: 71-74">s<em data-group-index="2" data-title="Match 8
+-----
+Group: 2
+Pos: 72-73"> </em><em data-group-index="3" data-title="Match 8
+-----
+Group: 3
+Pos: 73-74">y</em></em><em data-group-index="4" data-title="Match 8
+-----
+Group: 4
+Pos: 74-76">ou</em> </em>type.
+<em data-group-index="0" data-title="Match 9
+-----
+Group: 0
+Pos: 83-89"><em data-group-index="1" data-title="Match 9
+-----
+Group: 1
+Pos: 83-86"> <em data-group-index="2" data-title="Match 9
+-----
+Group: 2
+Pos: 84-85"> </em><em data-group-index="3" data-title="Match 9
+-----
+Group: 3
+Pos: 85-86"> </em></em><em data-group-index="4" data-title="Match 9
+-----
+Group: 4
+Pos: 86-88">  </em> </em>  An explan<em data-group-index="0" data-title="Match 10
+-----
+Group: 0
+Pos: 100-106"><em data-group-index="1" data-title="Match 10
+-----
+Group: 1
+Pos: 100-103">a<em data-group-index="2" data-title="Match 10
+-----
+Group: 2
+Pos: 101-102">t</em><em data-group-index="3" data-title="Match 10
+-----
+Group: 3
+Pos: 102-103">i</em></em><em data-group-index="4" data-title="Match 10
+-----
+Group: 4
+Pos: 103-105">on</em> </em>of<em data-group-index="0" data-title="Match 11
+-----
+Group: 0
+Pos: 108-114"><em data-group-index="1" data-title="Match 11
+-----
+Group: 1
+Pos: 108-111"> <em data-group-index="2" data-title="Match 11
+-----
+Group: 2
+Pos: 109-110">y</em><em data-group-index="3" data-title="Match 11
+-----
+Group: 3
+Pos: 110-111">o</em></em><em data-group-index="4" data-title="Match 11
+-----
+Group: 4
+Pos: 111-113">ur</em> </em><em data-group-index="0" data-title="Match 12
+-----
+Group: 0
+Pos: 114-120"><em data-group-index="1" data-title="Match 12
+-----
+Group: 1
+Pos: 114-117">r<em data-group-index="2" data-title="Match 12
+-----
+Group: 2
+Pos: 115-116">e</em><em data-group-index="3" data-title="Match 12
+-----
+Group: 3
+Pos: 116-117">g</em></em><em data-group-index="4" data-title="Match 12
+-----
+Group: 4
+Pos: 117-119">ex</em> </em>wi<em data-group-index="0" data-title="Match 13
+-----
+Group: 0
+Pos: 122-128"><em data-group-index="1" data-title="Match 13
+-----
+Group: 1
+Pos: 122-125">l<em data-group-index="2" data-title="Match 13
+-----
+Group: 2
+Pos: 123-124">l</em><em data-group-index="3" data-title="Match 13
+-----
+Group: 3
+Pos: 124-125"> </em></em><em data-group-index="4" data-title="Match 13
+-----
+Group: 4
+Pos: 125-127">be</em> </em>automati<em data-group-index="0" data-title="Match 14
+-----
+Group: 0
+Pos: 136-142"><em data-group-index="1" data-title="Match 14
+-----
+Group: 1
+Pos: 136-139">c<em data-group-index="2" data-title="Match 14
+-----
+Group: 2
+Pos: 137-138">a</em><em data-group-index="3" data-title="Match 14
+-----
+Group: 3
+Pos: 138-139">l</em></em><em data-group-index="4" data-title="Match 14
+-----
+Group: 4
+Pos: 139-141">ly</em> </em>gene<em data-group-index="0" data-title="Match 15
+-----
+Group: 0
+Pos: 146-152"><em data-group-index="1" data-title="Match 15
+-----
+Group: 1
+Pos: 146-149">r<em data-group-index="2" data-title="Match 15
+-----
+Group: 2
+Pos: 147-148">a</em><em data-group-index="3" data-title="Match 15
+-----
+Group: 3
+Pos: 148-149">t</em></em><em data-group-index="4" data-title="Match 15
+-----
+Group: 4
+Pos: 149-151">ed</em> </em>a<em data-group-index="0" data-title="Match 16
+-----
+Group: 0
+Pos: 153-159"><em data-group-index="1" data-title="Match 16
+-----
+Group: 1
+Pos: 153-156">s<em data-group-index="2" data-title="Match 16
+-----
+Group: 2
+Pos: 154-155"> </em><em data-group-index="3" data-title="Match 16
+-----
+Group: 3
+Pos: 155-156">y</em></em><em data-group-index="4" data-title="Match 16
+-----
+Group: 4
+Pos: 156-158">ou</em> </em>type.
+<em data-group-index="0" data-title="Match 17
+-----
+Group: 0
+Pos: 165-171"><em data-group-index="1" data-title="Match 17
+-----
+Group: 1
+Pos: 165-168"> <em data-group-index="2" data-title="Match 17
+-----
+Group: 2
+Pos: 166-167"> </em><em data-group-index="3" data-title="Match 17
+-----
+Group: 3
+Pos: 167-168"> </em></em><em data-group-index="4" data-title="Match 17
+-----
+Group: 4
+Pos: 168-170">  </em> </em>  3 chickens
+<em data-group-index="0" data-title="Match 18
+-----
+Group: 0
+Pos: 184-190"><em data-group-index="1" data-title="Match 18
+-----
+Group: 1
+Pos: 184-187"> <em data-group-index="2" data-title="Match 18
+-----
+Group: 2
+Pos: 185-186"> </em><em data-group-index="3" data-title="Match 18
+-----
+Group: 3
+Pos: 186-187"> </em></em><em data-group-index="4" data-title="Match 18
+-----
+Group: 4
+Pos: 187-189">  </em> </em>  55 cows
+<em data-group-index="0" data-title="Match 19
+-----
+Group: 0
+Pos: 200-206"><em data-group-index="1" data-title="Match 19
+-----
+Group: 1
+Pos: 200-203"> <em data-group-index="2" data-title="Match 19
+-----
+Group: 2
+Pos: 201-202"> </em><em data-group-index="3" data-title="Match 19
+-----
+Group: 3
+Pos: 202-203"> </em></em><em data-group-index="4" data-title="Match 19
+-----
+Group: 4
+Pos: 203-205">  </em> </em><em data-group-index="0" data-title="Match 20
+-----
+Group: 0
+Pos: 206-212"><em data-group-index="1" data-title="Match 20
+-----
+Group: 1
+Pos: 206-209"> <em data-group-index="2" data-title="Match 20
+-----
+Group: 2
+Pos: 207-208"> </em><em data-group-index="3" data-title="Match 20
+-----
+Group: 3
+Pos: 208-209">1</em></em><em data-group-index="4" data-title="Match 20
+-----
+Group: 4
+Pos: 209-211">00</em> </em>eggs
+<em data-group-index="0" data-title="Match 21
+-----
+Group: 0
+Pos: 217-223"><em data-group-index="1" data-title="Match 21
+-----
+Group: 1
+Pos: 217-220"> <em data-group-index="2" data-title="Match 21
+-----
+Group: 2
+Pos: 218-219"> </em><em data-group-index="3" data-title="Match 21
+-----
+Group: 3
+Pos: 219-220"> </em></em><em data-group-index="4" data-title="Match 21
+-----
+Group: 4
+Pos: 220-222">  </em> </em>  1 dragonfly
+<em data-group-index="0" data-title="Match 22
+-----
+Group: 0
+Pos: 237-243"><em data-group-index="1" data-title="Match 22
+-----
+Group: 1
+Pos: 237-240"> <em data-group-index="2" data-title="Match 22
+-----
+Group: 2
+Pos: 238-239"> </em><em data-group-index="3" data-title="Match 22
+-----
+Group: 3
+Pos: 239-240"> </em></em><em data-group-index="4" data-title="Match 22
+-----
+Group: 4
+Pos: 240-242">  </em> </em>  1 pig
+<em data-group-index="0" data-title="Match 23
+-----
+Group: 0
+Pos: 251-257"><em data-group-index="1" data-title="Match 23
+-----
+Group: 1
+Pos: 251-254"> <em data-group-index="2" data-title="Match 23
+-----
+Group: 2
+Pos: 252-253"> </em><em data-group-index="3" data-title="Match 23
+-----
+Group: 3
+Pos: 253-254"> </em></em><em data-group-index="4" data-title="Match 23
+-----
+Group: 4
+Pos: 254-256">  </em> </em></div>
+      <div class="group-hover-tip" style="display: none; top: 171.5px; left: 182px;">Match 3
+-----
+Group: 2
+Pos: 27-28</div>
+      <!-- <textarea class="border" oninput="run()" id="testStringInput" onscroll="syncScroll()">
+        
+      </textarea> -->
+    </div>
+  </div>
+  <script>
+    // 元素的id为xxx时，页面的全局就会出现一个叫xxx的变量，指向一个表示那个标签的对象
+
+    run()
+
+    /**
+     * 
+     * 零宽匹配要显示出来
+     * 每个匹配的分组也要分别用不同的颜色显示出来
+     */
+    function run() {
+      var reString = reInput.value // 可以通过value属性读取到文本框的值
+      if (reString == '') {
+        return
+      }
+      var flags = getFlags()
+      try {
+        var re = new RegExp(reString, flags)
+      } catch(e) {
+        if (e instanceof SyntaxError) {
+          tips.innerHTML = e.message
+          return
+        } else {
+          throw e
+        }
+      }
+      tips.innerHTML = ''
+      var testString = result.textContent
+
+      var done = false // 表示有没有处理完成
+
+      setTimeout(() => {
+        // 如果500毫秒以后还没okkk，就显示processing
+        if (done == false) {
+          matchState.textContent = 'processing...'
+        }
+      }, 500);
+
+      getMatchesFromWorker(re, testString, (matches) => {
+        matchState.textContent = 'okk'
+        done = true
+
+
+        var html = ''
+
+        var lastLastIndex = 0
+
+        var matchIndex = 0 //记录每个match的编号
+
+        for (var match of matches) {
+          html += testString.slice(lastLastIndex, match.index)
+          html += highlightMatch(match, matchIndex)
+          lastLastIndex = match.index + match[0].length
+
+          matchIndex++
+        }
+
+        html += testString.slice(lastLastIndex)
+        var cursorIndex = getCursorPosition(result)
+        result.innerHTML = html  // 这里用的不是value属性，而是innerHTML属性，因为它不是文本框
+        restoreCursorPosition(result, cursorIndex)
+      }, () => {
+        matchState.textContent = 'timeout'
+      })
+
+      // var html = ''
+
+      // var match
+
+      // var lastLastIndex = 0
+
+      // var matchIndex = 0
+      // while (match = re.exec(testString)) {
+      //   html += testString.slice(lastLastIndex, match.index)
+      //   html += highlightMatch(match, matchIndex)
+      //   lastLastIndex = re.lastIndex
+
+      //   if (match[0].length == 0) {
+      //     re.lastIndex++
+      //   }
+      //   if (re.global == false) {
+      //     break
+      //   }
+      //   matchIndex++
+      // }
+
+      // html += testString.slice(lastLastIndex)
+
+      // result.innerHTML = html  // 这里用的不是value属性，而是innerHTML属性，因为它不是文本框
+    }
+
+    var groupHoverTip = document.querySelector('.group-hover-tip')
+
+    result.addEventListener('mousemove', e => {
+      if (e.target.matches('em')) {
+        var em = e.target
+        var emBoxes = em.getClientRects()
+
+        var title = em.dataset.title
+        var mouseX = e.clientX
+        var mouseY = e.clientY
+
+        var box = getHoverBox(emBoxes, mouseX, mouseY)
+
+        groupHoverTip.textContent = title
+        groupHoverTip.style.display = 'block'
+
+        groupHoverTip.style.top = box.top + 'px'
+        groupHoverTip.style.left = mouseX + 'px'
+
+      }
+    })
+    result.addEventListener('mouseleave', e => {
+      if (e.target.matches('em')) {
+        groupHoverTip.style.display = 'none'
+      }
+    }, true)//用捕获是因为mouseleave事件不冒泡，但可以被捕获到
+
+    function getHoverBox(boxes, x, y) {
+      if (boxes.length == 1) {
+        return boxes[0]
+      }
+      for (var box of boxes) {
+        if (y >= box.top && y <= box.bottom) {
+          return box
+        }
+      }
+      return boxes[0]
+    }
+
+
+
+
+
+
+
+
+    // 返回光标在#result输入框中的位置
+    function getCursorPosition(node) {
+      var selection = window.getSelection()
+      var pos = 0
+      traverseTextNode(node, textNode => {
+        if (textNode === selection.anchorNode) {
+          pos += selection.anchorOffset
+          return false
+        } else {
+          pos += textNode.textContent.length
+        }
+      })
+      return pos
+    }
+    // 先序遍历一个元素结点里面的所有文本结点
+    function traverseTextNode(node, action) {
+      for (var child of node.childNodes) {
+        if (child.nodeType == document.TEXT_NODE) {
+          if (action(child) === false) {
+            return false
+          }
+        } else if (child.nodeType == document.ELEMENT_NODE) {
+          if (traverseTextNode(child, action) === false) {
+            return false
+          }
+        }
+      }
+    }
+    // 将光标设置在node结点的第index位置，node是一个元素结点
+    // 程序会计算应该把光标放在node中的哪个文本结点的第几个index
+    function restoreCursorPosition(node, index) {
+      var selection = window.getSelection()
+
+      traverseTextNode(node, textNode => {
+        if (index > textNode.textContent.length) {
+          index -= textNode.textContent.length
+        } else {
+          selection.setPosition(textNode, index)
+          return false
+        }
+      })
+    }
+
+
+    
+
+
+    function highlightMatch(match, matchIndex) {
+      if (match[0].length == 0) { // 说明是零宽断言
+        var info = [
+          `Match ${matchIndex}`,
+          `-----`,
+          `Group 0: [empty string]`,
+          `Pos: ${match.index}-${match.index}`
+        ].join('\n')
+        return `<u class="zero-width-assert" title="${info}"></u>`
+      }
+
+      var helper = new Array(match[0].length + 1).fill('')
+
+      var groupIndex = 0
+      for (var index of match.indices) {
+        var start = index[0] - match.index
+        var end = index[1] - match.index
+        var info = [
+          `Match ${matchIndex + 1}`,
+          `-----`,
+          `Group: ${groupIndex}`,
+          `Pos: ${index[0]}-${index[1]}`,
+        ].join('\n')
+        helper[start] += `<em data-group-index="${groupIndex}" data-title="${info}">`
+        helper[end] = '</em>' + helper[end]
+        groupIndex++
+      }
+
+      var result = ''
+      for (var i = 0; i < match[0].length; i++) {
+        result += helper[i] + match[0][i]
+      }
+      result += helper[i]
+
+      return result
+    }
+
+    function getFlags() {
+      var flags = ['g','m','i','y','u','s','d','v']
+
+      return flags.filter(it => {
+        var element = document.getElementById('flag-' + it)
+        if (element.checked) { // 对于checkbox来说，checked属性可以返回它是否有被打上勾
+          return true
+        } else {
+          return false
+        }
+      }).join('')
+    }
+
+    function getMatchesFromWorker(re, string, f, g) {
+      var worker = new Worker('./regexp-match-worker.js')
+      var success = false
+
+      worker.addEventListener('message', e => {
+        var matches = e.data
+        worker.terminate() // 结束掉这个worker
+        success = true
+        f(matches)
+      })
+
+      setTimeout(() => {
+        // 两秒钟之后如果没有成功，则运行g函数
+        // 并且结束这个worker
+        if (success == false) {
+          worker.terminate()
+          g()
+        }
+      }, 4000)
+
+      worker.postMessage({
+        re: re,
+        string: string,
+      })
+    }
+
+    // getMatchesFromWorker(/foo/g, 'woiejfoisdjfwiejrfowiejf', (matches) => {
+
+    // })
+
+    // requestAnimationFrame(time => {
+
+    // })
+
+
+  </script>
+
+
+</body></html>

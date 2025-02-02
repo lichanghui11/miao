@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聚焦事件</title>
+</head>
+<body>
+  <p>Name: <input type="text" data-help="Your full name"></p> 
+  <p>Age: <input type="text" data-help="Age in years"></p>
+  <p id="help"></p>
+
+  <script>
+    /*
+    let help = document.querySelector('#help'); 
+    let fields = document.querySelectorAll('input'); 
+    for (let i = 0; i < fields.length; i++) {
+      fields[i].addEventListener('focus', event => {
+        let text = event.target.getAttribute('data-help');
+        help.textContent = text; 
+      })
+      fields[i].addEventListener('blur', event => {
+        help.textContent = ''; 
+      })
+    }
+    */
+    
+
+    var help = document.querySelector('#help'); 
+    var fields = document.querySelectorAll('input'); ;
+    for (var i = 0; i < fields.length; i++) {
+      fields[i].addEventListener('focus', e => {
+        var text = e.target.getAttribute('data-help');
+        help.textContent = text; 
+      })
+      fields[i].addEventListener('blur', e => {
+        help.textContent = ''; 
+      })
+    }
+    
+
+  </script>
+</body>
+</html>

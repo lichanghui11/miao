@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>画图</title>
+  <style>
+    canvas {
+      border: 2px solid #f0f;
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas width="1000" height="1000"></canvas>
+</body>
+<script>
+  var canvas = document.querySelector('canvas')
+  canvas.style.imageRendering = 'pixelated' //放大时的插帧方式：不插帧，直接放大像素
+  var ctx = canvas.getContext('2d')
+
+  function dot(x, y, color = 'black') {
+    x = Math.round(x)
+    y = Math.round(y)
+    ctx.fillStyle = color
+    ctx.fillRect(x, y, 1, 1)
+  }
+  /**
+   * 你的任务：通过调用dot函数，实现：
+   * 需要注意，dot函数不能接收浮点数，如果参数为浮点数，会被转换为整数后绘制
+      * 在 坐标 (42, 42) 画出一个点
+      
+      * 画一条水平实线，粗细为一个像素
+      * 画一条垂直实线，粗细为一个像素
+      * 画一条一个实点一个空点的虚线
+      * 画一条两个实点两个空点的虚线
+      * 画一条三个实点两个空点的虚线
+      * 画一条45度的斜线
+      * 画一条50度的6线（与x轴的夹角呈30度）
+      * 画一条60度的斜线（与x轴的夹角呈60度）
+      * 画一条跨越画布左上角和右下角的对角线
+      * 画一个空心矩形
+      * 画一个实心矩形
+      * 画两个空心的圆，圆心在画布中心：
+        * 一个半径为50像素
+        * 一个半径为200像素
+      * 画一个实心的圆，半径至少为100像素
+      * 画一个【大小位置都合适】的sin(x)的图像
+
+      * 画出rgb色彩空间的某一面（尺寸要大于100x100）
+      * 如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变换后的色彩空间某一面
+        可以考虑如下几种矩阵：
+           2 0
+           0 2
+           ------
+           1  0.27
+           0  1
+           ------
+           0.5    0.87
+           -0.87  0.5
+      * 画一个二阶贝塞尔曲线（即控制点一共三个）
+
+      var bezierCurve = function(x1,y1,x2,y2,x3,y3) {
+
+
+      }
+
+   */
+</script>
+<script>
+  // 不可更改上面的代码
+  // 你的代码写在这里
+
+  // * 在 坐标 (42, 42) 画出一个点for 
+  dot(42, 42, 'red');
+  // * 画一条水平实线，粗细为一个像素
+  function horizontalLine(x1, y, x2, y, color) {
+    for (let i = x1; i < x2; i++) {
+      dot(i, y, color);
+    }
+  }
+  horizontalLine(10, 30, 300, 30, 'green');
+  // * 画一条垂直实线，粗细为一个像素
+  function verticalLine(x, y1, x, y2, color) {
+    for (let i = y1; i < y2; i++) {
+      dot(x, i, color);
+    }
+  }
+  verticalLine(10, 50, 10, 400, 'blue');
+  // * 画一条一个实点一个空点的虚线
+  function dottedLine1(x1, y, x2, y, color) {
+    for (let i = x1; i < x2; i++) {
+      if (i % 2 === 0) {
+        dot(i, y, color);
+      }
+    }
+  }
+  dottedLine1(100, 100, 600, 100, 'perple');
+  // * 画一条两个实点两个空点的虚线
+  function dashedLine1(x1, y, x2, y, color) {
+    for (let i = x1; i < x2; i++) {
+      if (i % 4 < 2) {
+        dot(i, y, color);
+      }
+    }
+  }
+  dashedLine1(50, 50, 500, 50, '#fb7000')
+  // * 画一条三个实点两个空点的虚线
+  function dashedLine2(x, y1, x, y2, color) {
+    for (let i = y1; i < y2; i++) {
+      if (i % 5 < 3) {
+        dot(x, i, color);
+      }
+    }
+  }
+  dashedLine2(100, 100, 100, 600, '#0049b7');
+  // * 画一条45度的斜线
+  function line45(x, color) {
+    for (let i = 0; i < x; i++) {
+      dot(i, i, color);
+    }
+  }
+  line45(300, 'red');
+  // * 画一条30度的斜线（与x轴的夹角呈30度）
+  function line30(x, color) {
+    for (let i = 0; i < x; i++) {
+      let y = i / Math.sqrt(3);
+      dot(i, y, color);
+    }
+  }
+  line30(300, '#00ddff');
+  // * 画一条60度的斜线（与x轴的夹角呈60度）
+  function line60(y, color) {
+    for (let i = 0; i < y; i++) {
+      let x = i / Math.sqrt(3);
+      dot(x, i, color);
+    }
+  }
+  line60(300, '#ff1d58');
+  // * 画一条跨越画布左上角和右下角的对角线
+  // 绘制原点到xy的直线
+  function line1(x1, y1, x2, y2, color) {
+    //第一象限， 终点大于起点， 非原点位置的线段； 
+    //判断斜率， 使用乘法； 
+    let px = x2 - x1;
+    let py = y2 - y1;
+    let k = py / px;
+
+    if (k < 1) {
+      for (let i = 0; i < px; i++) {
+        let y = k * i;
+        dot(x1 + i, y1 + y, color);
+      }
+    } else {
+      for (let i = 0; i < py; i++) {
+        let x = i / k;
+        dot(x1 + x, y1 + i, color);
+      }
+    }
+  }
+  line1(30, 50, 100, 400, 'tan');
+  line1(30, 50, 400, 90, 'tan');
+
+  function line2(x1, y1, x2, y2, color) {
+    //第一象限， 终点坐标大于起点坐标； 
+    let px = x2 - x1;
+    let py = y2 - y1;
+    let k = py / px;
+    if (k < 1) {
+      for (let x = 0, y = 0; x < px; x++, y += k) {
+        dot(x + x1, y + y1, color);
+      }
+    } else {
+      for (let x = 0, y = 0; y < py; y++, x += 1 / k) {
+        dot(x + x1, y + y1, color);
+      }
+    }
+  }
+
+  line2(50, 50, 400, 90, 'green');
+  line2(50, 50, 100, 400, 'red');
+
+  function line3(x1, y1, x2, y2, color) {
+    //第一象限， 终点坐标大于起点坐标； 
+    //Bresenham, 利用单位长度差； 
+    let dx = x2 - x1;
+    let dy = y2 - y1;
+    let k = dy / dx;
+    let d = 0;
+    if (k < 1) {
+      let y = 0;
+      for (let x = 0; x < dx; x++) {
+        d += dy;
+        if (d >= dx) {
+          y++;
+          d -= dx;
+        }
+        dot(x + x1, y + y1, color);
+      }
+    } else {
+      let x = 0;
+      for (let y = 0; y < dy; y++) {
+        d += dx;
+        if (d >= dy) {
+          x++;
+          d -= dy;
+        }
+        dot(x + x1, y + y1, color);
+      }
+    }
+  }
+  line3(10, 20, 400, 90, 'blue');
+  line3(10, 20, 100, 400, 'blue');
+  // 画一个空心矩形
+  function filledRectangle(x1, y1, x2, y2, color) {
+    let width = x2 - x1;
+    let height = y2 - y1;
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        dot(x + x1, y + y1, color);
+      }
+    }
+  }
+  filledRectangle(900, 20, 980, 120, 'lightgreen');
+
+  // 画一个实心矩形
+  function unfilledRectangle(x1, y1, x2, y2, color) {
+    let w = x2 - x1;
+    let h = y2 - y1;
+    for (let x = 0; x < w; x++) {
+      for (let y = 0; y < h; y++) {
+        if (x === 0 || y === 0 || x === (w - 1) || y === (h - 1)) {
+          dot(x + x1, y + y1, color);
+        }
+      }
+    }
+  }
+  unfilledRectangle(800, 20, 880, 120, 'lightblue');
+
+  function circle1(x1, y1, r, color) {
+    //利用三角函数； 
+    let maxX = r / Math.sqrt(2);
+    let y = r;
+    for (let x = 0; x < maxX; x++) {
+      y = Math.sqrt(r * r - x * x);
+      dot(x + x1, y + y1, color);
+      dot(x + x1, -y + y1, color);
+      dot(-x + x1, y + y1, color);
+      dot(-x + x1, -y + y1, color);
+
+      dot(y + x1, x + y1, color);
+      dot(y + x1, -x + y1, color);
+      dot(-y + x1, x + y1, color);
+      dot(-y + x1, -x + y1, color);
+    }
+  }
+
+  function circle2(x1, y1, r, color) {
+    //消除Math.sqrt()运算的逼近算法；
+    let y = r;
+    let x = 0;
+    while (x <= y) {
+      dot(x + x1, y + y1, color);
+      dot(x + x1, -y + y1, color);
+      dot(-x + x1, y + y1, color);
+      dot(-x + x1, -y + y1, color);
+
+      dot(y + x1, x + y1, color);
+      dot(y + x1, -x + y1, color);
+      dot(-y + x1, x + y1, color);
+      dot(-y + x1, -x + y1, color);
+      x++;
+      let a1 = y;
+      let a2 = y - 1;
+      let r1 = a1 * a1 + x * x;
+      let r2 = a2 * a2 + x * x;
+      let d1 = Math.abs(r * r - r1);
+      let d2 = Math.abs(r * r - r2);
+      if (d1 < d2) {
+        y = a1;
+      } else {
+        y = a2;
+      }
+    }
+  }
+  //一个半径为50像素
+  circle1(930, 200, 50, 'black');
+
+  //一个半径为200像素
+  circle2(800, 200, 200, 'green');
+  //画一个实心的圆，半径至少为100像素
+
+  //画一个【大小位置都合适】的sin(x)的图像
+  function drawSin(A, B, D, x, color) {
+    //A振幅， B周期， D垂直位移； 
+
+    for (let i = 0; i < x; i++) {
+      let j = A * Math.sin(B * i) + D;
+      dot(i, j, color);
+    }
+  }
+  //该Sin图像周期大约为(2 * 3.14 / (1 / 20))即125px; 
+  drawSin(20, 1 / 20, 100, 1000, 'green');
+
+  //画出rgb色彩空间的某一面（尺寸要大于100x100）
+  function squareRGB() {
+    for (let g = 0; g < 256; g++) {
+      for (let b = 0; b < 256; b++) {
+        let color = 'rgb(' + 0 + ',' + g + ',' + b + ')';
+        dot(g + 10, b + 300, color);
+      }
+    }
+  }
+  squareRGB();
+  //如下几种矩阵：
+  //  2 0
+  //  0 2
+  function squareTrans1() {
+    for (let g = 0; g < 256; g++) {
+      for (let b = 0; b < 256; b++) {
+        let color = 'rgb(' + 0 + ',' + g + ',' + b + ')';
+        x = g * 2;
+        y = b * 2;
+        dot(x + 400, y + 440, color);
+        dot(x + 1 + 400, y + 440, color);
+        dot(x + 400, y + 1 + 440, color);
+        dot(x + 1 + 400, y + 1 + 440, color);
+      }
+    }
+  }
+  squareTrans1();
+
+  //            1  0.27
+  //            0  1
+  //            ------
+  function squareTrans2() {
+    for (let g = 0; g < 256; g++) {
+      for (let b = 0; b < 256; b++) {
+        let color = 'rgb(' + 255 + ',' + g + ',' + b + ')';
+        let x = g;
+        let y = g * .27 + b;
+        dot(x + 10, y + 600, color);
+      }
+    }
+  }
+  squareTrans2();
+
+  //            0.5    0.87
+  //            -0.87  0.5
+  function squareTrans3() {
+    for (let g = 0; g < 256; g++) {
+      for (let b = 0; b < 256; b++) {
+        let color = 'rgb(' + 0 + ',' + g + ',' + b + ')';
+        let x = 0.5 * g - 0.87 * b;
+        let y = 0.87 * g + 0.5 * b;
+        dot(x + 500, y + 100, color);
+      }
+    }
+  }
+  squareTrans3();
+
+  //100像素的实心圆； 
+  function solidCircle(x1, y1, r, color) {
+    let left = x1 - r;
+    let right = x1 + r;
+    let top = y1 + r;
+    let bottom = y1 - r;
+    for (let i = left; i <= right; i++) {
+      for (let j = bottom; j <= top; j++) {
+        if (((i - x1) * (i - x1)) + ((j - y1) * (j - y1)) <= (r * r)) {
+          dot(i, j, color);
+        }
+      }
+    }
+  }
+  solidCircle(730, 240, 100, 'tan');
+
+  //贝塞尔曲线；(三个控制点) 
+  function bezierCurve(x1, y1, x2, y2, x3, y3, color) {
+    for (let p = 0; p <= 1; p += 0.001) {
+      let ax = x1 * (1 - p) + x2 * p;
+      let ay = y1 * (1 - p) + y2 * p;
+      let bx = x2 * (1 - p) + x3 * p;
+      let by = y2 * (1 - p) + y3 * p;
+
+      let cx = ax * (1 - p) + bx * p;
+      let cy = ay * (1 - p) + by * p;
+      dot(cx, cy, color);
+    }
+  }
+  bezierCurve(500, 40, 600, 200, 800, 100, 'red');
+</script>
+
+</html>

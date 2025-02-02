@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拖拽一下</title>
+  <style>
+    body {
+      background-color: violet;
+    }
+    div {
+      height: 10px;
+      background: orange;
+      width: 10px;
+    }
+  </style>
+</head>
+<body>
+  <p>拖拽： </p>
+  <div></div>
+  <script>
+    let div = document.querySelector('div');
+    let lastX;
+    div.addEventListener('mousedown', e => {
+      if (e.which === 1) { //1为左键； 
+        lastX = e.pageX; 
+        window.addEventListener('mousemove', move);
+        e.preventDefault(); //阻止选择的默认行为； 
+      }
+    })
+    function isPressed(e) {
+      if (!e.which) return e.buttons !== 0; 
+      else return e.which !== 0; 
+    }
+    function move(e) {
+      if (!isPressed(e)) {
+        removeEventListener('mousemove', move);
+      } else {
+        let rect = e.pageX - lastX;
+        let newWidth = Math.max(10, (div.offsetWidth + rect));
+        div.style.width = newWidth + 'px';
+        lastX = e.pageX;
+      }
+    }
+  </script>
+</body>
+</html>

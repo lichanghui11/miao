@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>操作节点画表格</title>
+  <style>
+    html, body {
+      margin: 0;
+      box-sizing: border-box;
+      background-color: pink;
+    }
+    table {
+      margin: auto;
+    }
+    td {
+      width: 10px;
+      height: 10px;
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+  
+  <script>
+    let body = document.querySelector('body');
+    let table = document.createElement('table');
+
+    body.append(table);
+    for (let i = 0; i < 10; i++) {
+      let row = document.createElement('tr');
+      table.append(row); 
+      for (let j = 33; j < 43; j++) {
+        let td = document.createElement('td');
+        row.append(td);
+      }
+    }
+  </script>
+</body>
+  
+</html>

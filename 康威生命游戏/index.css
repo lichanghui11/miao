@@ -1,0 +1,9 @@
+div.container {
+  background-color: lightblue;
+  min-width: 500px;
+  margin: auto;
+}
+
+button {
+  width: 100px;
+}

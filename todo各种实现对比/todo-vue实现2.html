@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>todos vue实现</title>
+</head>
+
+<body>
+  <div id="app">
+    <h1>todos</h1>
+
+    <div>
+      <input @click="upDate()" type="checkbox">
+      <input @keydown.enter="addList()" ref="inputString" type="text">
+    </div>
+
+    <ul :class="'visible-' + changes">
+      <li v-for="(todo, idx) of todos">
+        <input type="checkbox" v-model="todo.completed">
+        <span @dblclick="showIndex=idx" v-if="showIndex !== idx">{{ todo.text }}</span>
+        <input v-else v-focus @keydown.enter="todo.text = $event.target.value; showIndex = -1"
+          @keydown.escape="showIndex = -1" />
+        <button @click="deleteTodo(idx)">&times;</button>
+      </li>
+    </ul>
+
+    <div>
+      <span>{{ countLeft }} item{{ countLeft > 1 ? 's' : ''}} left</span>
+    </div>
+    <div>
+      <label for=""><input v-model="changes" value="All" type="radio" name="a" id="">All</label>
+      <label for=""><input v-model="changes" value="Active" type="radio" name="a" id="">Active</label>
+      <label for=""><input v-model="changes" value="Completed" type="radio" name="a" id="">Completed</label>
+    </div>
+  </div>
+
+  <script src="vue-2.7.16.js"></script>
+  <script>
+    let app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          todos: [
+            {
+              text: 'hello',
+              completed: false,
+            }, {
+              text: 'hehe',
+              completed: true,
+            }, {
+              text: 'hihi',
+              completed: false,
+            }, {
+              text: 'qqwer',
+              completed: true,
+            }, {
+              text: 'fuckit',
+              completed: false,
+            },
+          ],
+          changes: 'All',
+          showIndex: -1,
+        }
+      },
+      methods: {
+        deleteTodo(idx) {
+          this.todos.splice(idx, 1);
+        },
+        addList() {
+          let text = this.$refs.inputString.value.trim();
+          console.log('添加代办。。。')
+          if (text) {
+            let todo = {
+              text,
+              completed: false,
+            };
+            this.todos.push(todo);
+          }
+        },
+        upDate() {
+          let temp = this.todos.every(it => it.completed === true);
+          console.log('hahahahahahah')
+          if (temp) {
+            this.todos.forEach(it => it.completed = false);
+          } else {
+            this.todos.forEach(it => it.completed = true);
+          }
+        },
+      },
+      computed: {
+        countLeft() {
+          return this.todos.filter(it => it.completed === false).length
+        },
+      },
+      directives: {
+        focus: {
+          inserted(el) {
+            el.focus();
+          }
+        }
+      }
+    })
+  </script>
+
+
+</body>
+
+</html>

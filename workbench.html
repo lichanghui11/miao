@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模拟控制台</title>
+  <style>
+    textarea {
+      width: 400px;
+      height: 200px;
+      padding: 0;
+      border: 1px solid green;
+    }
+
+    pre {
+      width: 400px;
+      height: 200px;
+      border: 1px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <textarea name="" id="input">
+    1 + 2; 
+    console.log(3 + 3);
+    console.log(Math.max(2,3,4,45))
+    2();
+  </textarea>
+  <br>
+  <button id="run">run</button>
+  <pre id="output"></pre>
+
+  <script>
+    let input = document.querySelector('#input');
+    let output = document.querySelector('#output');
+    let run = document.querySelector('#run');
+
+    let console = {
+      log(...args) {
+        let now = new Date();
+        let time = now.toString().match(/\b\d\d:\d\d:\d\d\b/)[0];
+        output.textContent += time + '  ' + args.join(' ') + '\n';
+      }
+    }
+
+
+    run.addEventListener('click', () => {
+      let code = input.value;
+      let now = new Date();
+
+      let time = now.toString().match(/\b\d\d:\d\d:\d\d\b/)[0];
+      try {
+        let res = eval(code);
+        output.textContent += time + '  > ' + res + '\n';
+      } catch (e) {
+        output.textContent += String(e) + '\n';
+      }
+    })
+  </script>
+</body>
+
+</html>

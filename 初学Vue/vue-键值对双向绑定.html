@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>键值对双向绑定</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp } = Vue;
+
+    let app = createApp({
+      template: `
+        <div id="app">
+          <pairs v-model="temps"></pairs>
+        </div>
+      `,
+      data() {
+        return {
+          temps: {
+            'yeah': 333,
+            'wow': 444,
+            'life sucks': 999,
+          },
+        }
+      },
+      methods: {
+
+      },
+    })
+
+    app.component('pairs', {
+      template: `
+        <div>
+          <div v-for="(entry, idx) of entries">
+            <input v-model="entry[0]" />: <input v-model="entry[1]" /> <button @click="deleteOne(idx)">-</button>
+          </div>
+          <button @click="addOne">+</button>
+        </div>
+      `,
+      emits: ['update:modelValue'],
+      props: {
+        modelValue: {
+          required: true,
+          type: Object,
+        }
+      },
+      watch: {
+        modelValue(newVal, oldVal) {
+          if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+            this.entries = Object.entries(newVal);
+          }
+        },
+        entries: {
+          //此处newVal为push的['new value', '']
+          handler(newVal) {
+            console.log('hahaha')
+            let obj = Object.fromEntries(newVal);
+            this.$emit('update:modelValue', obj);
+          },
+          deep: true,
+        }
+      },
+      data() {
+        return {
+          entries: Object.entries(this.modelValue)
+        }
+      },
+      methods: {
+        deleteOne(idx) {
+          this.entries.splice(idx, 1);
+        },
+        addOne() {
+          this.entries.push(['new value', ''])
+        },
+      },
+    })
+
+    app = app.mount('#app');
+  </script>
+</body>
+
+</html>

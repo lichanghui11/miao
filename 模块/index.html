@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模块练习</title>
+</head>
+
+<body>
+  <script>
+    function getFile(path) {
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', path, false);
+      xhr.send();
+      return xhr.responseText;
+    }
+
+    require.cache = {};
+    function require(path) {
+      if (path in require.cache) {
+        return require.cache.path;
+      }
+      let code = getFile(path);
+      let func = new Function('exports, modules', code);
+      let modules = {
+        path,
+        fileType: '模块文件',
+        exports: {},
+      }
+
+      func(modules.exports, modules);
+      require.cache.path = modules;
+      return modules.exports;
+    }
+
+  </script>
+
+</body>
+
+</html>

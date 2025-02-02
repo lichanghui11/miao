@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>异步加载 同步运行</title>
+</head>
+
+<body>
+
+  <script>
+    function readFile(filename, callback) {
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', filename, true); //true为默认值， 可以不写
+      xhr.onload = () => {
+        callback(xhr.responseText);
+      }
+      xhr.send();
+    }
+
+    //文件缓存： 
+    let fileCache = Object.create(null);
+
+    //模块缓存： 
+    let moduleCache = Object.create(null);
+
+    function require(filename) {
+      if (filename in moduleCache) {
+        //先从moduleCache读取
+        return moduleCache.module[filename];
+      } else {
+        //再从fileCache读取
+        let code = fileCache.filename;
+        let module = {
+          id: filename,
+          exports: {},
+        }
+        let moduleFunc = new Function('exports', 'module', code);
+        moduleFunc(module.exports, module);
+        moduleCache.filename = module.exports
+        return module.exports;
+      }
+    }
+    function downAllDeps(filename, callback) {
+      readFile(filename, content => {
+        fileCache[filename] = content; //遇到一个文件就存下来
+
+        let deps = getAllDeps(content);
+        let count = 0;
+        if (deps.length === 0) {
+          callback();
+        } else {
+          deps.forEach(dep => {
+            downAllDeps(dep, () => {
+              count++;
+              if (count === deps.length) {
+                callback();
+              }
+            })
+          })
+        }
+      })
+    }
+
+
+    function use(filename) {
+      if (filename in fileCache) {
+        require(filename);
+      } else {
+        downAllDeps(filename, () => {
+          require(filename)
+        })
+      }
+    }
+
+    //let a = require('a.js')
+    function getAllDeps(content, callback) {
+      let re = /require\s*\(\s*(['"])\s*([^'"]+)\1\s*\)/g;
+      let re1 = /require\s*\(\s*(['"])\s*([^'"]+)\1\s*\)/;
+      let matchedFiles = content.match(re);
+      if (matchedFiles === null) {
+        return [];
+      } else {
+        return matchedFiles.map(item => {
+          return item.match(re1)[2];
+        })
+      }
+    }
+
+
+  </script>
+</body>
+
+</html>

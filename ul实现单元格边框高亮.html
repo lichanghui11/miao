@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ul实现边框高亮</title>
+  <style>
+    d* {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+    div {
+      font-size: 0;
+      width: 400px;
+      height: 400px;
+      margin: 100px auto;
+      display: flow-root;
+      > ul {
+        list-style-type: none;
+        margin: 40px auto;
+        padding: 0; 
+        display: flow-root;
+        > li {
+          float: left;
+          margin-left: -3px;
+          margin-bottom: -3px;
+          border: 3px solid;
+          width: 100px;
+          height: 100px;
+          display: inline-block;
+          position: relative;
+          &:hover {
+            border-color: red;
+            z-index: 999;
+            xbackground-color: lightblue;
+          }
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <ul>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div> 
+</body>
+</html>

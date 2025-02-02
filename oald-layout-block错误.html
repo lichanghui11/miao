@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OALD block布局</title>
+  <style>
+    * {
+      box-shadow: 0 0 3px 0 violet inset;
+    }
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-size: 0;
+    }
+    .wrap {
+      height: 100%;
+      margin: 0;
+    }
+    aside {
+      box-sizing: border-box;
+      border: 2px solid;  
+      font-size: 16px;
+      width: 200px;
+      height: 100%;
+      display: inline-block;
+      background-color: pink;
+    }
+
+    section {
+      margin-top: 0;
+      box-sizing: border-box;
+      border: 2px solid;
+      font-size: 16px;
+      display: inline-block;
+      width: calc(100% - 600px);
+      height: 100%;
+      min-width: 400px;
+      background-color: lightsalmon;
+      vertical-align: bottom;
+      > header {
+        margin: 0;
+        height: 100px;
+      }
+      > main {
+        height: calc(100% - 100px);
+        overflow: auto;
+      }
+    }
+    .a1 {
+      > .title {
+        height: 100px;
+      }
+      > input, button{
+        height: 20px;
+      }
+      > .main{
+        height: calc(100% - 120px);
+        overflow: auto;
+        > ul {
+          list-style: none;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+  <aside class="a1">
+    <div class="title">oald de7en</div>
+    <input type="text">
+    <button></button>
+    <div class="main">
+      <ul>
+        <li>01</li>
+        <li>02</li>
+        <li>03</li>
+        <li>04</li>
+        <li>05</li>
+        <li>06</li>
+        <li>07</li>
+        <li>08</li>
+        <li>09</li>
+        <li>10</li>
+        <li>11</li>
+        <li>12</li>
+        <li>13</li>
+        <li>14</li>
+        <li>15</li>
+        <li>16</li>
+        <li>17</li>
+        <li>18</li>
+        <li>19</li>
+        <li>20</li>
+        <li>21</li>
+        <li>22</li>
+        <li>23</li>
+        <li>24</li>
+        <li>25</li>
+        <li>26</li>
+        <li>27</li>
+        <li>28</li>
+        <li>29</li>
+        <li>30</li>
+        <li>31</li>
+        <li>32</li>
+        <li>33</li>
+        <li>34</li>
+        <li>35</li>
+        <li>36</li>
+        <li>37</li>
+        <li>38</li>
+        <li>39</li>
+        <li>40</li>
+        <li>41</li>
+        <li>42</li>
+        <li>43</li>
+        <li>44</li>
+        <li>45</li>
+        <li>46</li>
+        <li>47</li>
+        <li>48</li>
+        <li>49</li>
+        <li>50</li>
+        <li>51</li>
+        <li>52</li>
+        <li>53</li>
+        <li>54</li>
+        <li>55</li>
+        <li>56</li>
+        <li>57</li>
+        <li>58</li>
+        <li>59</li>
+        <li>60</li>
+        <li>61</li>
+        <li>62</li>
+        <li>63</li>
+        <li>64</li>
+        <li>65</li>
+        <li>66</li>
+        <li>67</li>
+        <li>68</li>
+        <li>69</li>
+        <li>70</li>
+        <li>71</li>
+        <li>72</li>
+        <li>73</li>
+        <li>74</li>
+        <li>75</li>
+        <li>76</li>
+        <li>77</li>
+        <li>78</li>
+        <li>79</li>
+        <li>80</li>
+        <li>81</li>
+        <li>82</li>
+        <li>83</li>
+        <li>84</li>
+        <li>85</li>
+        <li>86</li>
+        <li>87</li>
+        <li>88</li>
+        <li>89</li>
+        <li>90</li>
+        <li>91</li>
+        <li>92</li>
+        <li>93</li>
+        <li>94</li>
+        <li>95</li>
+        <li>96</li>
+        <li>97</li>
+        <li>98</li>
+        <li>99</li>
+        <li>100</li>
+        <li>101</li>
+        <li>102</li>
+        <li>103</li>
+        <li>104</li>
+        <li>105</li>
+        <li>106</li>
+        <li>107</li>
+        <li>108</li>
+        <li>109</li>
+        <li>110</li>
+        <li>111</li>
+        <li>112</li>
+        <li>113</li>
+        <li>114</li>
+        <li>115</li>
+        <li>116</li>
+        <li>117</li>
+        <li>118</li>
+        <li>119</li>
+        <li>120</li>
+      </ul>
+    </div>
+  </aside>
+  <section>
+    <header>这是一个标题栏</header>
+    <main>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae accusantium est inventore unde at sed maxime hic consectetur placeat! Temporibus mollitia reiciendis in quam doloremque assumenda est numquam libero similique?
+    Delectus autem eum illum ipsum sed quaerat voluptatem cum facilis illo. Deleniti fuga blanditiis voluptatibus magnam tenetur voluptate perferendis incidunt, quaerat nesciunt sed ipsam, ratione soluta harum eos id deserunt.
+    Corrupti magnam facilis voluptates corporis, molestias repudiandae porro mollitia ratione ullam quam cum molestiae delectus consequatur voluptatibus accusantium nobis aut illum quaerat natus? Vel ipsa obcaecati aliquid labore cum assumenda!
+    Ut, accusantium! Doloremque soluta, non praesentium delectus possimus ut animi! Illo illum voluptatibus cum consequuntur doloremque expedita minus voluptates deleniti ut a dolorem veniam officiis nisi porro sint, dolores quia?
+    Atque fugiat, et nam est nisi perferendis incidunt non placeat repudiandae iusto illo ea, accusantium mollitia eius voluptas quis necessitatibus delectus quas alias accusamus aperiam. Libero est provident dolores expedita?
+    Saepe assumenda voluptas minus laboriosam et natus ipsam voluptate autem unde. Voluptate ab nobis, nostrum quidem culpa ducimus exercitationem numquam provident amet ipsum sequi consequatur est eligendi dolore doloribus harum?
+    Quae architecto soluta dignissimos enim ipsa ea assumenda fugiat odio possimus! Quo, reiciendis esse, praesentium, velit quibusdam itaque enim officia nostrum tenetur facere cumque at perferendis dignissimos earum corrupti autem.
+    Eaque cumque minima veniam officiis? Harum beatae quo dolorem consequuntur quam obcaecati nisi error tempora porro nemo suscipit, ut repellendus officiis? Deleniti perferendis nemo hic pariatur reprehenderit facere quasi nihil.
+    Magni sapiente quidem distinctio doloremque laboriosam necessitatibus, placeat velit, nihil voluptate exercitationem accusantium modi porro animi. Commodi, aliquam ipsa aperiam id praesentium repellendus soluta officia eaque sunt libero iure fuga?
+    Perferendis laboriosam quas asperiores consequuntur dolorem iusto id beatae nobis perspiciatis, delectus tempore mollitia maxime saepe reiciendis, ex quibusdam maiores dolorum debitis? Nam quibusdam in ut! Maxime magnam vero impedit!
+    Illo ducimus officia doloribus blanditiis natus nobis omnis qui esse aspernatur dolore molestiae ea, eligendi cupiditate eum fugit eveniet repudiandae rem a placeat sit odio suscipit culpa vitae alias! Quisquam.
+    Quo, omnis necessitatibus. Sapiente molestiae impedit reprehenderit eos dolores porro! Porro, provident sint? Iusto, facere dignissimos optio ab officia molestias totam! Explicabo molestias quod nemo a animi in laborum nulla!Lorem, illendus, nulla qui architecto ipsum, nostrum veniam nam provident repudiandae recusandae porro natus itaque vitae? Maxime, a accusantium. Magnam placeat officiis officia distinctio! Id dolorum dolor harum.</main>
+  </section>
+  <aside class="a2"></aside>
+  <aside class="a3"></aside>
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼠标幻影</title>
+  <style>
+    .mouseShadow {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJQAAACUCAMAAABC4vDmAAAAY1BMVEX+/v7///8AAAD4+Ph3d3d7e3vIyMiOjo61tbWnp6eBgYHOzs5WVlb19fX7+/sKCgppaWkfHx85OTnv7+8lJSXAwMDV1dVkZGQyMjJvb28UFBTb29ugoKBMTEwZGRmWlpbm5ubtHcUSAAACbklEQVR4nO3a65aqIBgGYFEzD4mdtLHc09z/Vc42+LRgNN1jwNq9769GEJ+FDQnisedZ+SJhwLz7sLUs2PIJrcyIBxRQQAEFFFBAAQUUUEAB9caoKa2YRp0O+UFJYB113Kj5E1tH/ZDGRVQCFFBAmUDtm0RJox2hlKZQG/2cZKgLa2Mo/ljwt2gQtQIKKKDMoM77x3ykPFejPRC+GrXJlcZire8+tfHUAdQusoB6LAAKqDdF+SVVsY4qqkwmuta3bLu5or2e6m9WKo90v0A2UfIIBwoooIDqUYGOygYTeWZQvDmJEf1Kg7znDyc3gurvVUVFYygzPdUXRUAB9Z6oQouf86DNGEpU/BEli36FKgN1is93R5HzECroFgM89QJ8oGgeSptSMKbeThXVD3uqabhoLkpr9inqHwIUUEA9R3msFIlOS6K+ZKulfr0pqG6sSRdEjYxt01BUeVHUCBcooEygBv8rzKNCkTqWM9CLCyg6Qo+XK+3KFlDqgkGqP9oCBdR/iVJGLKuocxs/DTiFVrXsoeSuw7zcf8gUB2YbRYk+qch3CLUDCqj3RNXy79olVCl2/TWl9gtkD3VX5ZWmmShDAQoooFxEne9QJoanKahse5LZVBcRQz02ghIviW4vivbi1YwfW0fdhb5dTqGOQAEF1HIYikMoxhO5AWd9qUQcQAXdcitd2AHUvE1dQAG1NKroUFTZAdQqXLUJm+iWsnIBRQnlSa9Z4Fh4nydQQAEFFFBAAWUL1Z6xDKZtiP0eJTcnL/I2hHH6MG+KRclikWQtcl1gaY8F6ZqSyPazOSgKTat3XwugDj6l0PZSfwODGnKKmKfg+gAAAABJRU5ErkJggg==);
+      width: 20px;
+      height: 20px;
+      background-size: contain;
+      position: fixed;
+    }
+  </style>
+</head>
+<body>
+  
+  <script>
+    function throttle (func, time) {
+      let scheduled = false; //记录是否安排该函数运行； 
+      let lastArgs = []; 
+      return function(...args) {
+        lastArgs = args; 
+        if (scheduled === false) {
+          scheduled = true; 
+          setTimeout(() => {
+            scheduled = false; 
+            func(...lastArgs);
+          }, time);
+        }
+      }
+    }
+
+    let mouseX, mouseY; 
+    addEventListener('mousemove', throttle(e => { 
+      mouseX = e.clientX; 
+      mouseY = e.clientY; 
+
+      let shadow;
+      shadow = document.createElement('span'); 
+      shadow.className = 'mouseShadow'; 
+      shadow.style.left = mouseX + 'px'; 
+      shadow.style.top = mouseY + 'px'; 
+
+      document.body.append(shadow);
+
+      setTimeout(() => {
+        document.body.removeChild(shadow); 
+      }, 16 * 5);
+    }, 16))
+
+  </script>
+</body>
+</html>

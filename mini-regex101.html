@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Regex101</title>
+  <script src="https://cdn.tailwindcss.com/"></script>
+  <style >
+    input, button {
+      outline: none;
+    }
+    #result strong {
+      font-weight: normal;
+      &:nth-of-type(odd) {
+        background-color: #9fcfff;
+      }
+      &:nth-of-type(even) {
+        background-color: #d5ebff;
+      }
+    }
+    #output {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      > textarea, #result {
+        font-family: consolas;
+        white-space: pre-wrap;
+        word-break: break-all;
+        /* position: absolute; */
+        width: 100%;
+        height: 100%;
+        border: 1px solid;
+        overflow: auto;
+        background-color: transparent;
+      }
+    }
+    em {
+      font-style: normal;
+    }
+    #result > em:nth-of-type(odd) {
+      /* --bgc: white; */
+    }
+    #result > em:nth-of-type(even) {
+      /* --bgc: black; */
+      opacity: 0.5;
+    }
+    /* 一个元素的里面如果有hover的元素，自己就不要框了 */
+    /* 如果一个元素里面没有被hover的元素，但其自身被hover，则显示框 */
+    em:not(:has(:hover)):hover {
+      outline: 2px solid grey;
+    }
+    em:not(:has(:hover)):hover em {
+      background-color: inherit;
+    }
+    /* 实际上这个选择器：em:not(:has(:hover)):hover
+      就是只选中了直接被hover的元素，不选中这个元素的祖先元素
+      简单的:hover 选择器在选中一个元素的同时，也选中了其所有的祖先元素
+    */
+    [data-group-index="0"] {
+      background-color: #9fcfff;
+    }
+    [data-group-index="1"] {
+      background-color: #9fcba1;
+    }
+    [data-group-index="2"] {
+      background-color: #e0bf8b;
+    }
+    [data-group-index="3"] {
+      background-color: #acadfc;
+    }
+    [data-group-index="4"] {
+      background-color: #e1abf5;
+    }
+    .zero-width-assert {
+      /* width: 2px; */
+      border-left: 2px dotted magenta;
+      opacity: 1 !important;
+      margin-left: -1px;
+      margin-right: -1px;
+      position: relative;
+      z-index: 8;
+      &:hover {
+        box-shadow: 0 0 2px red;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div>REGULAR EXPRESSION</div>
+    <input class="border" type="text" id="reInput" onkeyup="run()" value="(.(.)(.))(..) ">
+    <button class="border" onclick="run()" >RUN</button>
+    <div id="tips"></div>
+    <div>FLAGS</div>
+    <label><input type="checkbox" id="flag-g" checked> g</label>
+    <label><input type="checkbox" id="flag-m"> m</label>
+    <label><input type="checkbox" id="flag-i"> i</label>
+    <label><input type="checkbox" id="flag-y"> y</label>
+    <label><input type="checkbox" id="flag-u"> u</label>
+    <label><input type="checkbox" id="flag-s"> s</label>
+    <label><input type="checkbox" id="flag-d" checked> d</label>
+    <label><input type="checkbox" id="flag-v"> v</label>
+    
+    <div>TEST STRING</div>
+    <div id="output">
+      <div class="border border-red-500" onscroll="syncScroll2()" id="result"></div>
+      <textarea class="border" oninput="run()" id="testStringInput" onscroll="syncScroll()">
+        An explanation of your regex will be automatically generated as you type.
+        An explanation of your regex will be automatically generated as you type.
+        3 chickens
+        55 cows
+        100 eggs
+        1 dragonfly
+        1 pig
+      </textarea>
+    </div>
+  </div>
+  <script>
+    // 元素的id为xxx时，页面的全局就会出现一个叫xxx的变量，指向一个表示那个标签的对象
+
+    run()
+
+    /**
+     * 
+     * 零宽匹配要显示出来
+     * 每个匹配的分组也要分别用不同的颜色显示出来
+     */
+    function run() {
+      var reString = reInput.value // 可以通过value属性读取到文本框的值
+      if (reString == '') {
+        return
+      }
+      var flags = getFlags()
+      try {
+        var re = new RegExp(reString, flags)
+      } catch(e) {
+        if (e instanceof SyntaxError) {
+          tips.innerHTML = e.message
+          return
+        } else {
+          throw e
+        }
+      }
+      tips.innerHTML = ''
+      var testString = testStringInput.value
+
+      var html = ''
+
+      var match
+
+      var lastLastIndex = 0
+
+      var matchIndex = 0
+      while (match = re.exec(testString)) {
+        html += testString.slice(lastLastIndex, match.index)
+        html += highlightMatch(match, matchIndex)
+        lastLastIndex = re.lastIndex
+
+        if (match[0].length == 0) {
+          re.lastIndex++
+        }
+        if (re.global == false) {
+          break
+        }
+        matchIndex++
+      }
+
+      html += testString.slice(lastLastIndex)
+
+      result.innerHTML = html  // 这里用的不是value属性，而是innerHTML属性，因为它不是文本框
+    }
+
+    function syncScroll() {
+      result.scrollTop = testStringInput.scrollTop
+    }
+    function syncScroll2() {
+       testStringInput.scrollTop = result.scrollTop
+    }
+
+    function highlightMatch(match, matchIndex) {
+      if (match[0].length == 0) { // 说明是零宽断言
+        var info = [
+          `Match ${matchIndex}`,
+          `-----`,
+          `Group 0: [empty string]`,
+          `Pos: ${match.index}-${match.index}`
+        ].join('\n')
+        return `<u class="zero-width-assert" title="${info}"></u>`
+      }
+
+      var helper = new Array(match[0].length + 1).fill('')
+
+      var groupIndex = 0
+      for (var index of match.indices) {
+        var start = index[0] - match.index
+        var end = index[1] - match.index
+        var info = [
+          `Match ${matchIndex + 1}`,
+          `-----`,
+          `Group: ${groupIndex}`,
+          `Pos: ${index[0]}-${index[1]}`,
+        ].join('\n')
+        helper[start] += `<em data-group-index="${groupIndex}" title="${info}">`
+        helper[end] = '</em>' + helper[end]
+        groupIndex++
+      }
+
+      var result = ''
+      for (var i = 0; i < match[0].length; i++) {
+        result += helper[i] + match[0][i]
+      }
+      result += helper[i]
+
+      return result
+    }
+
+    function getFlags() {
+      var flags = ['g','m','i','y','u','s','d','v']
+
+      return flags.filter(it => {
+        var element = document.getElementById('flag-' + it)
+        if (element.checked) { // 对于checkbox来说，checked属性可以返回它是否有被打上勾
+          return true
+        } else {
+          return false
+        }
+      }).join('')
+    }
+  </script>
+</body>
+</html>

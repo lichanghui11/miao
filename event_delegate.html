@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events</title>
+</head>
+<body>
+  <ul>
+    <li>zero</li>
+    <li>one</li>
+    <li>two</li>
+    <li>three</li> 
+  </ul>
+  
+  <script>
+    let ul = document.querySelector('ul');
+    ul.addEventListener('click', e => {
+      if (e.target.matches('li')) {
+        //let li = e.target;
+        let index = [...ul.children].indexOf(e.target);
+        console.log(index);
+      }
+    })
+
+
+
+
+    //let lists = [...document.querySelectorAll('li')];
+    /*
+    for (let i = 0; i < lists.length; i++) {
+      let li = lists[i];
+      li.addEventListener('click', e => {
+        console.log(i);
+      })
+    }
+    */
+
+    /*
+    var i;
+    for (i = 0; i < lists.length; i++) {
+      let li = lists[i];
+      (function (i) {
+        li.addEventListener('click', e => {
+          console.log(i);
+        })
+      }) (i)
+    }
+    */
+  </script>
+
+
+
+  <ul>
+    <li>第一项</li>
+    <li>第二项</li>
+    <li>第三项</li>
+    <li>第四项</li>
+    <li>No.5</li>
+    <li></li>
+  </ul>
+
+  <script>
+    /*
+    let lists = [...document.querySelectorAll('li')];
+
+    lists.forEach((it, i) => {
+      it.addEventListener('click', e => {
+        console.log(i); 
+      }) 
+    })
+    */
+  </script>
+
+
+
+ <div>
+  <button>1</button>
+  <button>2</button>
+  <button>3</button>
+  <button>4</button>
+</div> 
+<p>
+  <button>paragraph</button>
+</p>
+<button>out</button>
+<script>
+  let div = document.querySelector('div');
+  div.addEventListener('click', e => {
+    console.log(e.target.textContent); 
+  })
+  let body = document.querySelector('body'); 
+  body.addEventListener('click', e => {
+    if (e.target.matches('p button')) {
+      console.log(e.target.textContent);
+    }
+  })
+</script>
+</body>
+</html>

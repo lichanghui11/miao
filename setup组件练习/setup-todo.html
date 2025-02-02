@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>setup todos</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { reactive, createApp, ref, computed, onMounted, onBeforeMount } = Vue;
+
+    let app = createApp({
+      template: `
+        <div id="app">
+          <TodoList/> 
+        </div>
+      `,
+    })
+
+    app.component('TodoList', {
+
+      template: `
+        <div>
+          <input type="checkbox" @click="toggleAll()" :checked="isAllCompleted"/>
+          <input type="text" placeholder="What do you want to do?" />
+        </div>
+        <ul :class="'visible-' + data.changes">
+          <li v-for="(todo, i) of data.todos" :key="i">
+            <input type="checkbox" v-model="todo.completed"/>
+            <span>{{ todo.text }}</span>
+            <button @click="clearOne(i)">&times;</button>
+          </li>
+        </ul>
+        <div><span>{{ countLeft() }} item{{ isPlural() }} left.</span></div>
+        <div>
+          <label><input type="radio" v-model="data.changes" name="status" value= All />All</label>
+
+          <label><input type="radio" v-model="data.changes" name="status" value= Active />Active</label>
+
+          <label><input type="radio" v-model="data.changes" name="status" value= Completed/>Completed</label>
+
+          <button v-show="isBlank()" @click="clearCompleted()">Clear Completed</button>
+        </div>
+      `,
+      setup() {
+        let data = reactive({
+          todos: [
+            {
+              text: 'hello',
+              completed: false,
+            }, {
+              text: 'hehe',
+              completed: true,
+            }, {
+              text: 'hihi',
+              completed: false,
+            }, {
+              text: 'qqwer',
+              completed: true,
+            }, {
+              text: 'fuckit',
+              completed: false,
+            },
+          ],
+          changes: 'All',
+        })
+
+        const countLeft = () => data.todos.filter(it => it.completed === false).length;
+        const isPlural = () => countLeft() > 1 ? 's' : '';
+        const clearOne = (i) => data.todos.splice(i, 1);
+        const clearCompleted = () => {
+          let temp = data.todos.filter(it => it.completed === false);
+          data.todos = temp;
+        };
+        const isBlank = () => data.todos.length > 0 ? true : false;
+        const toggleAll = () => {
+          let temp = data.todos.every(it => it.completed === true);
+          if (temp) data.todos.forEach(it => it.completed = false);
+          else data.todos.forEach(it => it.completed = true);
+        }
+        const isAllCompleted = computed(() => {
+          return data.todos.every(it => it.completed === true);
+
+        })
+
+
+        onBeforeMount(() => {
+          window.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              let temp = e.target.value.trim();
+              if (temp) {
+                data.todos.push({
+                  text: temp,
+                  completed: false,
+                })
+                e.target.value = '';
+              }
+            }
+          })
+        })
+
+        return {
+          data,
+          countLeft,
+          isPlural,
+          clearOne,
+          clearCompleted,
+          isBlank,
+          toggleAll,
+          isAllCompleted,
+        }
+      },
+    })
+
+    app.mount('#app');
+  </script>
+</body>
+
+</html>

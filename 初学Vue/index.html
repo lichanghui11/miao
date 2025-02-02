@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 初学</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div id="app">
+    <div>
+      <input type="checkbox" @click="toggleAll()" :checked="todos.every(it => it.completed === true)">
+      <input type="text" @keydown="addTodo($event)">
+    </div>
+
+    <ul :class="'visible-' + activeCategory">
+      <li v-for="(todo, idx) of todos">
+        <input type="checkbox" v-model="todo.completed">
+        <span>{{ todo.text }}</span>
+        <button @click="deleteTodo(idx)">&times;</button>
+      </li>
+    </ul>
+
+    <div>
+      <span>{{ todos.filter(it => it.completed === false).length }} item{{ todos.filter(it => it.completed === false).length > 1 ? 's' : '' }} left</span>
+      <div>
+        <label><input name="selection" @click="all()" type="radio" v-model="activeCategory" value="All">All</label>
+        <label><input name="selection" @click="active()" type="radio" v-model="activeCategory" value="Active">Active</label>
+        <label><input name="selection" @click="completed" type="radio" v-model="activeCategory" value="Completed">Completed</label>
+      </div>
+      <button v-show="todos.some(it => it.completed === true)" @click="clearCompleted()">clear completed</button>
+    </div>
+  </div>
+
+
+  <script src="./vue-2.7.16.js"></script>
+  <script src="./index.js"></script>
+</body>
+
+</html>

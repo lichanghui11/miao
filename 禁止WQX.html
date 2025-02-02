@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>禁止输入WQX</title>
+</head>
+<body>
+  <input type="text" id="textInput">
+
+
+
+  <script>
+    let message = document.querySelector('#textInput');
+    message.addEventListener('keypress', e => {
+      console.log(e); 
+      if (e.key === 'Q' || e.key === 'W' || e.key === 'X') {
+        e.preventDefault(); 
+      }
+    })
+
+    message.addEventListener('paste', e => {
+      console.log(e);
+      let pastedText = e.clipboardData.getData('text/plain'); 
+      console.log(pastedText);
+
+      let filteredText = pastedText.replaceAll(/[WQX]/g, '*'); 
+
+      if (pastedText.match(/[WQX]/g)) {
+        e.preventDefault(); 
+        let cursorStart = message.selectionStart; 
+        let cursorEnd = message.selectionEnd; 
+        let newValue = message.value.slice(0, cursorStart) + filteredText + message.value.slice(cursorEnd);
+        message.value = newValue; 
+
+        message.selectionEnd = message.selectionStart = cursorStart + filteredText.length; 
+      }
+    })
+  
+    // message.addEventListener('drop', e => {
+    //   console.log(e);
+    //   let dragText = message.value;
+    //   console.log(dragText)
+    // })
+
+    // 拦截控制台行为
+    let valueDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(message)); 
+    Object.defineProperty(message, 'value', {
+      get: function () {
+        return valueDescriptor.get.call(message); 
+      }, 
+      set: function (val) {
+        let filtered = val.replaceAll(/[WQX]/g, '*'); 
+        valueDescriptor.set.call(message, filtered);
+      }
+    })
+  </script>
+</body>
+</html>

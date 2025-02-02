@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小米网站横向布局flex</title>
+  <style>
+    * {
+      box-shadow: 0 0 2px 0 red inset;
+      background-color: rgba(0 0 0 0.05);
+    }
+    
+    div {
+      background-color: lightsalmon;
+      display: flex;
+      flex-direction: column;
+      width: 950px;
+      height: 570px;
+      margin: auto;
+      flex-wrap: wrap;
+      gap: 10px;
+      > span {
+        width: 150px;
+        height: 280px;
+        background-color: lightblue;
+        &:first-child {
+          height: 570px;
+        }
+        &:nth-last-child(-n + 2) {
+          width: 150px;
+          height: 135px;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div> 
+
+</body>
+</html>

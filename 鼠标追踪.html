@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼠标追踪</title>
+  <style>
+    div.container {
+      > div {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 9999px;
+        background-color: red;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="mouse1"></div>
+    <div class="mouse2"></div>
+    <div class="mouse3"></div> 
+  </div>
+ 
+  <script>
+    let mouse1 = document.querySelector('.mouse1');
+    let mouse2 = document.querySelector('.mouse2');
+    let mouse3 = document.querySelector('.mouse3');
+
+  let x0 = window.innerWidth / 2;
+  let y0 = window.innerHeight / 2;
+  window.addEventListener('mousemove', e => {
+    x0 = e.pageX;
+    y0 = e.pageY;
+
+  })
+    window.addEventListener('touchstart', e => {
+        x0 = e.pageX;
+        y0 = e.pageY;
+
+      })
+    let lastTime = null;
+    requestAnimationFrame(function animation(){
+      let angle1 = (Date.now()) * 0.01;
+      let angle2 = angle1 + Math.PI * 2 / 3;
+      let angle3 = angle2 + Math.PI * 2 / 3;
+
+
+      let x1 = Math.cos(angle1) * 50 + x0; 
+      let y1 = Math.sin(angle1) * 50 + y0; 
+
+      let x2 = Math.cos(angle2) * 50 + x0; 
+      let y2 = Math.sin(angle2) * 50 + y0; 
+
+      let x3 = Math.cos(angle3) * 50 + x0; 
+      let y3 = Math.sin(angle3) * 50 + y0; 
+
+      mouse1.style.left = x1 + 'px';
+      mouse1.style.top = y1 + 'px';
+
+      mouse2.style.left = x2 + 'px';
+      mouse2.style.top = y2 + 'px';
+
+      mouse3.style.left = x3 + 'px';
+      mouse3.style.top = y3 + 'px';
+
+     
+      requestAnimationFrame(animation);
+    })
+  </script>
+</body>
+</html>

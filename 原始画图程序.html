@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原始画图程序</title>
+  <style>
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      position: absolute;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    addEventListener('click', e => {
+      let dot = document.createElement('span'); 
+      dot.className = 'dot'; 
+      dot.style.left = e.clientX + 'px'; 
+      dot.style.top = e.clientY + 'px'; 
+
+      document.body.append(dot); 
+    })
+  </script>
+</body>
+</html>

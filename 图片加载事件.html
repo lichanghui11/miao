@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片渐显效果</title>
+  <style>
+    img {
+      opacity: 0;
+      transition: 2000ms;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis voluptatibus fuga doloribus est in repellat,
+    quibusdam aut sunt enim omnis nesciunt incidunt corporis perferendis! Eos, et dolores? Voluptas, cum dicta?
+  </p>
+
+  <img src="https://www.12306.cn/index/images/abanner01.jpg" alt="">
+  <img src="https://www.12306.cn/index/images/link05.png" alt="">
+  <img src="https://www.12306.cn/index/images/link04.png" alt="">
+
+
+  <script>
+    let imgs = document.querySelectorAll('img');
+    imgs.forEach(iem => {
+      iem.onload = () => {
+        iem.style.opacity = 1;
+      }
+    })
+  </script>
+</body>
+
+</html>

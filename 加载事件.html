@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=], initial-scale=1.0">
+  <title>加载事件</title>
+  <style>
+    img {
+      width: 100px;
+      height: 100px;
+      opacity: 0;
+      transition: 1000;
+    }
+  </style>
+</head>
+<body>
+  <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. In quidem suscipit explicabo praesentium pariatur ad placeat odio. Architecto excepturi repellendus quibusdam consequatur vitae libero assumenda sint ut voluptas, laboriosam nostrum.</p>
+  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi, distinctio est beatae alias facilis doloremque velit nemo quaerat labore ab qui fugiat, laudantium ducimus aperiam in dicta ad libero repudiandae.</p> 
+  <img data-src="images/cat.jpeg" alt="">
+  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque odit inventore rem, error consequatur tenetur. Non et eligendi natus inventore odit eveniet illo vel culpa numquam, reiciendis qui labore aspernatur.</p>
+  <img data-src="images/cat.jpeg" alt="">
+
+  <script>
+    let imgs = document.querySelectorAll('img'); 
+    imgs.forEach(img => {
+      window.addEventListener('scroll', function func(e) {
+        let box = img.getBoundingClientRect(); 
+        if (box.top < window.innerHeight) {
+          img.src = img.dataset.src; 
+          window.removeEventListener('scroll', func)
+        }
+      })
+
+      img.onload = () => {
+        img.style.opacity = 1; 
+      }
+    })
+  </script>
+</body>
+</html>

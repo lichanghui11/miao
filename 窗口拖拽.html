@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>窗口拽拽</title>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+      background-color: cyan;
+      border: 1px solid pink;
+      position: fixed;
+    }
+  </style>
+</head>
+<body> 
+  <div class="win"></div> 
+  <div class="win"></div>
+  <div class="win"></div>
+
+  <script>
+    let mouseStartX;
+    let mouseStartY; 
+
+
+    window.addEventListener('mousedown', e => {
+      if (e.target.matches('.win')) {
+        mouseStartX = e.clientX; 
+        mouseStartY = e.clientY; 
+        window.addEventListener('mousemove', move); 
+      }
+    })
+    
+    function move (e) {
+      if (e.which === 0 || e.buttons === 0) {
+        window.removeEventListener('mousemove', move); 
+      } else {
+        
+      }
+    }
+  </script>
+</body>
+</html>
