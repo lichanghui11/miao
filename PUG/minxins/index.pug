@@ -1,0 +1,35 @@
+mixin comment(commentData)
+  .comment 
+    .date= commentData.date
+    .author= commentData.author 
+    .text= commentData.text
+
+doctype html 
+html 
+  head 
+    style. 
+      .comment {
+        font-family: sans-serif;
+        line-height: 1.5;
+        padding: 10px; 
+        border: 1px solid #555;
+        width: 250px;
+      }
+      .date {
+        font-size: 86%;
+        text-align: right;
+      }
+      .author {
+        font-size: 110%; 
+        font-weight: bold;
+      }
+      .text {
+        font-size: 100%;
+      }
+  body  
+    hr
+    hr
+    - const com = { date: "2-3-2024", author: 'Tom', text: 'hey! buddy',}
+    +comment(com)
+    - const com2 = { date: '1-1-2025', author: 'Bruce', text: 'how are you?'}
+    +comment(com2)
